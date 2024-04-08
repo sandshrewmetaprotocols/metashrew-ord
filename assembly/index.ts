@@ -1,6 +1,5 @@
 import { Box, RCBox } from "metashrew-as/assembly/utils/box"
 import { _flush, input, get, set } from "metashrew-as/assembly/indexer/index";
-import { IndexPointer } from "metashrew-as/assembly/indexer/tables";
 import { parseBytes, parsePrimitive, concat, primitiveToBuffer } from "metashrew-as/assembly/utils/utils";
 import { Block } from "metashrew-as/assembly/blockdata/block";
 import { Transaction, Input, Output, OutPoint } from "metashrew-as/assembly/blockdata/transaction";
@@ -14,22 +13,24 @@ import { Sat, SatPoint } from "metashrew-as/assembly/blockdata/sat";
 import { JUBILEE_HEIGHT } from "./constants";
 import { BST } from "metashrew-as/assembly/indexer/bst";
 
-const SAT_TO_OUTPOINT = BST.at<u64>(IndexPointer.for("/outpoint/bysatrange/"));
-const OUTPOINT_TO_SAT = IndexPointer.for("/sat/by/outpoint/");
-const OUTPOINT_TO_VALUE = IndexPointer.for("/value/byoutpoint/");
-const OUTPOINT_TO_SEQUENCE_NUMBERS = IndexPointer.for("/sequencenumbers/byoutpoint");
-const HEIGHT_TO_BLOCKHASH = IndexPointer.for("/blockhash/byheight/");
-const BLOCKHASH_TO_HEIGHT = IndexPointer.for("/height/byblockhash/");
-const STARTING_SAT = IndexPointer.for("/startingsat");
-const INSCRIPTION_ID_TO_INSCRIPTION = IndexPointer.for("/inscription/byid/");
-const SATPOINT_TO_INSCRIPTION_ID = IndexPointer.for("/inscriptionid/bysatpoint");
-const SATPOINT_TO_SAT = IndexPointer.for("/sat/bysatpoint");
-const INSCRIPTION_ID_TO_SATPOINT = IndexPointer.for("/satpoint/byinscriptionid/");
-const INSCRIPTION_ID_TO_BLOCKHEIGHT = IndexPointer.for("/height/byinscription/");
-const HEIGHT_TO_INSCRIPTION_IDS = IndexPointer.for("/inscriptionids/byheight/")
-const NEXT_SEQUENCE_NUMBER = IndexPointer.for("/nextsequence");
-const SEQUENCE_NUMBER_TO_INSCRIPTION_ID = IndexPointer.for("/inscriptionid/bysequence/");
-const INSCRIPTION_ID_TO_SEQUENCE_NUMBER = IndexPointer.for("/sequence/byinscriptionid/");
+import {
+  SAT_TO_OUTPOINT,
+  OUTPOINT_TO_SAT,
+  OUTPOINT_TO_VALUE,
+  OUTPOINT_TO_SEQUENCE_NUMBERS,
+  HEIGHT_TO_BLOCKHASH,
+  BLOCKHASH_TO_HEIGHT,
+  STARTING_SAT,
+  INSCRIPTION_ID_TO_INSCRIPTION,
+  SATPOINT_TO_INSCRIPTION_ID,
+  SATPOINT_TO_SAT,
+  INSCRIPTION_ID_TO_SATPOINT,
+  INSCRIPTION_ID_TO_BLOCKHEIGHT,
+  HEIGHT_TO_INSCRIPTION_IDS,
+  NEXT_SEQUENCE_NUMBER,
+  SEQUENCE_NUMBER_TO_INSCRIPTION_ID,
+  INSCRIPTION_ID_TO_SEQUENCE_NUMBER
+} from "./tables";
 
 
 function rangeLength<K>(bst: BST<K>, key: K): K {

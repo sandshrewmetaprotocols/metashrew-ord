@@ -54,22 +54,22 @@
  (global $~lib/metashrew-as/assembly/indexer/index/_updateKeys (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/metashrew-as/assembly/blockdata/epoch/Epoch.STARTING_SATS (mut i32) (i32.const 0))
- (global $assembly/index/SAT_TO_OUTPOINT (mut i32) (i32.const 0))
- (global $assembly/index/OUTPOINT_TO_SAT (mut i32) (i32.const 0))
- (global $assembly/index/OUTPOINT_TO_VALUE (mut i32) (i32.const 0))
- (global $assembly/index/OUTPOINT_TO_SEQUENCE_NUMBERS (mut i32) (i32.const 0))
- (global $assembly/index/HEIGHT_TO_BLOCKHASH (mut i32) (i32.const 0))
- (global $assembly/index/BLOCKHASH_TO_HEIGHT (mut i32) (i32.const 0))
- (global $assembly/index/STARTING_SAT (mut i32) (i32.const 0))
- (global $assembly/index/INSCRIPTION_ID_TO_INSCRIPTION (mut i32) (i32.const 0))
- (global $assembly/index/SATPOINT_TO_INSCRIPTION_ID (mut i32) (i32.const 0))
- (global $assembly/index/SATPOINT_TO_SAT (mut i32) (i32.const 0))
- (global $assembly/index/INSCRIPTION_ID_TO_SATPOINT (mut i32) (i32.const 0))
- (global $assembly/index/INSCRIPTION_ID_TO_BLOCKHEIGHT (mut i32) (i32.const 0))
- (global $assembly/index/HEIGHT_TO_INSCRIPTION_IDS (mut i32) (i32.const 0))
- (global $assembly/index/NEXT_SEQUENCE_NUMBER (mut i32) (i32.const 0))
- (global $assembly/index/SEQUENCE_NUMBER_TO_INSCRIPTION_ID (mut i32) (i32.const 0))
- (global $assembly/index/INSCRIPTION_ID_TO_SEQUENCE_NUMBER (mut i32) (i32.const 0))
+ (global $assembly/tables/SAT_TO_OUTPOINT (mut i32) (i32.const 0))
+ (global $assembly/tables/OUTPOINT_TO_SAT (mut i32) (i32.const 0))
+ (global $assembly/tables/OUTPOINT_TO_VALUE (mut i32) (i32.const 0))
+ (global $assembly/tables/OUTPOINT_TO_SEQUENCE_NUMBERS (mut i32) (i32.const 0))
+ (global $assembly/tables/HEIGHT_TO_BLOCKHASH (mut i32) (i32.const 0))
+ (global $assembly/tables/BLOCKHASH_TO_HEIGHT (mut i32) (i32.const 0))
+ (global $assembly/tables/STARTING_SAT (mut i32) (i32.const 0))
+ (global $assembly/tables/INSCRIPTION_ID_TO_INSCRIPTION (mut i32) (i32.const 0))
+ (global $assembly/tables/SATPOINT_TO_INSCRIPTION_ID (mut i32) (i32.const 0))
+ (global $assembly/tables/SATPOINT_TO_SAT (mut i32) (i32.const 0))
+ (global $assembly/tables/INSCRIPTION_ID_TO_SATPOINT (mut i32) (i32.const 0))
+ (global $assembly/tables/INSCRIPTION_ID_TO_BLOCKHEIGHT (mut i32) (i32.const 0))
+ (global $assembly/tables/HEIGHT_TO_INSCRIPTION_IDS (mut i32) (i32.const 0))
+ (global $assembly/tables/NEXT_SEQUENCE_NUMBER (mut i32) (i32.const 0))
+ (global $assembly/tables/SEQUENCE_NUMBER_TO_INSCRIPTION_ID (mut i32) (i32.const 0))
+ (global $assembly/tables/INSCRIPTION_ID_TO_SEQUENCE_NUMBER (mut i32) (i32.const 0))
  (memory $0 1 65335)
  (data $0 (i32.const 1036) "\1c\02")
  (data $0.1 (i32.const 1048) "\04\00\00\00\00\02\00\00000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff")
@@ -1489,82 +1489,82 @@
   local.get $0
   i32.store
   local.get $1
-  global.set $assembly/index/SAT_TO_OUTPOINT
+  global.set $assembly/tables/SAT_TO_OUTPOINT
   i32.const 1
   global.set $~argumentsLength
   i32.const 3376
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/OUTPOINT_TO_SAT
+  global.set $assembly/tables/OUTPOINT_TO_SAT
   i32.const 1
   global.set $~argumentsLength
   i32.const 3440
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/OUTPOINT_TO_VALUE
+  global.set $assembly/tables/OUTPOINT_TO_VALUE
   i32.const 1
   global.set $~argumentsLength
   i32.const 3504
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/OUTPOINT_TO_SEQUENCE_NUMBERS
+  global.set $assembly/tables/OUTPOINT_TO_SEQUENCE_NUMBERS
   i32.const 1
   global.set $~argumentsLength
   i32.const 3584
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/HEIGHT_TO_BLOCKHASH
+  global.set $assembly/tables/HEIGHT_TO_BLOCKHASH
   i32.const 1
   global.set $~argumentsLength
   i32.const 3648
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/BLOCKHASH_TO_HEIGHT
+  global.set $assembly/tables/BLOCKHASH_TO_HEIGHT
   i32.const 1
   global.set $~argumentsLength
   i32.const 3712
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/STARTING_SAT
+  global.set $assembly/tables/STARTING_SAT
   i32.const 1
   global.set $~argumentsLength
   i32.const 3760
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/INSCRIPTION_ID_TO_INSCRIPTION
+  global.set $assembly/tables/INSCRIPTION_ID_TO_INSCRIPTION
   i32.const 1
   global.set $~argumentsLength
   i32.const 3824
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/SATPOINT_TO_INSCRIPTION_ID
+  global.set $assembly/tables/SATPOINT_TO_INSCRIPTION_ID
   i32.const 1
   global.set $~argumentsLength
   i32.const 3904
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/SATPOINT_TO_SAT
+  global.set $assembly/tables/SATPOINT_TO_SAT
   i32.const 1
   global.set $~argumentsLength
   i32.const 3968
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/INSCRIPTION_ID_TO_SATPOINT
+  global.set $assembly/tables/INSCRIPTION_ID_TO_SATPOINT
   i32.const 1
   global.set $~argumentsLength
   i32.const 4048
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/INSCRIPTION_ID_TO_BLOCKHEIGHT
+  global.set $assembly/tables/INSCRIPTION_ID_TO_BLOCKHEIGHT
   i32.const 1
   global.set $~argumentsLength
   i32.const 4112
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/HEIGHT_TO_INSCRIPTION_IDS
+  global.set $assembly/tables/HEIGHT_TO_INSCRIPTION_IDS
   i32.const 1
   global.set $~argumentsLength
   i32.const 4192
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/NEXT_SEQUENCE_NUMBER
+  global.set $assembly/tables/NEXT_SEQUENCE_NUMBER
   i32.const 1
   global.set $~argumentsLength
   i32.const 4240
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/SEQUENCE_NUMBER_TO_INSCRIPTION_ID
+  global.set $assembly/tables/SEQUENCE_NUMBER_TO_INSCRIPTION_ID
   i32.const 1
   global.set $~argumentsLength
   i32.const 4320
   call $~lib/string/String.UTF8.encode@varargs
-  global.set $assembly/index/INSCRIPTION_ID_TO_SEQUENCE_NUMBER
+  global.set $assembly/tables/INSCRIPTION_ID_TO_SEQUENCE_NUMBER
  )
  (func $~lib/metashrew-as/assembly/utils/box/Box#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5407,7 +5407,7 @@
     i64.load offset=8
     i64.add
     local.set $5
-    global.get $assembly/index/SAT_TO_OUTPOINT
+    global.get $assembly/tables/SAT_TO_OUTPOINT
     local.set $8
     i32.const 8
     call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -5684,7 +5684,7 @@
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
     local.get $10
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-    global.get $assembly/index/OUTPOINT_TO_SAT
+    global.get $assembly/tables/OUTPOINT_TO_SAT
     local.get $10
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#extend
@@ -5805,7 +5805,7 @@
   local.get $2
  )
  (func $assembly/index/SatRanges.fromTransaction~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  global.get $assembly/index/OUTPOINT_TO_SAT
+  global.get $assembly/tables/OUTPOINT_TO_SAT
   local.set $1
   local.get $0
   call $~lib/metashrew-as/assembly/blockdata/transaction/Input#previousOutput
@@ -6501,7 +6501,7 @@
   i64.rotr
  )
  (func $assembly/index/SatRanges#pull~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32)
-  global.get $assembly/index/SAT_TO_OUTPOINT
+  global.get $assembly/tables/SAT_TO_OUTPOINT
   local.set $1
   i32.const 8
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -7543,7 +7543,7 @@
     end
     local.tee $12
     if
-     global.get $assembly/index/NEXT_SEQUENCE_NUMBER
+     global.get $assembly/tables/NEXT_SEQUENCE_NUMBER
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
      local.set $9
      local.get $1
@@ -7564,7 +7564,7 @@
      call $~lib/metashrew-as/assembly/blockdata/sat/SatPoint#constructor
      call $~lib/metashrew-as/assembly/blockdata/sat/SatPoint#toArrayBuffer
      local.set $8
-     global.get $assembly/index/OUTPOINT_TO_VALUE
+     global.get $assembly/tables/OUTPOINT_TO_VALUE
      local.set $7
      local.get $0
      i32.load offset=12
@@ -7602,7 +7602,7 @@
       i64.const 0
       local.set $4
      end
-     global.get $assembly/index/OUTPOINT_TO_SAT
+     global.get $assembly/tables/OUTPOINT_TO_SAT
      local.set $5
      i32.const 4816
      i32.const 0
@@ -7649,7 +7649,7 @@
      local.get $5
      call $~lib/metashrew-as/assembly/utils/box/Box.concat
      local.set $7
-     global.get $assembly/index/SATPOINT_TO_SAT
+     global.get $assembly/tables/SATPOINT_TO_SAT
      local.get $8
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      local.set $5
@@ -7661,17 +7661,17 @@
      local.get $5
      local.get $3
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/SATPOINT_TO_INSCRIPTION_ID
+     global.get $assembly/tables/SATPOINT_TO_INSCRIPTION_ID
      local.get $8
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/INSCRIPTION_ID_TO_SATPOINT
+     global.get $assembly/tables/INSCRIPTION_ID_TO_SATPOINT
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      local.get $8
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/INSCRIPTION_ID_TO_BLOCKHEIGHT
+     global.get $assembly/tables/INSCRIPTION_ID_TO_BLOCKHEIGHT
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      local.set $5
@@ -7683,18 +7683,18 @@
      local.get $5
      local.get $3
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/HEIGHT_TO_INSCRIPTION_IDS
+     global.get $assembly/tables/HEIGHT_TO_INSCRIPTION_IDS
      local.get $2
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#selectValue<u32>
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#extend
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/SEQUENCE_NUMBER_TO_INSCRIPTION_ID
+     global.get $assembly/tables/SEQUENCE_NUMBER_TO_INSCRIPTION_ID
      local.get $9
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#selectValue<u64>
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/INSCRIPTION_ID_TO_SEQUENCE_NUMBER
+     global.get $assembly/tables/INSCRIPTION_ID_TO_SEQUENCE_NUMBER
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      local.set $5
@@ -7706,7 +7706,7 @@
      local.get $5
      local.get $3
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/INSCRIPTION_ID_TO_INSCRIPTION
+     global.get $assembly/tables/INSCRIPTION_ID_TO_INSCRIPTION
      local.get $7
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      local.set $10
@@ -7761,7 +7761,7 @@
      local.get $10
      local.get $5
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-     global.get $assembly/index/OUTPOINT_TO_SEQUENCE_NUMBERS
+     global.get $assembly/tables/OUTPOINT_TO_SEQUENCE_NUMBERS
      local.get $11
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#extend
@@ -7790,7 +7790,7 @@
      local.get $5
      i32.load offset=4
      memory.copy
-     global.get $assembly/index/OUTPOINT_TO_SEQUENCE_NUMBERS
+     global.get $assembly/tables/OUTPOINT_TO_SEQUENCE_NUMBERS
      local.get $3
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getListValues<u64>
@@ -7803,25 +7803,25 @@
       i32.load offset=12
       i32.lt_s
       if
-       global.get $assembly/index/SEQUENCE_NUMBER_TO_INSCRIPTION_ID
+       global.get $assembly/tables/SEQUENCE_NUMBER_TO_INSCRIPTION_ID
        local.get $11
        local.get $12
        call $~lib/array/Array<u64>#__get
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#selectValue<u64>
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#get
        local.set $10
-       global.get $assembly/index/INSCRIPTION_ID_TO_SATPOINT
+       global.get $assembly/tables/INSCRIPTION_ID_TO_SATPOINT
        local.get $10
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#get
        local.set $3
-       global.get $assembly/index/SATPOINT_TO_SAT
+       global.get $assembly/tables/SATPOINT_TO_SAT
        local.get $3
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
        local.set $9
        block $__inlined_func$~lib/metashrew-as/assembly/indexer/bst/BST<u64>#seekLower$44 (result i64)
-        global.get $assembly/index/SAT_TO_OUTPOINT
+        global.get $assembly/tables/SAT_TO_OUTPOINT
         local.set $8
         i32.const 8
         call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -7956,7 +7956,7 @@
         i64.const -1
        end
        local.set $6
-       global.get $assembly/index/SAT_TO_OUTPOINT
+       global.get $assembly/tables/SAT_TO_OUTPOINT
        local.set $5
        i32.const 8
        call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -7998,7 +7998,7 @@
        call $~lib/metashrew-as/assembly/blockdata/sat/SatPoint#constructor
        call $~lib/metashrew-as/assembly/blockdata/sat/SatPoint#toArrayBuffer
        local.set $7
-       global.get $assembly/index/SATPOINT_TO_SAT
+       global.get $assembly/tables/SATPOINT_TO_SAT
        local.get $7
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
        local.set $5
@@ -8010,17 +8010,17 @@
        local.get $5
        local.get $3
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-       global.get $assembly/index/SATPOINT_TO_INSCRIPTION_ID
+       global.get $assembly/tables/SATPOINT_TO_INSCRIPTION_ID
        local.get $7
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
        local.get $10
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-       global.get $assembly/index/INSCRIPTION_ID_TO_SATPOINT
+       global.get $assembly/tables/INSCRIPTION_ID_TO_SATPOINT
        local.get $10
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
        local.get $7
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-       global.get $assembly/index/OUTPOINT_TO_SEQUENCE_NUMBERS
+       global.get $assembly/tables/OUTPOINT_TO_SEQUENCE_NUMBERS
        local.get $8
        call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
        local.set $3
@@ -8074,13 +8074,13 @@
   (local $17 i64)
   (local $18 i32)
   (local $19 i32)
-  global.get $assembly/index/HEIGHT_TO_BLOCKHASH
+  global.get $assembly/tables/HEIGHT_TO_BLOCKHASH
   local.get $0
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#selectValue<u32>
   local.get $1
   call $~lib/metashrew-as/assembly/blockdata/block/Block#blockhash
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
-  global.get $assembly/index/BLOCKHASH_TO_HEIGHT
+  global.get $assembly/tables/BLOCKHASH_TO_HEIGHT
   local.get $1
   call $~lib/metashrew-as/assembly/blockdata/block/Block#blockhash
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
@@ -8116,7 +8116,7 @@
      i32.load offset=12
      i32.lt_s
      if
-      global.get $assembly/index/OUTPOINT_TO_VALUE
+      global.get $assembly/tables/OUTPOINT_TO_VALUE
       local.set $6
       local.get $9
       local.get $4
@@ -8168,7 +8168,7 @@
   i32.const 0
   call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
   local.set $10
-  global.get $assembly/index/STARTING_SAT
+  global.get $assembly/tables/STARTING_SAT
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
   local.set $7
   local.get $10
@@ -8202,7 +8202,7 @@
      i32.load offset=12
      i32.lt_s
      if
-      global.get $assembly/index/OUTPOINT_TO_VALUE
+      global.get $assembly/tables/OUTPOINT_TO_VALUE
       local.set $6
       local.get $1
       local.get $4
@@ -8246,7 +8246,7 @@
     br $for-loop|01
    end
   end
-  global.get $assembly/index/STARTING_SAT
+  global.get $assembly/tables/STARTING_SAT
   local.set $2
   i32.const 8
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -8427,7 +8427,7 @@
      i32.load offset=12
      i32.lt_s
      if
-      global.get $assembly/index/SAT_TO_OUTPOINT
+      global.get $assembly/tables/SAT_TO_OUTPOINT
       local.set $9
       local.get $11
       local.get $1
@@ -8566,7 +8566,7 @@
       local.set $5
       local.get $10
       local.get $1
-      global.get $assembly/index/STARTING_SAT
+      global.get $assembly/tables/STARTING_SAT
       call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
       local.tee $7
       local.get $5
