@@ -33,6 +33,8 @@ import {
 } from "./tables";
 
 
+export function trap(): void { unreachable(); }
+
 function rangeLength<K>(bst: BST<K>, key: K): K {
   return bst.seekGreater(key) - key;
 }
