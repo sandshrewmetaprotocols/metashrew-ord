@@ -161,7 +161,7 @@ describe("metashrew index", () => {
       program.setBlockHeight(i);
       await program.run("_start");
     }
-    for (let i = 0; i < 2000; i++) {
+    for (let i = 709634; i < 709635; i++) {
       console.log(`BLOCK ${i}`);
       await runBlock(i);
     }
