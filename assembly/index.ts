@@ -164,7 +164,11 @@ class Index {
     let total = 0;
     let offset: u64 = 0;
     let outputIndex: i32 = 0;
+    // console.log(height.toString(10));
+    // console.log(Box.from(txid).toHexString());
     for (let i = 0; i < tx.ins.length; i++) {
+      // console.log(i.toString(10));
+
       const inscription = tx.ins[i].inscription();
       if (inscription !== null) {
         const sequenceNumber = NEXT_SEQUENCE_NUMBER.getValue<u64>();
