@@ -13,9 +13,9 @@
  (type $11 (func (param i32 i64) (result i32)))
  (type $12 (func (param i64 i32) (result i32)))
  (type $13 (func (param i32 i64 i32)))
- (type $14 (func (param i32 i64) (result i64)))
- (type $15 (func (param i32 i32 i32 i32)))
- (type $16 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $14 (func (param i32 i32 i32 i32)))
+ (type $15 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $16 (func (param i32 i64) (result i64)))
  (type $17 (func (param i64 i32 i32)))
  (type $18 (func (param i64) (result i64)))
  (type $19 (func (param i32 i32 i64)))
@@ -24,7 +24,7 @@
  (type $22 (func (param i32 i64 i32 i32)))
  (type $23 (func (param i64 i64 i32) (result i32)))
  (type $24 (func (param i32 i32 i32) (result i64)))
- (type $25 (func (param i64 i64) (result i64)))
+ (type $25 (func (param i32 i64 i64) (result i64)))
  (type $26 (func (param i32 i32 i64) (result i32)))
  (type $27 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -9947,23 +9947,25 @@
   i64.const 0
   return
  )
- (func $assembly/index/rangeLength<u64> (param $bst i32) (param $key i64) (result i64)
+ (func $assembly/index/rangeLength<u64> (param $bst i32) (param $key i64) (param $max i64) (result i64)
+  (local $greater i64)
+  (local $end i64)
   local.get $bst
   local.get $key
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#seekGreater
+  local.set $greater
+  local.get $greater
+  i64.const 0
+  i64.eq
+  if (result i64)
+   local.get $max
+  else
+   local.get $greater
+  end
+  local.set $end
+  local.get $end
   local.get $key
   i64.sub
-  return
- )
- (func $assembly/index/min<u64> (param $a i64) (param $b i64) (result i64)
-  local.get $a
-  local.get $b
-  i64.gt_u
-  if
-   local.get $b
-   return
-  end
-  local.get $a
   return
  )
  (func $assembly/index/SatRanges.fromSats (param $sats i32) (result i32)
@@ -9988,10 +9990,9 @@
     local.get $sats
     local.get $i
     call $~lib/array/Array<u64>#__get
-    call $assembly/index/rangeLength<u64>
     global.get $assembly/tables/STARTING_SAT
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
-    call $assembly/index/min<u64>
+    call $assembly/index/rangeLength<u64>
     call $~lib/array/Array<u64>#__set
     local.get $i
     i32.const 1

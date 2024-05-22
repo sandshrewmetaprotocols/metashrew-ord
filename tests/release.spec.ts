@@ -191,10 +191,9 @@ describe("metashrew index", () => {
       await program.run("_start");
     }
     for (let i = 0; i < 3; i++) {
-      console.log(`BLOCK ${i}`);
       await runBlock(i);
-      console.log(IndexPointer.for(program, '/startingsat').getUInt64());
+      IndexPointer.for(program, '/startingsat').getUInt64();
     }
-    console.log(IndexPointer.for(program, '/outpoint/bysatrange').getBST());
+    IndexPointer.for(program, '/outpoint/bysatrange').getBST();
   });
 });

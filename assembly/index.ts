@@ -35,12 +35,19 @@ import {
 
 export function trap(): void { unreachable(); }
 
-function rangeLength<K>(bst: BST<K>, key: K): K {
-  return bst.seekGreater(key) - key;
+function rangeLength<K>(bst: BST<K>, key: K, max: K): K {
+  const greater = bst.seekGreater(key);
+  const end = greater === 0 ? max : greater;
+  return end - key;
 }
 
 function min<T>(a: T, b: T): T {
   if (a > b) return b;
+  return a;
+}
+
+function max<T>(a: T, b: T): T {
+  if (a < b) return b;
   return a;
 }
 
@@ -69,7 +76,7 @@ class SatRanges {
   static fromSats(sats: Array<u64>): SatRanges {
     const distances = new Array<u64>(sats.length);
     for (let i = 0; i < sats.length; i++) {
-      distances[i] = min(rangeLength<u64>(SAT_TO_OUTPOINT, sats[i]), STARTING_SAT.getValue<u64>());
+      distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], STARTING_SAT.getValue<u64>());
     }
     return new SatRanges(sats, distances);
   }
