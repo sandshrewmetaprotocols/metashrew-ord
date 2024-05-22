@@ -32,6 +32,7 @@
  (import "env" "__load_input" (func $~lib/metashrew-as/assembly/indexer/index/__load_input (param i32)))
  (import "env" "__get_len" (func $~lib/metashrew-as/assembly/indexer/index/__get_len (param i32) (result i32)))
  (import "env" "__get" (func $~lib/metashrew-as/assembly/indexer/index/__get (param i32 i32)))
+ (import "env" "__log" (func $~lib/metashrew-as/assembly/utils/logging/__log (param i32)))
  (import "env" "__flush" (func $~lib/metashrew-as/assembly/indexer/index/__flush (param i32)))
  (global $~lib/metashrew-as/assembly/utils/hex/hexLookupTable i32 (i32.const 32))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -10775,12 +10776,17 @@
   (local $len|4 i32)
   (local $this|5 i32)
   (local $this|6 i32)
+  (local $next i32)
+  (local $this|8 i32)
+  (local $len|9 i32)
+  (local $this|10 i32)
+  (local $this|11 i32)
   (local $subview i32)
   (local $distance i32)
-  (local $this|9 i32)
-  (local $len|10 i32)
-  (local $this|11 i32)
-  (local $this|12 i32)
+  (local $this|14 i32)
+  (local $len|15 i32)
+  (local $this|16 i32)
+  (local $this|17 i32)
   (local $envelopeBox i32)
   local.get $view
   call $~lib/metashrew-as/assembly/utils/box/Box#get:start
@@ -10825,39 +10831,77 @@
       local.set $len
       br $while-break|0
      end
+     block $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.16 (result i32)
+      local.get $head
+      call $~lib/metashrew-as/assembly/utils/pointer/toPointer
+      local.set $this
+      local.get $len
+      local.set $len|4
+      i32.const 0
+      block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.16 (result i32)
+       local.get $this
+       local.set $this|5
+       block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.16 (result i32)
+        local.get $this|5
+        local.set $this|6
+        local.get $this|6
+        br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.16
+       end
+       br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.16
+      end
+      local.get $len|4
+      call $~lib/metashrew-as/assembly/utils/box/Box#constructor
+      br $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.16
+     end
+     local.set $next
      local.get $head
-     i32.const 1
-     i32.add
-     local.set $head
-     local.get $len
-     i32.const 1
-     i32.sub
-     local.set $len
+     i32.load8_u
+     call $~lib/metashrew-as/assembly/utils/utils/isPushOp
+     if
+      local.get $next
+      call $~lib/metashrew-as/assembly/utils/utils/parsePushOp
+      drop
+      local.get $next
+      call $~lib/metashrew-as/assembly/utils/box/Box#get:start
+      local.set $head
+      local.get $next
+      call $~lib/metashrew-as/assembly/utils/box/Box#get:len
+      local.set $len
+     else
+      local.get $head
+      i32.const 1
+      i32.add
+      local.set $head
+      local.get $len
+      i32.const 1
+      i32.sub
+      local.set $len
+     end
      br $while-continue|0
     end
    end
   end
-  block $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.16 (result i32)
+  block $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.17 (result i32)
    local.get $head
    call $~lib/metashrew-as/assembly/utils/pointer/toPointer
-   local.set $this
+   local.set $this|8
    local.get $len
-   local.set $len|4
+   local.set $len|9
    i32.const 0
-   block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.16 (result i32)
-    local.get $this
-    local.set $this|5
-    block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.16 (result i32)
-     local.get $this|5
-     local.set $this|6
-     local.get $this|6
-     br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.16
+   block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.17 (result i32)
+    local.get $this|8
+    local.set $this|10
+    block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.17 (result i32)
+     local.get $this|10
+     local.set $this|11
+     local.get $this|11
+     br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.17
     end
-    br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.16
+    br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.17
    end
-   local.get $len|4
+   local.get $len|9
    call $~lib/metashrew-as/assembly/utils/box/Box#constructor
-   br $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.16
+   br $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.17
   end
   local.set $subview
   loop $while-continue|1
@@ -10877,27 +10921,27 @@
      local.get $head
      i32.sub
      local.set $distance
-     block $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.17 (result i32)
+     block $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.18 (result i32)
       local.get $head
       call $~lib/metashrew-as/assembly/utils/pointer/toPointer
-      local.set $this|9
+      local.set $this|14
       local.get $distance
-      local.set $len|10
+      local.set $len|15
       i32.const 0
-      block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.17 (result i32)
-       local.get $this|9
-       local.set $this|11
-       block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.17 (result i32)
-        local.get $this|11
-        local.set $this|12
-        local.get $this|12
-        br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.17
+      block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.18 (result i32)
+       local.get $this|14
+       local.set $this|16
+       block $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.18 (result i32)
+        local.get $this|16
+        local.set $this|17
+        local.get $this|17
+        br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asRef<usize>|inlined.18
        end
-       br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.17
+       br $~lib/metashrew-as/assembly/utils/pointer/Pointer#asUsize|inlined.18
       end
-      local.get $len|10
+      local.get $len|15
       call $~lib/metashrew-as/assembly/utils/box/Box#constructor
-      br $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.17
+      br $~lib/metashrew-as/assembly/utils/pointer/Pointer#toBox|inlined.18
      end
      local.set $envelopeBox
      local.get $envelopeBox
@@ -11050,6 +11094,25 @@
   local.get $buffer
   i32.load
   return
+ )
+ (func $~lib/number/Usize#toString (param $this i32) (param $radix i32) (result i32)
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  local.get $this
+  local.get $radix
+  call $~lib/util/number/utoa32
+  return
+ )
+ (func $~lib/metashrew-as/assembly/utils/logging/Console#log (param $this i32) (param $v i32)
+  local.get $v
+  i32.const 1
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/metashrew-as/assembly/utils/logging/__log
  )
  (func $~lib/metashrew-as/assembly/blockdata/inscription/Inscription#get:fields (param $this i32) (result i32)
   local.get $this
@@ -11225,7 +11288,8 @@
   (local $tag i32)
   (local $content i32)
   (local $i i32)
-  (local $i|8 i32)
+  (local $data|8 i32)
+  (local $i|9 i32)
   (local $contentBody i32)
   local.get $this
   i32.eqz
@@ -11276,7 +11340,7 @@
   if
    i32.const 0
    i32.const 5696
-   i32.const 66
+   i32.const 74
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -11311,6 +11375,14 @@
       local.get $i
       call $~lib/metashrew-as/assembly/utils/utils/decodeTag
       local.set $tag
+      global.get $~lib/metashrew-as/assembly/utils/logging/console
+      local.get $tag
+      i32.const 10
+      call $~lib/number/Usize#toString
+      call $~lib/metashrew-as/assembly/utils/logging/Console#log
+      local.get $inscBox
+      call $~lib/metashrew-as/assembly/utils/utils/parsePushOp
+      local.set $data|8
       local.get $this
       call $~lib/metashrew-as/assembly/blockdata/inscription/Inscription#get:fields
       i32.const 0
@@ -11349,9 +11421,9 @@
     if
      local.get $inscBox
      call $~lib/metashrew-as/assembly/utils/utils/parsePushOp
-     local.set $i|8
+     local.set $i|9
      local.get $content
-     local.get $i|8
+     local.get $i|9
      call $~lib/metashrew-as/assembly/utils/utils/fromPushBox
      call $~lib/array/Array<~lib/arraybuffer/ArrayBuffer>#push
      drop

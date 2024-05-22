@@ -1,8 +1,9 @@
 import { expect } from "chai";
 import fs from "fs-extra";
 import { EventEmitter } from "events";
-import { IndexerProgram } from "metashrew-test";
+import { IndexPointer, IndexerProgram } from "metashrew-test";
 import path from "path";
+import { Block } from "bitcoinjs-lib";
 
 const stripHexPrefix = (key: string) => {
   if (key.substr(0, 2) === '0x') return key.substr(2);
@@ -13,6 +14,25 @@ const addHexPrefix = (s: string) => {
   if (s.substr(0, 2) === '0x') return s;
   return '0x' + s;
 };
+
+async function rpcCall(method, params) {
+  const response = await fetch(
+    "https://mainnet.sandshrew.io/v1/154f9aaa25a986241357836c37f8d71",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        method,
+        params,
+        jsonrpc: "2.0",
+        id: Date.now(),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  return (await response.json()).result;
+}
 
 const split = (ary, sym) => {
   return ary.reduce((r, v) => {
@@ -123,7 +143,6 @@ describe("metashrew index", () => {
     // console.log(program.kv);
     // console.log(String(ms) + "ms");
   });
-  */
   it("indexes a range of blocks", async () => {
     const program = new IndexerProgram(
       new Uint8Array(
@@ -136,24 +155,6 @@ describe("metashrew index", () => {
     );
 //    program.kv = require(path.join(__dirname, 'snapshot-1295'));
     program.on("log", (v) => console.log(v));
-    async function rpcCall(method, params) {
-      const response = await fetch(
-        "https://mainnet.sandshrew.io/v1/154f9aaa25a986241357836c37f8d71",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            method,
-            params,
-            jsonrpc: "2.0",
-            id: Date.now(),
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      return (await response.json()).result;
-    }
     async function runBlock(i: number) {
       program.setBlock(
         await rpcCall("getblock", [await rpcCall("getblockhash", [i]), 0]),
@@ -165,5 +166,35 @@ describe("metashrew index", () => {
       console.log(`BLOCK ${i}`);
       await runBlock(i);
     }
+  });
+  */
+  it('correctly indexes satranges', async () => {
+    const block = await rpcCall('getblock', [ await rpcCall('getblockhash', [ 1 ]), 0 ]);
+    const fee = 50000;
+    const decoded = Block.fromHex(block);
+    const program = new IndexerProgram(
+      new Uint8Array(
+        Array.from(
+          await fs.readFile(
+            path.join(__dirname, "..", "build", "release.wasm"),
+          ),
+        ),
+      ).buffer,
+    );
+//    program.kv = require(path.join(__dirname, 'snapshot-1295'));
+    program.on("log", (v) => console.log(v));
+    async function runBlock(i: number) {
+      program.setBlock(
+        await rpcCall("getblock", [await rpcCall("getblockhash", [i]), 0]),
+      );
+      program.setBlockHeight(i);
+      await program.run("_start");
+    }
+    for (let i = 0; i < 3; i++) {
+      console.log(`BLOCK ${i}`);
+      await runBlock(i);
+      console.log(IndexPointer.for(program, '/startingsat').getUInt64());
+    }
+    console.log(IndexPointer.for(program, '/outpoint/bysatrange').getBST());
   });
 });
