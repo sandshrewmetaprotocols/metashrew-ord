@@ -275,6 +275,24 @@ class Index {
   }
 }
 
+function decodeHex(hex: string): ArrayBuffer {
+  const result = new ArrayBuffer(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    store<u8>(changetype<usize>(result) + (i / 2), <u8>parseInt(hex.substring(i, i + 2), 16));
+  }
+  return result;
+}
+
+
+/*
+function test_storage_persisted(): void {
+  let outpoint = OutPoint.from(decodeHex("04c3d4dd40af599514fa2861fbc884f7ee9bcb7717763cb84332319bb16c5fac"), 17).toArrayBuffer();
+  let value = OUTPOINT_TO_VALUE.select(outpoint).getValue<u64>();
+  console.log('value: ' + value.toString(10));
+  //if (value !== 0) throw Error('abort');
+}
+*/
+
 
 export function _start(): void {
   const data = input();
