@@ -35,12 +35,19 @@ import {
 
 export function trap(): void { unreachable(); }
 
-function rangeLength<K>(bst: BST<K>, key: K): K {
-  return bst.seekGreater(key) - key;
+function rangeLength<K>(bst: BST<K>, key: K, max: K): K {
+  const greater = bst.seekGreater(key);
+  const end = greater === 0 ? max : greater;
+  return end - key;
 }
 
 function min<T>(a: T, b: T): T {
   if (a > b) return b;
+  return a;
+}
+
+function max<T>(a: T, b: T): T {
+  if (a < b) return b;
   return a;
 }
 
@@ -69,7 +76,7 @@ class SatRanges {
   static fromSats(sats: Array<u64>): SatRanges {
     const distances = new Array<u64>(sats.length);
     for (let i = 0; i < sats.length; i++) {
-      distances[i] = min(rangeLength<u64>(SAT_TO_OUTPOINT, sats[i]), STARTING_SAT.getValue<u64>());
+      distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], STARTING_SAT.getValue<u64>());
     }
     return new SatRanges(sats, distances);
   }
@@ -267,6 +274,24 @@ class Index {
     }
   }
 }
+
+function decodeHex(hex: string): ArrayBuffer {
+  const result = new ArrayBuffer(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    store<u8>(changetype<usize>(result) + (i / 2), <u8>parseInt(hex.substring(i, i + 2), 16));
+  }
+  return result;
+}
+
+
+/*
+function test_storage_persisted(): void {
+  let outpoint = OutPoint.from(decodeHex("04c3d4dd40af599514fa2861fbc884f7ee9bcb7717763cb84332319bb16c5fac"), 17).toArrayBuffer();
+  let value = OUTPOINT_TO_VALUE.select(outpoint).getValue<u64>();
+  console.log('value: ' + value.toString(10));
+  //if (value !== 0) throw Error('abort');
+}
+*/
 
 
 export function _start(): void {

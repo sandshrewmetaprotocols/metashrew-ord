@@ -986,16 +986,15 @@ memorystream@^0.3.1:
 
 "metashrew-as@https://github.com/sandshrewmetaprotocols/metashrew-as":
   version "0.1.0"
-  resolved "https://github.com/sandshrewmetaprotocols/metashrew-as#25867657a55682c372a5bf75268b0c486c35ca0f"
+  resolved "https://github.com/sandshrewmetaprotocols/metashrew-as#8034f7724c4109a348045ef3c1560e3da193e439"
   dependencies:
     fast-sha256-as "https://github.com/sandshrewmetaprotocols/fast-sha256-as"
     lodash "^4.17.21"
 
 "metashrew-test@https://github.com/sandshrewmetaprotocols/metashrew-test":
   version "0.1.0"
-  resolved "https://github.com/sandshrewmetaprotocols/metashrew-test#55e465dc51c3d9f001a501e9880450b7b178bc82"
+  resolved "https://github.com/sandshrewmetaprotocols/metashrew-test#ad1d3b61869a0508158369782079b12502d40295"
   dependencies:
-    "@protobuf-ts/plugin" "^2.9.4"
     lodash "^4.17.21"
     rlp "^3.0.0"
 

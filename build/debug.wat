@@ -14,8 +14,8 @@
  (type $12 (func (param i64 i32) (result i32)))
  (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $14 (func (param i32 i64 i32)))
- (type $15 (func (param i32 i64) (result i64)))
- (type $16 (func (param i32 i32 i32 i32)))
+ (type $15 (func (param i32 i32 i32 i32)))
+ (type $16 (func (param i32 i64) (result i64)))
  (type $17 (func (param i64 i32 i32)))
  (type $18 (func (param i64) (result i64)))
  (type $19 (func (param i32 i32 i64)))
@@ -24,7 +24,7 @@
  (type $22 (func (param i32 i64 i32 i32)))
  (type $23 (func (param i64 i64 i32) (result i32)))
  (type $24 (func (param i32 i32 i32) (result i64)))
- (type $25 (func (param i64 i64) (result i64)))
+ (type $25 (func (param i32 i64 i64) (result i64)))
  (type $26 (func (param i32 i32 i64) (result i32)))
  (type $27 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -33,7 +33,6 @@
  (import "env" "__get_len" (func $~lib/metashrew-as/assembly/indexer/index/__get_len (param i32) (result i32)))
  (import "env" "__get" (func $~lib/metashrew-as/assembly/indexer/index/__get (param i32 i32)))
  (import "env" "__flush" (func $~lib/metashrew-as/assembly/indexer/index/__flush (param i32)))
- (import "env" "__log" (func $~lib/metashrew-as/assembly/utils/logging/__log (param i32)))
  (global $~lib/metashrew-as/assembly/utils/hex/hexLookupTable i32 (i32.const 32))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -10385,23 +10384,25 @@
   i64.const 0
   return
  )
- (func $assembly/index/rangeLength<u64> (param $bst i32) (param $key i64) (result i64)
+ (func $assembly/index/rangeLength<u64> (param $bst i32) (param $key i64) (param $max i64) (result i64)
+  (local $greater i64)
+  (local $end i64)
   local.get $bst
   local.get $key
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#seekGreater
+  local.set $greater
+  local.get $greater
+  i64.const 0
+  i64.eq
+  if (result i64)
+   local.get $max
+  else
+   local.get $greater
+  end
+  local.set $end
+  local.get $end
   local.get $key
   i64.sub
-  return
- )
- (func $assembly/index/min<u64> (param $a i64) (param $b i64) (result i64)
-  local.get $a
-  local.get $b
-  i64.gt_u
-  if
-   local.get $b
-   return
-  end
-  local.get $a
   return
  )
  (func $assembly/index/SatRanges.fromSats (param $sats i32) (result i32)
@@ -10426,10 +10427,9 @@
     local.get $sats
     local.get $i
     call $~lib/array/Array<u64>#__get
-    call $assembly/index/rangeLength<u64>
     global.get $assembly/tables/STARTING_SAT
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
-    call $assembly/index/min<u64>
+    call $assembly/index/rangeLength<u64>
     call $~lib/array/Array<u64>#__set
     local.get $i
     i32.const 1
@@ -13051,16 +13051,90 @@
   call $~lib/array/Array<u8>#set:length_
   local.get $this
  )
+ (func $~lib/array/Array<u8>#get:length_ (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<u8>#get:length (param $this i32) (result i32)
+  local.get $this
+  call $~lib/array/Array<u8>#get:length_
+  return
+ )
+ (func $~lib/array/Array<u8>#get:dataStart (param $this i32) (result i32)
+  local.get $this
+  i32.load offset=4
+ )
+ (func $~lib/array/Array<u8>#__set (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<u8>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 2320
+    i32.const 2448
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 0
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u8>#set:length_
+  end
+  local.get $this
+  call $~lib/array/Array<u8>#get:dataStart
+  local.get $index
+  i32.const 0
+  i32.shl
+  i32.add
+  local.get $value
+  i32.store8
+  i32.const 0
+  drop
+ )
  (func $~lib/metashrew-as/assembly/indexer/index/arrayBufferToArray (param $data i32) (result i32)
   (local $result i32)
+  (local $i i32)
   i32.const 0
   local.get $data
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   call $~lib/array/Array<u8>#constructor
   local.set $result
-  local.get $result
-  local.get $data
-  call $~lib/array/Array<u8>#set:buffer
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $result
+   call $~lib/array/Array<u8>#get:length
+   i32.lt_u
+   if
+    local.get $result
+    local.get $i
+    local.get $data
+    local.get $i
+    i32.add
+    i32.load8_u
+    call $~lib/array/Array<u8>#__set
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
   local.get $result
   return
  )
@@ -13251,14 +13325,6 @@
   call $~lib/array/Array<~lib/array/Array<u8>>#get:length_
   return
  )
- (func $~lib/array/Array<u8>#get:length_ (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=12
- )
- (func $~lib/array/Array<u8>#get:dataStart (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
  (func $~lib/array/Array<u8>#push (param $this i32) (param $value i32) (result i32)
   (local $oldLen i32)
   (local $len i32)
@@ -13361,11 +13427,6 @@
    unreachable
   end
   local.get $value
-  return
- )
- (func $~lib/array/Array<u8>#get:length (param $this i32) (result i32)
-  local.get $this
-  call $~lib/array/Array<u8>#get:length_
   return
  )
  (func $~lib/array/Array<u8>#__get (param $this i32) (param $index i32) (result i32)
@@ -15132,37 +15193,6 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   return
  )
- (func $~lib/number/Usize#toString (param $this i32) (param $radix i32) (result i32)
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  local.get $this
-  local.get $radix
-  call $~lib/util/number/utoa32
-  return
- )
- (func $~lib/metashrew-as/assembly/utils/logging/Console#log (param $this i32) (param $v i32)
-  local.get $v
-  i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
-  call $~lib/metashrew-as/assembly/utils/logging/__log
- )
- (func $~lib/array/Array<u8>#get:buffer (param $this i32) (result i32)
-  local.get $this
-  i32.load
- )
- (func $~lib/number/U8#toString (param $this i32) (param $radix i32) (result i32)
-  local.get $this
-  i32.const 255
-  i32.and
-  local.get $radix
-  call $~lib/util/number/utoa32
-  return
- )
  (func $assembly/index/test_arrayBufferCopy
   (local $buffer i32)
   (local $ary i32)
@@ -15173,22 +15203,10 @@
   local.get $buffer
   i32.const 1430532898
   i32.store
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $buffer
-  i32.load
-  i32.const 10
-  call $~lib/number/Usize#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
   i32.const 0
   i32.const 4
   call $~lib/array/Array<u8>#constructor
   local.set $ary
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $ary
-  call $~lib/array/Array<u8>#get:buffer
-  i32.const 10
-  call $~lib/number/Usize#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
   local.get $ary
   local.get $buffer
   i32.store
@@ -15197,39 +15215,6 @@
   i32.add
   local.get $buffer
   i32.store
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $ary
-  i32.load
-  i32.const 10
-  call $~lib/number/Usize#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $ary
-  call $~lib/array/Array<u8>#get:buffer
-  i32.const 10
-  call $~lib/number/Usize#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $ary
-  call $~lib/array/Array<u8>#get:dataStart
-  i32.const 10
-  call $~lib/number/Usize#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $ary
-  i32.const 4
-  i32.add
-  i32.load
-  i32.const 10
-  call $~lib/number/Usize#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $ary
-  i32.const 0
-  call $~lib/array/Array<u8>#__get
-  i32.const 10
-  call $~lib/number/U8#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
  )
  (func $~start
   call $start:assembly/index
