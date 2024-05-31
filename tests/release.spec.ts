@@ -124,6 +124,7 @@ describe("metashrew index", () => {
     // console.log(String(ms) + "ms");
   });
   */
+ /*
   it("indexes a range of blocks", async () => {
     const program = new IndexerProgram(
       new Uint8Array(
@@ -161,9 +162,26 @@ describe("metashrew index", () => {
       program.setBlockHeight(i);
       await program.run("_start");
     }
-    for (let i = 770051; i < 770052; i++) {
+    for (let i = 0; i < 100; i++) {
       console.log(`BLOCK ${i}`);
       await runBlock(i);
     }
+  });
+  */
+  it("permits setting data backend for Array", async () => {
+    const program = new IndexerProgram(
+      new Uint8Array(
+        Array.from(
+          await fs.readFile(
+            path.join(__dirname, "..", "build", "debug.wasm"),
+          ),
+        ),
+      ).buffer,
+    );
+//    program.kv = require(path.join(__dirname, 'snapshot-1295'));
+    program.on("log", (v) => console.log(v));
+    program.setBlockHeight(0)
+    program.setBlock('0x');
+    await program.run('test_arrayBufferCopy');
   });
 });

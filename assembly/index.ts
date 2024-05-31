@@ -164,11 +164,11 @@ class Index {
     let total = 0;
     let offset: u64 = 0;
     let outputIndex: i32 = 0;
-    // console.log(height.toString(10));
-    // console.log(Box.from(txid).toHexString());
+    //console.log(height.toString(10));
+    //console.log(Box.from(txid).toHexString());
     for (let i = 0; i < tx.ins.length; i++) {
-      // console.log(i.toString(10));
-
+      //console.log(i.toString(10));
+      if (outputIndex >= tx.outs.length) break;
       const inscription = tx.ins[i].inscription();
       if (inscription !== null) {
         const sequenceNumber = NEXT_SEQUENCE_NUMBER.getValue<u64>();
@@ -180,7 +180,7 @@ class Index {
           outputIndex++;
 	  offset = 0;
 	}
-	const sat = OUTPOINT_TO_SAT.selectIndex(0).getValue<u64>();
+	const sat = OUTPOINT_TO_SAT.select(outpoint).selectIndex(0).getValue<u64>();
 	const inscriptionId = toID(satpoint, 0);
 	SATPOINT_TO_SAT.select(satpoint).setValue<u64>(sat);
 	SATPOINT_TO_INSCRIPTION_ID.select(satpoint).set(inscriptionId);
@@ -291,14 +291,16 @@ export function sat(): ArrayBuffer {
   ]));
 }
 
+
 export function inscription(): ArrayBuffer {
   const data = input();
   return data;
 }
 
 export function content(): ArrayBuffer {
-  const data = input();
-  return data;
+  const number = parsePrimitive<u32>(Box.from(input()));
+  const inscriptionId = SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(<u64>number).get();
+  return INSCRIPTION_ID_TO_INSCRIPTION.select(inscriptionId).get();
 }
 
 export function inscriptionsfrom(): ArrayBuffer {
@@ -316,4 +318,25 @@ export function output(): ArrayBuffer {
   const outpoint = parseBytes(data, 32);
   const vout = parsePrimitive<u32>(data);
   return new ArrayBuffer(0);
+}
+
+export function test_arrayBufferCopy(): void {
+  const buffer = new ArrayBuffer(4);
+  store<u32>(changetype<usize>(buffer), 0x55443322);
+  /*
+  console.log(load<usize>(changetype<usize>(buffer)).toString(10));
+  */
+  const ary = new Array<u8>(4);
+  /*
+  console.log(changetype<usize>(ary.buffer).toString(10));
+  */
+  store<usize>(changetype<usize>(ary), changetype<usize>(buffer));
+  store<usize>(changetype<usize>(ary) + sizeof<usize>(), changetype<usize>(buffer));
+  /*
+  console.log(load<usize>(changetype<usize>(ary)).toString(10));
+  console.log(changetype<usize>(ary.buffer).toString(10));
+  console.log(changetype<usize>(ary.dataStart).toString(10));
+  console.log(load<usize>(changetype<usize>(ary) + sizeof<usize>()).toString(10));
+  console.log(ary[0].toString(10));
+  */
 }
