@@ -166,7 +166,7 @@
  (data $60 (i32.const 6428) "\1c\00\00\00\00\00\00\00\00\00\00\00:\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00")
  (data $61 (i32.const 6460) "\1c\00\00\00\00\00\00\00\00\00\00\00:\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 11 11 funcref)
- (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/index/SatRanges.fromTransaction~anonymous|0 $assembly/index/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|1 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|2 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|3)
+ (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/sats/SatRanges/SatRanges.fromTransaction~anonymous|0 $assembly/sats/SatRanges/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|1 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|2 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|3)
  (export "trap" (func $assembly/index/trap))
  (export "_start" (func $assembly/index/_start))
  (export "sat" (func $assembly/index/sat))
@@ -1759,11 +1759,17 @@
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer.for
   global.set $assembly/tables/INSCRIPTION_ID_TO_SEQUENCE_NUMBER
  )
+ (func $start:assembly/sats/SatRanges
+  call $start:assembly/tables
+ )
+ (func $start:assembly/sats/index
+  call $start:assembly/sats/SatRanges
+ )
  (func $start:assembly/index
   call $start:~lib/metashrew-as/assembly/indexer/index
   call $start:~lib/metashrew-as/assembly/blockdata/block
   call $start:~lib/metashrew-as/assembly/blockdata/height
-  call $start:assembly/tables
+  call $start:assembly/sats/index
  )
  (func $assembly/index/trap
   unreachable
@@ -7987,7 +7993,7 @@
   i32.const 0
   drop
  )
- (func $assembly/index/SatSource#set:ranges (param $this i32) (param $ranges i32)
+ (func $assembly/sats/SatSource/SatSource#set:ranges (param $this i32) (param $ranges i32)
   local.get $this
   local.get $ranges
   i32.store
@@ -7996,17 +8002,17 @@
   i32.const 0
   call $~lib/rt/stub/__link
  )
- (func $assembly/index/SatSource#set:pointer (param $this i32) (param $pointer i32)
+ (func $assembly/sats/SatSource/SatSource#set:pointer (param $this i32) (param $pointer i32)
   local.get $this
   local.get $pointer
   i32.store offset=4
  )
- (func $assembly/index/SatSource#set:offset (param $this i32) (param $offset i64)
+ (func $assembly/sats/SatSource/SatSource#set:offset (param $this i32) (param $offset i64)
   local.get $this
   local.get $offset
   i64.store offset=8
  )
- (func $assembly/index/SatSource#constructor (param $this i32) (param $ranges i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#constructor (param $this i32) (param $ranges i32) (result i32)
   local.get $this
   i32.eqz
   if
@@ -8017,19 +8023,19 @@
   end
   local.get $this
   i32.const 0
-  call $assembly/index/SatSource#set:ranges
+  call $assembly/sats/SatSource/SatSource#set:ranges
   local.get $this
   i32.const 0
-  call $assembly/index/SatSource#set:pointer
+  call $assembly/sats/SatSource/SatSource#set:pointer
   local.get $this
   i64.const 0
-  call $assembly/index/SatSource#set:offset
+  call $assembly/sats/SatSource/SatSource#set:offset
   local.get $this
   local.get $ranges
-  call $assembly/index/SatSource#set:ranges
+  call $assembly/sats/SatSource/SatSource#set:ranges
   local.get $this
  )
- (func $assembly/index/SatRanges#set:sats (param $this i32) (param $sats i32)
+ (func $assembly/sats/SatRanges/SatRanges#set:sats (param $this i32) (param $sats i32)
   local.get $this
   local.get $sats
   i32.store
@@ -8038,7 +8044,7 @@
   i32.const 0
   call $~lib/rt/stub/__link
  )
- (func $assembly/index/SatRanges#set:distances (param $this i32) (param $distances i32)
+ (func $assembly/sats/SatRanges/SatRanges#set:distances (param $this i32) (param $distances i32)
   local.get $this
   local.get $distances
   i32.store offset=4
@@ -8047,7 +8053,7 @@
   i32.const 0
   call $~lib/rt/stub/__link
  )
- (func $assembly/index/SatRanges#constructor (param $this i32) (param $sats i32) (param $distances i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges#constructor (param $this i32) (param $sats i32) (param $distances i32) (result i32)
   local.get $this
   i32.eqz
   if
@@ -8058,19 +8064,19 @@
   end
   local.get $this
   i32.const 0
-  call $assembly/index/SatRanges#set:sats
+  call $assembly/sats/SatRanges/SatRanges#set:sats
   local.get $this
   i32.const 0
-  call $assembly/index/SatRanges#set:distances
+  call $assembly/sats/SatRanges/SatRanges#set:distances
   local.get $this
   local.get $sats
-  call $assembly/index/SatRanges#set:sats
+  call $assembly/sats/SatRanges/SatRanges#set:sats
   local.get $this
   local.get $distances
-  call $assembly/index/SatRanges#set:distances
+  call $assembly/sats/SatRanges/SatRanges#set:distances
   local.get $this
  )
- (func $assembly/index/SatSource.range (param $sat i64) (param $distance i64) (result i32)
+ (func $assembly/sats/SatSource/SatSource.range (param $sat i64) (param $distance i64) (result i32)
   (local $sats i32)
   (local $distances i32)
   i32.const 0
@@ -8093,11 +8099,11 @@
   i32.const 0
   local.get $sats
   local.get $distances
-  call $assembly/index/SatRanges#constructor
-  call $assembly/index/SatSource#constructor
+  call $assembly/sats/SatRanges/SatRanges#constructor
+  call $assembly/sats/SatSource/SatSource#constructor
   return
  )
- (func $assembly/index/SatSink#set:target (param $this i32) (param $target i32)
+ (func $assembly/sats/SatSink/SatSink#set:target (param $this i32) (param $target i32)
   local.get $this
   local.get $target
   i32.store
@@ -8106,17 +8112,17 @@
   i32.const 0
   call $~lib/rt/stub/__link
  )
- (func $assembly/index/SatSink#set:pointer (param $this i32) (param $pointer i32)
+ (func $assembly/sats/SatSink/SatSink#set:pointer (param $this i32) (param $pointer i32)
   local.get $this
   local.get $pointer
   i32.store offset=4
  )
- (func $assembly/index/SatSink#set:offset (param $this i32) (param $offset i64)
+ (func $assembly/sats/SatSink/SatSink#set:offset (param $this i32) (param $offset i64)
   local.get $this
   local.get $offset
   i64.store offset=8
  )
- (func $assembly/index/SatSink#constructor (param $this i32) (param $target i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink#constructor (param $this i32) (param $target i32) (result i32)
   local.get $this
   i32.eqz
   if
@@ -8127,33 +8133,33 @@
   end
   local.get $this
   i32.const 0
-  call $assembly/index/SatSink#set:target
+  call $assembly/sats/SatSink/SatSink#set:target
   local.get $this
   i32.const 0
-  call $assembly/index/SatSink#set:pointer
+  call $assembly/sats/SatSink/SatSink#set:pointer
   local.get $this
   i64.const 0
-  call $assembly/index/SatSink#set:offset
+  call $assembly/sats/SatSink/SatSink#set:offset
   local.get $this
   local.get $target
-  call $assembly/index/SatSink#set:target
+  call $assembly/sats/SatSink/SatSink#set:target
   local.get $this
  )
- (func $assembly/index/SatSink.fromTransaction (param $tx i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink.fromTransaction (param $tx i32) (result i32)
   i32.const 0
   local.get $tx
-  call $assembly/index/SatSink#constructor
+  call $assembly/sats/SatSink/SatSink#constructor
   return
  )
- (func $assembly/index/SatSource#get:pointer (param $this i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#get:pointer (param $this i32) (result i32)
   local.get $this
   i32.load offset=4
  )
- (func $assembly/index/SatSource#get:ranges (param $this i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#get:ranges (param $this i32) (result i32)
   local.get $this
   i32.load
  )
- (func $assembly/index/SatRanges#get:sats (param $this i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges#get:sats (param $this i32) (result i32)
   local.get $this
   i32.load
  )
@@ -8162,11 +8168,11 @@
   call $~lib/array/Array<u64>#get:length_
   return
  )
- (func $assembly/index/SatSource#get:offset (param $this i32) (result i64)
+ (func $assembly/sats/SatSource/SatSource#get:offset (param $this i32) (result i64)
   local.get $this
   i64.load offset=8
  )
- (func $assembly/index/SatRanges#get:distances (param $this i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges#get:distances (param $this i32) (result i32)
   local.get $this
   i32.load offset=4
  )
@@ -8197,35 +8203,35 @@
   local.get $value
   return
  )
- (func $assembly/index/SatSource#consumed (param $this i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#consumed (param $this i32) (result i32)
   local.get $this
-  call $assembly/index/SatSource#get:pointer
+  call $assembly/sats/SatSource/SatSource#get:pointer
   local.get $this
-  call $assembly/index/SatSource#get:ranges
-  call $assembly/index/SatRanges#get:sats
+  call $assembly/sats/SatSource/SatSource#get:ranges
+  call $assembly/sats/SatRanges/SatRanges#get:sats
   call $~lib/array/Array<u64>#get:length
   i32.ge_s
   if (result i32)
    i32.const 1
   else
    local.get $this
-   call $assembly/index/SatSource#get:pointer
+   call $assembly/sats/SatSource/SatSource#get:pointer
    local.get $this
-   call $assembly/index/SatSource#get:ranges
-   call $assembly/index/SatRanges#get:sats
+   call $assembly/sats/SatSource/SatSource#get:ranges
+   call $assembly/sats/SatRanges/SatRanges#get:sats
    call $~lib/array/Array<u64>#get:length
    i32.const 1
    i32.sub
    i32.eq
    if (result i32)
     local.get $this
-    call $assembly/index/SatSource#get:offset
+    call $assembly/sats/SatSource/SatSource#get:offset
     local.get $this
-    call $assembly/index/SatSource#get:ranges
-    call $assembly/index/SatRanges#get:distances
+    call $assembly/sats/SatSource/SatSource#get:ranges
+    call $assembly/sats/SatRanges/SatRanges#get:distances
     local.get $this
-    call $assembly/index/SatSource#get:ranges
-    call $assembly/index/SatRanges#get:distances
+    call $assembly/sats/SatSource/SatSource#get:ranges
+    call $assembly/sats/SatRanges/SatRanges#get:distances
     call $~lib/array/Array<u64>#get:length
     i32.const 1
     i32.sub
@@ -8237,23 +8243,23 @@
   end
   return
  )
- (func $assembly/index/SatSink#get:pointer (param $this i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink#get:pointer (param $this i32) (result i32)
   local.get $this
   i32.load offset=4
  )
- (func $assembly/index/SatSink#get:target (param $this i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink#get:target (param $this i32) (result i32)
   local.get $this
   i32.load
  )
- (func $assembly/index/SatSink#get:offset (param $this i32) (result i64)
+ (func $assembly/sats/SatSink/SatSink#get:offset (param $this i32) (result i64)
   local.get $this
   i64.load offset=8
  )
- (func $assembly/index/SatSink#filled (param $this i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink#filled (param $this i32) (result i32)
   local.get $this
-  call $assembly/index/SatSink#get:pointer
+  call $assembly/sats/SatSink/SatSink#get:pointer
   local.get $this
-  call $assembly/index/SatSink#get:target
+  call $assembly/sats/SatSink/SatSink#get:target
   call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:outs
   call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Output>#get:length
   i32.ge_s
@@ -8261,9 +8267,9 @@
    i32.const 1
   else
    local.get $this
-   call $assembly/index/SatSink#get:pointer
+   call $assembly/sats/SatSink/SatSink#get:pointer
    local.get $this
-   call $assembly/index/SatSink#get:target
+   call $assembly/sats/SatSink/SatSink#get:target
    call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:outs
    call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Output>#get:length
    i32.const 1
@@ -8271,12 +8277,12 @@
    i32.eq
    if (result i32)
     local.get $this
-    call $assembly/index/SatSink#get:offset
+    call $assembly/sats/SatSink/SatSink#get:offset
     local.get $this
-    call $assembly/index/SatSink#get:target
+    call $assembly/sats/SatSink/SatSink#get:target
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:outs
     local.get $this
-    call $assembly/index/SatSink#get:target
+    call $assembly/sats/SatSink/SatSink#get:target
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:outs
     call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Output>#get:length
     i32.const 1
@@ -8290,12 +8296,12 @@
   end
   return
  )
- (func $assembly/index/SatSink#currentOutpoint (param $this i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink#currentOutpoint (param $this i32) (result i32)
   local.get $this
-  call $assembly/index/SatSink#get:target
+  call $assembly/sats/SatSink/SatSink#get:target
   call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#txid
   local.get $this
-  call $assembly/index/SatSink#get:pointer
+  call $assembly/sats/SatSink/SatSink#get:pointer
   call $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint.from
   call $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint#toArrayBuffer
   return
@@ -9330,55 +9336,55 @@
   local.get $v
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#setValue<u64>
  )
- (func $assembly/index/SatSink#consume (param $this i32) (param $source i32)
+ (func $assembly/sats/SatSink/SatSink#consume (param $this i32) (param $source i32)
   (local $sourceRemaining i64)
   (local $targetRemaining i64)
   (local $outpoint i32)
   (local $sat i64)
   loop $while-continue|0
    local.get $source
-   call $assembly/index/SatSource#consumed
+   call $assembly/sats/SatSource/SatSource#consumed
    i32.eqz
    if (result i32)
     local.get $this
-    call $assembly/index/SatSink#filled
+    call $assembly/sats/SatSink/SatSink#filled
     i32.eqz
    else
     i32.const 0
    end
    if
     local.get $source
-    call $assembly/index/SatSource#get:ranges
-    call $assembly/index/SatRanges#get:distances
+    call $assembly/sats/SatSource/SatSource#get:ranges
+    call $assembly/sats/SatRanges/SatRanges#get:distances
     local.get $source
-    call $assembly/index/SatSource#get:pointer
+    call $assembly/sats/SatSource/SatSource#get:pointer
     call $~lib/array/Array<u64>#__get
     local.get $source
-    call $assembly/index/SatSource#get:offset
+    call $assembly/sats/SatSource/SatSource#get:offset
     i64.sub
     local.set $sourceRemaining
     local.get $this
-    call $assembly/index/SatSink#get:target
+    call $assembly/sats/SatSink/SatSink#get:target
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:outs
     local.get $this
-    call $assembly/index/SatSink#get:pointer
+    call $assembly/sats/SatSink/SatSink#get:pointer
     call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Output>#__get
     call $~lib/metashrew-as/assembly/blockdata/transaction/Output#get:value
     local.get $this
-    call $assembly/index/SatSink#get:offset
+    call $assembly/sats/SatSink/SatSink#get:offset
     i64.sub
     local.set $targetRemaining
     local.get $this
-    call $assembly/index/SatSink#currentOutpoint
+    call $assembly/sats/SatSink/SatSink#currentOutpoint
     local.set $outpoint
     local.get $source
-    call $assembly/index/SatSource#get:ranges
-    call $assembly/index/SatRanges#get:sats
+    call $assembly/sats/SatSource/SatSource#get:ranges
+    call $assembly/sats/SatRanges/SatRanges#get:sats
     local.get $source
-    call $assembly/index/SatSource#get:pointer
+    call $assembly/sats/SatSource/SatSource#get:pointer
     call $~lib/array/Array<u64>#__get
     local.get $source
-    call $assembly/index/SatSource#get:offset
+    call $assembly/sats/SatSource/SatSource#get:offset
     i64.add
     local.set $sat
     global.get $assembly/tables/SAT_TO_OUTPOINT
@@ -9396,19 +9402,19 @@
     if
      local.get $this
      local.get $this
-     call $assembly/index/SatSink#get:pointer
+     call $assembly/sats/SatSink/SatSink#get:pointer
      i32.const 1
      i32.add
-     call $assembly/index/SatSink#set:pointer
+     call $assembly/sats/SatSink/SatSink#set:pointer
      local.get $this
      i64.const 0
-     call $assembly/index/SatSink#set:offset
+     call $assembly/sats/SatSink/SatSink#set:offset
      local.get $source
      local.get $source
-     call $assembly/index/SatSource#get:offset
+     call $assembly/sats/SatSource/SatSource#get:offset
      local.get $targetRemaining
      i64.add
-     call $assembly/index/SatSource#set:offset
+     call $assembly/sats/SatSource/SatSource#set:offset
     else
      local.get $sourceRemaining
      local.get $targetRemaining
@@ -9416,38 +9422,38 @@
      if
       local.get $source
       local.get $source
-      call $assembly/index/SatSource#get:pointer
+      call $assembly/sats/SatSource/SatSource#get:pointer
       i32.const 1
       i32.add
-      call $assembly/index/SatSource#set:pointer
+      call $assembly/sats/SatSource/SatSource#set:pointer
       local.get $source
       i64.const 0
-      call $assembly/index/SatSource#set:offset
+      call $assembly/sats/SatSource/SatSource#set:offset
       local.get $this
       local.get $this
-      call $assembly/index/SatSink#get:offset
+      call $assembly/sats/SatSink/SatSink#get:offset
       local.get $sourceRemaining
       i64.add
-      call $assembly/index/SatSink#set:offset
+      call $assembly/sats/SatSink/SatSink#set:offset
      else
       local.get $source
       i64.const 0
-      call $assembly/index/SatSource#set:offset
+      call $assembly/sats/SatSource/SatSource#set:offset
       local.get $source
       local.get $source
-      call $assembly/index/SatSource#get:pointer
+      call $assembly/sats/SatSource/SatSource#get:pointer
       i32.const 1
       i32.add
-      call $assembly/index/SatSource#set:pointer
+      call $assembly/sats/SatSource/SatSource#set:pointer
       local.get $this
       i64.const 0
-      call $assembly/index/SatSink#set:offset
+      call $assembly/sats/SatSink/SatSink#set:offset
       local.get $this
       local.get $this
-      call $assembly/index/SatSink#get:pointer
+      call $assembly/sats/SatSink/SatSink#get:pointer
       i32.const 1
       i32.add
-      call $assembly/index/SatSink#set:pointer
+      call $assembly/sats/SatSink/SatSink#set:pointer
      end
     end
     br $while-continue|0
@@ -9493,7 +9499,7 @@
   local.get $result
   return
  )
- (func $assembly/index/SatRanges.fromTransaction~anonymous|0 (param $v i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges.fromTransaction~anonymous|0 (param $v i32) (param $$1 i32) (param $$2 i32) (result i32)
   global.get $assembly/tables/OUTPOINT_TO_SAT
   local.get $v
   call $~lib/metashrew-as/assembly/blockdata/transaction/Input#previousOutput
@@ -9658,7 +9664,7 @@
   local.get $len
   return
  )
- (func $assembly/index/flatten<u64> (param $ary i32) (result i32)
+ (func $assembly/utils/flatten<u64> (param $ary i32) (result i32)
   (local $result i32)
   (local $i i32)
   (local $j i32)
@@ -10383,7 +10389,7 @@
   i64.const 0
   return
  )
- (func $assembly/index/rangeLength<u64> (param $bst i32) (param $key i64) (param $max i64) (result i64)
+ (func $assembly/utils/rangeLength<u64> (param $bst i32) (param $key i64) (param $max i64) (result i64)
   (local $greater i64)
   (local $end i64)
   local.get $bst
@@ -10404,7 +10410,7 @@
   i64.sub
   return
  )
- (func $assembly/index/SatRanges.fromSats (param $sats i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges.fromSats (param $sats i32) (result i32)
   (local $distances i32)
   (local $i i32)
   i32.const 0
@@ -10428,7 +10434,7 @@
     call $~lib/array/Array<u64>#__get
     global.get $assembly/tables/STARTING_SAT
     call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
-    call $assembly/index/rangeLength<u64>
+    call $assembly/utils/rangeLength<u64>
     call $~lib/array/Array<u64>#__set
     local.get $i
     i32.const 1
@@ -10440,23 +10446,23 @@
   i32.const 0
   local.get $sats
   local.get $distances
-  call $assembly/index/SatRanges#constructor
+  call $assembly/sats/SatRanges/SatRanges#constructor
   return
  )
- (func $assembly/index/SatRanges.fromTransaction (param $tx i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges.fromTransaction (param $tx i32) (result i32)
   local.get $tx
   call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:ins
   i32.const 6128
   call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#map<~lib/array/Array<u64>>
-  call $assembly/index/flatten<u64>
-  call $assembly/index/SatRanges.fromSats
+  call $assembly/utils/flatten<u64>
+  call $assembly/sats/SatRanges/SatRanges.fromSats
   return
  )
- (func $assembly/index/SatSource.fromTransaction (param $tx i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource.fromTransaction (param $tx i32) (result i32)
   i32.const 0
   local.get $tx
-  call $assembly/index/SatRanges.fromTransaction
-  call $assembly/index/SatSource#constructor
+  call $assembly/sats/SatRanges/SatRanges.fromTransaction
+  call $assembly/sats/SatSource/SatSource#constructor
   return
  )
  (func $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#nullify (param $this i32) (param $k i64)
@@ -10478,7 +10484,7 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
  )
- (func $assembly/index/SatRanges#pull~anonymous|0 (param $v i64) (param $i i32) (param $ary i32)
+ (func $assembly/sats/SatRanges/SatRanges#pull~anonymous|0 (param $v i64) (param $i i32) (param $ary i32)
   global.get $assembly/tables/SAT_TO_OUTPOINT
   local.get $v
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#nullify
@@ -10528,18 +10534,18 @@
    end
   end
  )
- (func $assembly/index/SatRanges#pull (param $this i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges#pull (param $this i32) (result i32)
   local.get $this
-  call $assembly/index/SatRanges#get:sats
+  call $assembly/sats/SatRanges/SatRanges#get:sats
   i32.const 6160
   call $~lib/array/Array<u64>#forEach
   local.get $this
   return
  )
- (func $assembly/index/SatSource#pull (param $this i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#pull (param $this i32) (result i32)
   local.get $this
-  call $assembly/index/SatSource#get:ranges
-  call $assembly/index/SatRanges#pull
+  call $assembly/sats/SatSource/SatSource#get:ranges
+  call $assembly/sats/SatRanges/SatRanges#pull
   drop
   local.get $this
   return
@@ -11984,7 +11990,7 @@
   call $~lib/metashrew-as/assembly/utils/box/Box.concat
   return
  )
- (func $assembly/index/toID (param $satpoint i32) (param $index i32) (result i32)
+ (func $assembly/utils/toID (param $satpoint i32) (param $index i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 2
@@ -12372,7 +12378,7 @@
      local.set $sat
      local.get $satpoint
      i32.const 0
-     call $assembly/index/toID
+     call $assembly/utils/toID
      local.set $inscriptionId
      global.get $assembly/tables/SATPOINT_TO_SAT
      local.get $satpoint
@@ -12557,14 +12563,14 @@
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#setValue<u64>
   local.get $startingSat
   local.get $reward
-  call $assembly/index/SatSource.range
+  call $assembly/sats/SatSource/SatSource.range
   local.set $coinbaseSource
   local.get $coinbase
-  call $assembly/index/SatSink.fromTransaction
+  call $assembly/sats/SatSink/SatSink.fromTransaction
   local.set $coinbaseSink
   local.get $coinbaseSink
   local.get $coinbaseSource
-  call $assembly/index/SatSink#consume
+  call $assembly/sats/SatSink/SatSink#consume
   i32.const 1
   local.set $i
   loop $for-loop|0
@@ -12580,25 +12586,25 @@
     call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Transaction>#__get
     local.set $tx
     local.get $tx
-    call $assembly/index/SatSink.fromTransaction
+    call $assembly/sats/SatSink/SatSink.fromTransaction
     local.set $transactionSink
     local.get $tx
-    call $assembly/index/SatSource.fromTransaction
-    call $assembly/index/SatSource#pull
+    call $assembly/sats/SatSource/SatSource.fromTransaction
+    call $assembly/sats/SatSource/SatSource#pull
     local.set $transactionSource
     local.get $transactionSink
     local.get $transactionSource
-    call $assembly/index/SatSink#consume
+    call $assembly/sats/SatSink/SatSink#consume
     local.get $tx
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#txid
     local.set $txid
     local.get $transactionSource
-    call $assembly/index/SatSource#consumed
+    call $assembly/sats/SatSource/SatSource#consumed
     i32.eqz
     if
      local.get $coinbaseSink
      local.get $transactionSource
-     call $assembly/index/SatSink#consume
+     call $assembly/sats/SatSink/SatSink#consume
     end
     local.get $tx
     local.get $txid

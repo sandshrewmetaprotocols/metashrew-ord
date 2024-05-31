@@ -173,7 +173,7 @@
  (data $61 (i32.const 7484) "\1c")
  (data $61.1 (i32.const 7496) ":\00\00\00\08\00\00\00\n")
  (table $0 11 11 funcref)
- (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/index/SatRanges.fromTransaction~anonymous|0 $assembly/index/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|1 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|2 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|2)
+ (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/sats/SatRanges/SatRanges.fromTransaction~anonymous|0 $assembly/sats/SatRanges/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|0 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|1 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|2 $~lib/metashrew-as/assembly/utils/rlp/toRLP~anonymous|2)
  (export "trap" (func $assembly/index/trap))
  (export "_start" (func $assembly/index/_start))
  (export "sat" (func $assembly/index/sat))
@@ -4528,14 +4528,14 @@
     if (result i32)
      i32.const 0
     else
-     block $__inlined_func$~lib/string/String.__eq$1066 (result i32)
+     block $__inlined_func$~lib/string/String.__eq$1068 (result i32)
       i32.const 1
       local.get $5
       i32.load
       local.tee $2
       local.get $1
       i32.eq
-      br_if $__inlined_func$~lib/string/String.__eq$1066
+      br_if $__inlined_func$~lib/string/String.__eq$1068
       drop
       i32.const 0
       local.get $1
@@ -4543,7 +4543,7 @@
       local.get $2
       i32.eqz
       i32.or
-      br_if $__inlined_func$~lib/string/String.__eq$1066
+      br_if $__inlined_func$~lib/string/String.__eq$1068
       drop
       i32.const 0
       local.get $2
@@ -4560,7 +4560,7 @@
       i32.const 1
       i32.shr_u
       i32.ne
-      br_if $__inlined_func$~lib/string/String.__eq$1066
+      br_if $__inlined_func$~lib/string/String.__eq$1068
       drop
       local.get $1
       local.set $3
@@ -4605,7 +4605,7 @@
         end
        end
       end
-      block $__inlined_func$~lib/util/string/compareImpl$308
+      block $__inlined_func$~lib/util/string/compareImpl$309
        loop $while-continue|1
         local.get $0
         local.tee $4
@@ -4625,7 +4625,7 @@
          local.get $7
          local.get $8
          i32.ne
-         br_if $__inlined_func$~lib/util/string/compareImpl$308
+         br_if $__inlined_func$~lib/util/string/compareImpl$309
          local.get $2
          i32.const 2
          i32.add
@@ -5300,7 +5300,7 @@
   local.get $2
   i64.store
  )
- (func $assembly/index/SatSource#constructor (param $0 i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#constructor (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 16
   i32.const 36
@@ -5319,7 +5319,7 @@
   i32.store
   local.get $1
  )
- (func $assembly/index/SatRanges#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 8
   i32.const 37
@@ -5338,7 +5338,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $assembly/index/SatSink#constructor (param $0 i32) (result i32)
+ (func $assembly/sats/SatSink/SatSink#constructor (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 16
   i32.const 39
@@ -5378,7 +5378,7 @@
   i32.add
   i64.load
  )
- (func $assembly/index/SatSource#consumed (param $0 i32) (result i32)
+ (func $assembly/sats/SatSource/SatSource#consumed (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -5687,7 +5687,7 @@
   call $~lib/string/String.UTF8.encode@varargs
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
  )
- (func $assembly/index/SatSink#consume (param $0 i32) (param $1 i32)
+ (func $assembly/sats/SatSink/SatSink#consume (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5704,7 +5704,7 @@
   (local $15 i32)
   loop $while-continue|0
    local.get $1
-   call $assembly/index/SatSource#consumed
+   call $assembly/sats/SatSource/SatSource#consumed
    if (result i32)
     i32.const 1
    else
@@ -6016,7 +6016,7 @@
          i32.and
          i32.store8
         end
-        block $__inlined_func$~lib/metashrew-as/assembly/indexer/bst/isZeroU256$452 (result i32)
+        block $__inlined_func$~lib/metashrew-as/assembly/indexer/bst/isZeroU256$453 (result i32)
          i32.const 0
          local.set $4
          loop $for-loop|001
@@ -6031,7 +6031,7 @@
            i64.load
            i64.const 0
            i64.ne
-           br_if $__inlined_func$~lib/metashrew-as/assembly/indexer/bst/isZeroU256$452
+           br_if $__inlined_func$~lib/metashrew-as/assembly/indexer/bst/isZeroU256$453
            drop
            local.get $4
            i32.const 1
@@ -6188,7 +6188,7 @@
   end
   local.get $2
  )
- (func $assembly/index/SatRanges.fromTransaction~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $assembly/sats/SatRanges/SatRanges.fromTransaction~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $assembly/tables/OUTPOINT_TO_SAT
   local.set $2
@@ -6902,7 +6902,7 @@
   i64.const 32
   i64.rotr
  )
- (func $assembly/index/SatRanges#pull~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32)
+ (func $assembly/sats/SatRanges/SatRanges#pull~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32)
   global.get $assembly/tables/SAT_TO_OUTPOINT
   local.set $1
   i32.const 8
@@ -7819,17 +7819,17 @@
    if
     i32.const 0
     local.set $5
-    block $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$979
+    block $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$981
      local.get $3
      local.get $15
      call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
      i32.load offset=20
      local.tee $10
      i32.eqz
-     br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$979
+     br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$981
      i32.const 0
      local.set $11
-     block $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1080
+     block $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1082
       local.get $10
       i32.load offset=4
       local.tee $8
@@ -7837,7 +7837,7 @@
       local.tee $7
       i32.const 0
       i32.le_s
-      br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1080
+      br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1082
       local.get $7
       i32.const 2
       i32.ge_s
@@ -7855,7 +7855,7 @@
        local.tee $7
        i32.const 1
        i32.le_s
-       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1080
+       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1082
        local.get $10
        i32.load offset=4
        local.get $7
@@ -7864,7 +7864,7 @@
        call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
        i32.load8_u offset=5
        i32.eqz
-       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1080
+       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1082
        local.get $10
        i32.load offset=4
        local.get $7
@@ -7886,7 +7886,7 @@
         i32.const 31
         i32.and
        end
-       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1080
+       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1082
        local.get $10
        i32.load offset=4
        local.get $7
@@ -8026,7 +8026,7 @@
       i32.const 0
      end
      i32.eqz
-     br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$979
+     br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$981
      local.get $11
      call $~lib/metashrew-as/assembly/blockdata/inscription/Inscription#constructor
      local.set $5
@@ -8782,14 +8782,14 @@
   call $~lib/array/Array<u64>#__set
   local.get $2
   local.get $1
-  call $assembly/index/SatRanges#constructor
-  call $assembly/index/SatSource#constructor
+  call $assembly/sats/SatRanges/SatRanges#constructor
+  call $assembly/sats/SatSource/SatSource#constructor
   local.set $1
   local.get $11
-  call $assembly/index/SatSink#constructor
+  call $assembly/sats/SatSink/SatSink#constructor
   local.tee $13
   local.get $1
-  call $assembly/index/SatSink#consume
+  call $assembly/sats/SatSink/SatSink#consume
   i32.const 1
   local.set $16
   loop $for-loop|016
@@ -8804,7 +8804,7 @@
     local.get $16
     call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
     local.tee $12
-    call $assembly/index/SatSink#constructor
+    call $assembly/sats/SatSink/SatSink#constructor
     local.set $11
     i32.const 0
     local.set $17
@@ -9090,8 +9090,8 @@
     end
     local.get $10
     local.get $9
-    call $assembly/index/SatRanges#constructor
-    call $assembly/index/SatSource#constructor
+    call $assembly/sats/SatRanges/SatRanges#constructor
+    call $assembly/sats/SatSource/SatSource#constructor
     local.tee $6
     i32.load
     i32.load
@@ -9135,17 +9135,17 @@
     end
     local.get $11
     local.get $6
-    call $assembly/index/SatSink#consume
+    call $assembly/sats/SatSink/SatSink#consume
     local.get $12
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#txid
     local.set $1
     local.get $6
-    call $assembly/index/SatSource#consumed
+    call $assembly/sats/SatSource/SatSource#consumed
     i32.eqz
     if
      local.get $13
      local.get $6
-     call $assembly/index/SatSink#consume
+     call $assembly/sats/SatSink/SatSink#consume
     end
     local.get $12
     local.get $1
@@ -9775,7 +9775,7 @@
  (func $~lib/metashrew-as/assembly/blockdata/sat/Sat#epochPosition (param $0 i32) (result i64)
   local.get $0
   i64.load
-  block $__inlined_func$~lib/metashrew-as/assembly/blockdata/epoch/Epoch#startingSat$1015 (result i32)
+  block $__inlined_func$~lib/metashrew-as/assembly/blockdata/epoch/Epoch#startingSat$1017 (result i32)
    local.get $0
    call $~lib/metashrew-as/assembly/blockdata/sat/Sat#epoch
    local.tee $0
@@ -9786,7 +9786,7 @@
     global.get $~lib/metashrew-as/assembly/blockdata/epoch/Epoch.STARTING_SATS
     i32.const 33
     call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
-    br $__inlined_func$~lib/metashrew-as/assembly/blockdata/epoch/Epoch#startingSat$1015
+    br $__inlined_func$~lib/metashrew-as/assembly/blockdata/epoch/Epoch#startingSat$1017
    end
    global.get $~lib/metashrew-as/assembly/blockdata/epoch/Epoch.STARTING_SATS
    local.get $0
@@ -10041,24 +10041,24 @@
      end
     end
    else
-    block $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$739 (result i32)
+    block $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$740 (result i32)
      i32.const 4
      local.get $1
      i32.const 24
      i32.shr_s
-     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$739
+     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$740
      drop
      i32.const 3
      local.get $1
      i32.const 16
      i32.shr_s
-     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$739
+     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$740
      drop
      i32.const 2
      local.get $1
      i32.const 8
      i32.shr_s
-     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$739
+     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$740
      drop
      i32.const 1
     end
@@ -10270,24 +10270,24 @@
     memory.copy
    else
     local.get $1
-    block $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$745 (result i32)
+    block $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$746 (result i32)
      i32.const 4
      local.get $1
      i32.const 24
      i32.shr_s
-     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$745
+     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$746
      drop
      i32.const 3
      local.get $1
      i32.const 16
      i32.shr_s
-     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$745
+     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$746
      drop
      i32.const 2
      local.get $1
      i32.const 8
      i32.shr_s
-     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$745
+     br_if $__inlined_func$~lib/metashrew-as/assembly/utils/rlp/byteLengthForLength$746
      drop
      i32.const 1
     end
