@@ -160,6 +160,23 @@ class SatSink {
   }
 }
 
+function excessSats(source: SatSource): void {
+  while (!source.consumed()) {
+    const sourceRemaining = source.ranges.distances[source.pointer] - source.offset;
+    const outpoint = new ArrayBuffer(36);
+    store<u32>(changetype<usize>(outpoint) + 34, bswap<u16>(0xdead));
+    const sat = source.ranges.sats[source.pointer] + source.offset;
+    SAT_TO_OUTPOINT.set(sat, outpoint);
+    OUTPOINT_TO_SAT.select(outpoint).appendValue<u64>(sat);
+    source.offset = 0;
+    source.pointer++;
+  }
+}
+
+function blockReward(height: u64): u64 {
+  return <u64>50e8 / <u64>(<u64>1 << (<u64>height / 210000));
+}
+
 
 class Index {
   static indexTransactionInscriptions(
@@ -257,8 +274,9 @@ class Index {
     Index.indexOutputValuesForBlock(block);
     const coinbase = block.coinbase();
     let startingSat = STARTING_SAT.getValue<u64>();
-    const reward = Index.totalOutputs(coinbase) - Index.transactionFeesForBlock(block);
+    const reward = blockReward(height);
     STARTING_SAT.setValue<u64>(startingSat + reward);
+    console.log((startingSat + reward).toString(10));
     const coinbaseSource = SatSource.range(startingSat, reward);
     const coinbaseSink = SatSink.fromTransaction(coinbase);
     coinbaseSink.consume(coinbaseSource);
@@ -364,4 +382,9 @@ export function test_arrayBufferCopy(): void {
   console.log(load<usize>(changetype<usize>(ary) + sizeof<usize>()).toString(10));
   console.log(ary[0].toString(10));
   */
+}
+
+export function test_nullTx(): void {
+  const buffer = new Transaction(Box.from(new ArrayBuffer(0)));
+  console.log(Box.from(buffer.txid()).toHexString());
 }

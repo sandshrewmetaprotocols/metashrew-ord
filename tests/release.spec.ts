@@ -195,4 +195,19 @@ describe("metashrew index", () => {
     }
     IndexPointer.for(program, '/outpoint/bysatrange').getBST();
   });
+  it('creates a null tx', async () => {
+    const program = new IndexerProgram(
+      new Uint8Array(
+        Array.from(
+          await fs.readFile(
+            path.join(__dirname, "..", "build", "debug.wasm"),
+          ),
+        ),
+      ).buffer,
+    );
+    program.on('log', (v) => console.log(v));
+    program.setBlockHeight(0);
+    program.setBlock('0x');
+    await program.run('test_nullTx');
+  });
 });
