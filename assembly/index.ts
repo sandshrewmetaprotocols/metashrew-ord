@@ -290,6 +290,7 @@ class Index {
       if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
       Index.indexTransactionInscriptions(tx, txid, height);
     }
+    excessSats(coinbaseSource);
   }
 }
 

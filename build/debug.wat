@@ -12785,6 +12785,95 @@
    end
   end
  )
+ (func $~lib/polyfills/bswap<u16> (param $value i32) (result i32)
+  i32.const 1
+  drop
+  i32.const 2
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 2
+  i32.const 2
+  i32.eq
+  drop
+  local.get $value
+  i32.const 8
+  i32.const 15
+  i32.and
+  i32.shl
+  local.get $value
+  i32.const 65535
+  i32.and
+  i32.const 8
+  i32.const 15
+  i32.and
+  i32.shr_u
+  i32.or
+  return
+ )
+ (func $assembly/index/excessSats (param $source i32)
+  (local $sourceRemaining i64)
+  (local $outpoint i32)
+  (local $sat i64)
+  loop $while-continue|0
+   local.get $source
+   call $assembly/index/SatSource#consumed
+   i32.eqz
+   if
+    local.get $source
+    call $assembly/index/SatSource#get:ranges
+    call $assembly/index/SatRanges#get:distances
+    local.get $source
+    call $assembly/index/SatSource#get:pointer
+    call $~lib/array/Array<u64>#__get
+    local.get $source
+    call $assembly/index/SatSource#get:offset
+    i64.sub
+    local.set $sourceRemaining
+    i32.const 0
+    i32.const 36
+    call $~lib/arraybuffer/ArrayBuffer#constructor
+    local.set $outpoint
+    local.get $outpoint
+    i32.const 34
+    i32.add
+    i32.const 57005
+    call $~lib/polyfills/bswap<u16>
+    i32.const 65535
+    i32.and
+    i32.store
+    local.get $source
+    call $assembly/index/SatSource#get:ranges
+    call $assembly/index/SatRanges#get:sats
+    local.get $source
+    call $assembly/index/SatSource#get:pointer
+    call $~lib/array/Array<u64>#__get
+    local.get $source
+    call $assembly/index/SatSource#get:offset
+    i64.add
+    local.set $sat
+    global.get $assembly/tables/SAT_TO_OUTPOINT
+    local.get $sat
+    local.get $outpoint
+    call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#set
+    global.get $assembly/tables/OUTPOINT_TO_SAT
+    local.get $outpoint
+    call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
+    local.get $sat
+    call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#appendValue<u64>
+    local.get $source
+    i64.const 0
+    call $assembly/index/SatSource#set:offset
+    local.get $source
+    local.get $source
+    call $assembly/index/SatSource#get:pointer
+    i32.const 1
+    i32.add
+    call $assembly/index/SatSource#set:pointer
+    br $while-continue|0
+   end
+  end
+ )
  (func $assembly/index/Index.indexBlock (param $height i32) (param $block i32)
   (local $coinbase i32)
   (local $startingSat i64)
@@ -12888,6 +12977,8 @@
     br $for-loop|0
    end
   end
+  local.get $coinbaseSource
+  call $assembly/index/excessSats
  )
  (func $~lib/array/Array<~lib/string/String>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
