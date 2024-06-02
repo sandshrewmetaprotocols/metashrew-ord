@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package ordinals;
+
+message OutPoint {
+  bytes hash = 1;
+  uint32 vout = 2;
+}
+
+message SatRange {
+  uint64 start = 1;
+  uint64 distance = 2;
+}
+
+message SatRanges {
+  repeated SatRange ranges = 1;
+}
+
+message SatRangesRequest {
+  OutPoint outpoint = 1;
+}
+
+message SatRangesResponse {
+  SatRanges satranges = 1;
+}

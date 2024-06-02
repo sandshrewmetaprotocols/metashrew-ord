@@ -13,6 +13,8 @@ import { Sat, SatPoint } from "metashrew-as/assembly/blockdata/sat";
 import { JUBILEE_HEIGHT } from "./constants";
 import { BST } from "metashrew-as/assembly/indexer/bst";
 
+import { ordinals } from "./protobuf";
+
 import {
   SAT_TO_OUTPOINT,
   OUTPOINT_TO_SAT,
@@ -276,7 +278,6 @@ class Index {
     let startingSat = STARTING_SAT.getValue<u64>();
     const reward = blockReward(height);
     STARTING_SAT.setValue<u64>(startingSat + reward);
-    console.log((startingSat + reward).toString(10));
     const coinbaseSource = SatSource.range(startingSat, reward);
     const coinbaseSink = SatSink.fromTransaction(coinbase);
     coinbaseSink.consume(coinbaseSource);
@@ -320,6 +321,22 @@ export function _start(): void {
   const block = new Block(box);
   Index.indexBlock(height, block);
   _flush();
+}
+
+export function satranges(): ArrayBuffer {
+  const request = ordinals.SatRangesRequest.decode(input());
+  const sats = OUTPOINT_TO_SAT.select(OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout).toArrayBuffer()).getListValues<u64>();
+  const response = new ordinals.SatRangesResponse();
+  const distances = sats.map<u64>((v: u64, i: i32, ary: Array<u64>) => {
+    return rangeLength<u64>(SAT_TO_OUTPOINT, v, STARTING_SAT.getValue<u64>());
+  });
+  for (let i = 0; i < sats.length; i++) {
+    const range = new ordinals.SatRange();
+    range.start = sats[i];
+    range.distance = distances[i];
+    response.satranges.ranges.push(range);
+  }
+  return response.encode();
 }
 
 export function sat(): ArrayBuffer {

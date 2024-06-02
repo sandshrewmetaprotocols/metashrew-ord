@@ -4,15 +4,21 @@
   "scripts": {
     "asbuild:debug": "asc assembly/index.ts --target debug --enable threads --config asconfig.json",
     "asbuild:release": "asc assembly/index.ts --target release --config asconfig.json",
-    "build": "npm-run-all asbuild:debug asbuild:release",
+    "build": "npm-run-all build:protoc asbuild:debug asbuild:release",
+    "build:protoc": "npm-run-all build:protoc:as build:protoc:ts",
+    "build:protoc:ts": "protoc --ts_out ./src.ts --proto_path proto ordinals.proto",
+    "build:protoc:as": "protoc --plugin=./node_modules/.bin/protoc-gen-as --as_out=assembly --as_opt targetFileName=protobuf.ts --proto_path=proto ordinals.proto",
     "build:debug:preloader": "npm run asbuild:preloader --sharedMemory",
     "prettier:assemblyscript": "prettier --write ./assembly/**/*.ts",
     "prettier:ts": "prettier --write ./src.ts/**/*.ts",
     "prettier": "npm-run-all prettier:assemblyscript prettier:ts",
     "test": "ts-mocha --timeout 0 ./tests/**.spec.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@protobuf-ts/plugin": "^2.9.4"
+  },
   "devDependencies": {
+    "@protobuf-ts/protoc": "^2.9.4",
     "@types/node": "^20.10.6",
     "assemblyscript": "^0.27.22",
     "assemblyscript-prettier": "^3.0.1",
@@ -24,6 +30,7 @@
     "nice-repl": "^0.1.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.1.1",
+    "protobuf-as": "https://github.com/sandshrewmetaprotocols/protobuf-as",
     "rlp": "^3.0.0",
     "ts-mocha": "^10.0.0",
     "typescript": "^5.3.3"
