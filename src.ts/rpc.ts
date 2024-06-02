@@ -4,6 +4,7 @@ import * as ordinals from "./ordinals";
 
 import { ethers } from "ethers";
 import url from "url";
+import fs from "fs";
 
 const addHexPrefix = (s) => s.substr(0, 2) === '0x' ? s : '0x' + s;
 
@@ -19,14 +20,14 @@ export class MetashrewOrd {
     blockTag
   }: any) {
     this.baseUrl = baseUrl || 'http://localhost:8080';
-    this.programHash = programHash;
+    this.programHash = programHash || process.env.PROGRAM_HASH || ethers.solidityPackedKeccak256(['bytes'], [ ethers.hexlify(fs.readFileSync(process.env.PROGRAM_PATH)) ]);
     this.blockTag = blockTag;
   }
   async _call({
     method,
     input
   }): Promise<string> {
-    return (await (await fetch(url.format({
+    const response = (await (await fetch(url.format({
       ...url.parse(this.baseUrl),
       pathname: '/'
     }), {
@@ -41,7 +42,8 @@ export class MetashrewOrd {
         'Content-Type': 'application/json',
 	'Accept': 'application/json'
       }
-    })).json()).result;
+    })).json());
+    return addHexPrefix(response.result);
   }
   async satranges({
     outpoint
@@ -53,9 +55,13 @@ export class MetashrewOrd {
 	vout: Number(vout)
       }
     }));
-    return await this._call({
+    const byteString = await this._call({
       method: 'satranges',
       input: buffer
     });
+    return ordinals.SatRangesResponse.fromBinary(ethers.toBeArray(byteString)).satranges.ranges.map((v) => ({
+      start: v.start,
+      distance: v.distance
+    }));
   }
 }

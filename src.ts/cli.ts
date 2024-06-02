@@ -6,8 +6,6 @@ yargs.parserConfiguration({
 
 const args = yargs.parse();
 
-console.log(args);
-
 const client = new MetashrewOrd({
   baseUrl: args.url || process.env.METASHREW_VIEW_URL || 'http://localhost:8080',
   ...args

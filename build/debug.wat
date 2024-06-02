@@ -13627,79 +13627,6 @@
   call $assembly/index/Index.indexBlock
   call $~lib/metashrew-as/assembly/indexer/index/_flush
  )
- (func $~lib/metashrew-as/assembly/utils/logging/Console#log (param $this i32) (param $v i32)
-  local.get $v
-  i32.const 1
-  i32.const 2
-  global.set $~argumentsLength
-  i32.const 0
-  call $~lib/string/String.UTF8.encode@varargs
-  call $~lib/metashrew-as/assembly/utils/logging/__log
- )
- (func $~lib/metashrew-as/assembly/utils/hex/encodeHexUTF8 (param $start i32) (param $len i32) (result i32)
-  (local $result i32)
-  (local $i i32)
-  i32.const 0
-  i32.const 2
-  local.get $len
-  i32.const 2
-  i32.mul
-  i32.add
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $result
-  local.get $result
-  i32.const 30768
-  i32.store16
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   local.get $len
-   i32.lt_u
-   if
-    i32.const 2
-    local.get $result
-    i32.add
-    local.get $i
-    i32.const 2
-    i32.mul
-    i32.add
-    global.get $~lib/metashrew-as/assembly/utils/hex/hexLookupTable
-    i32.const 2
-    local.get $start
-    local.get $i
-    i32.add
-    i32.load8_u
-    i32.mul
-    i32.add
-    i32.load16_u
-    i32.store16
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
-   end
-  end
-  local.get $result
-  return
- )
- (func $~lib/metashrew-as/assembly/utils/hex/encodeHex (param $start i32) (param $len i32) (result i32)
-  local.get $start
-  local.get $len
-  call $~lib/metashrew-as/assembly/utils/hex/encodeHexUTF8
-  i32.const 0
-  call $~lib/string/String.UTF8.decode
-  return
- )
- (func $~lib/metashrew-as/assembly/utils/box/Box#toHexString (param $this i32) (result i32)
-  local.get $this
-  call $~lib/metashrew-as/assembly/utils/box/Box#get:start
-  local.get $this
-  call $~lib/metashrew-as/assembly/utils/box/Box#get:len
-  call $~lib/metashrew-as/assembly/utils/hex/encodeHex
-  return
- )
  (func $~lib/dataview/DataView#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
   local.get $buffer
@@ -16241,16 +16168,6 @@
   local.get $box
   call $~lib/metashrew-as/assembly/utils/box/Box#toArrayBuffer
   local.set $data
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $height
-  i32.const 10
-  call $~lib/number/U32#toString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
-  global.get $~lib/metashrew-as/assembly/utils/logging/console
-  local.get $data
-  call $~lib/metashrew-as/assembly/utils/box/Box.from
-  call $~lib/metashrew-as/assembly/utils/box/Box#toHexString
-  call $~lib/metashrew-as/assembly/utils/logging/Console#log
   local.get $data
   call $assembly/protobuf/ordinals.SatRangesRequest.decode
   local.set $request
@@ -17853,6 +17770,79 @@
   i32.add
   local.get $buffer
   i32.store
+ )
+ (func $~lib/metashrew-as/assembly/utils/hex/encodeHexUTF8 (param $start i32) (param $len i32) (result i32)
+  (local $result i32)
+  (local $i i32)
+  i32.const 0
+  i32.const 2
+  local.get $len
+  i32.const 2
+  i32.mul
+  i32.add
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $result
+  local.get $result
+  i32.const 30768
+  i32.store16
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $len
+   i32.lt_u
+   if
+    i32.const 2
+    local.get $result
+    i32.add
+    local.get $i
+    i32.const 2
+    i32.mul
+    i32.add
+    global.get $~lib/metashrew-as/assembly/utils/hex/hexLookupTable
+    i32.const 2
+    local.get $start
+    local.get $i
+    i32.add
+    i32.load8_u
+    i32.mul
+    i32.add
+    i32.load16_u
+    i32.store16
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
+  local.get $result
+  return
+ )
+ (func $~lib/metashrew-as/assembly/utils/hex/encodeHex (param $start i32) (param $len i32) (result i32)
+  local.get $start
+  local.get $len
+  call $~lib/metashrew-as/assembly/utils/hex/encodeHexUTF8
+  i32.const 0
+  call $~lib/string/String.UTF8.decode
+  return
+ )
+ (func $~lib/metashrew-as/assembly/utils/box/Box#toHexString (param $this i32) (result i32)
+  local.get $this
+  call $~lib/metashrew-as/assembly/utils/box/Box#get:start
+  local.get $this
+  call $~lib/metashrew-as/assembly/utils/box/Box#get:len
+  call $~lib/metashrew-as/assembly/utils/hex/encodeHex
+  return
+ )
+ (func $~lib/metashrew-as/assembly/utils/logging/Console#log (param $this i32) (param $v i32)
+  local.get $v
+  i32.const 1
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String.UTF8.encode@varargs
+  call $~lib/metashrew-as/assembly/utils/logging/__log
  )
  (func $assembly/index/test_nullTx
   (local $buffer i32)

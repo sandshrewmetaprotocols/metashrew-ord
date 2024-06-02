@@ -327,8 +327,6 @@ export function satranges(): ArrayBuffer {
   const box = Box.from(input());
   const height = parsePrimitive<u32>(box);
   const data = box.toArrayBuffer();
-  console.log(height.toString(10));
-  console.log(Box.from(data).toHexString());
   const request = ordinals.SatRangesRequest.decode(data);
   const sats = OUTPOINT_TO_SAT.select(OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout).toArrayBuffer()).getListValues<u64>();
   const response = new ordinals.SatRangesResponse();
