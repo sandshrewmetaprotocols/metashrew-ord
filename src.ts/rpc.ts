@@ -21,7 +21,7 @@ export class MetashrewOrd {
   }: any) {
     this.baseUrl = baseUrl || 'http://localhost:8080';
     this.programHash = programHash || process.env.PROGRAM_HASH || ethers.solidityPackedKeccak256(['bytes'], [ ethers.hexlify(fs.readFileSync(process.env.PROGRAM_PATH)) ]);
-    this.blockTag = blockTag;
+    this.blockTag = blockTag || 'latest';;
   }
   async _call({
     method,

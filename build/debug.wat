@@ -3854,61 +3854,32 @@
   call $~lib/metashrew-as/assembly/blockdata/block/Block#set:bytes
   local.get $this
  )
- (func $~lib/polyfills/bswap<u64> (param $value i64) (result i64)
-  (local $a i64)
-  (local $b i64)
-  (local $v i64)
+ (func $~lib/polyfills/bswap<u32> (param $value i32) (result i32)
   i32.const 1
   drop
-  i32.const 8
+  i32.const 4
   i32.const 1
   i32.eq
   drop
-  i32.const 8
+  i32.const 4
   i32.const 2
   i32.eq
   drop
-  i32.const 8
+  i32.const 4
   i32.const 4
   i32.eq
   drop
-  i32.const 8
-  i32.const 8
-  i32.eq
-  drop
   local.get $value
-  i64.const 8
-  i64.shr_u
-  i64.const 71777214294589695
-  i64.and
-  local.set $a
+  i32.const -16711936
+  i32.and
+  i32.const 8
+  i32.rotl
   local.get $value
-  i64.const 71777214294589695
-  i64.and
-  i64.const 8
-  i64.shl
-  local.set $b
-  local.get $a
-  local.get $b
-  i64.or
-  local.set $v
-  local.get $v
-  i64.const 16
-  i64.shr_u
-  i64.const 281470681808895
-  i64.and
-  local.set $a
-  local.get $v
-  i64.const 281470681808895
-  i64.and
-  i64.const 16
-  i64.shl
-  local.set $b
-  local.get $a
-  local.get $b
-  i64.or
-  i64.const 32
-  i64.rotr
+  i32.const 16711935
+  i32.and
+  i32.const 8
+  i32.rotr
+  i32.or
   return
  )
  (func $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#unwrap (param $this i32) (result i32)
@@ -4126,6 +4097,7 @@
  (func $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select (param $this i32) (param $key i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $res i32)
   i32.const 2
   i32.const 2
   i32.const 27
@@ -4148,6 +4120,8 @@
   call $~lib/array/Array<~lib/metashrew-as/assembly/utils/box/Box>#__set
   local.get $2
   call $~lib/metashrew-as/assembly/utils/box/Box.concat
+  local.set $res
+  local.get $res
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer.wrap
   return
  )
@@ -4159,9 +4133,8 @@
   local.set $keyBytes
   local.get $keyBytes
   local.get $key
-  i64.extend_i32_u
-  call $~lib/polyfills/bswap<u64>
-  i64.store32
+  call $~lib/polyfills/bswap<u32>
+  i32.store
   local.get $this
   local.get $keyBytes
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
@@ -8169,6 +8142,63 @@
   call $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint#toArrayBuffer
   return
  )
+ (func $~lib/polyfills/bswap<u64> (param $value i64) (result i64)
+  (local $a i64)
+  (local $b i64)
+  (local $v i64)
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $value
+  i64.const 8
+  i64.shr_u
+  i64.const 71777214294589695
+  i64.and
+  local.set $a
+  local.get $value
+  i64.const 71777214294589695
+  i64.and
+  i64.const 8
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  local.set $v
+  local.get $v
+  i64.const 16
+  i64.shr_u
+  i64.const 281470681808895
+  i64.and
+  local.set $a
+  local.get $v
+  i64.const 281470681808895
+  i64.and
+  i64.const 16
+  i64.shl
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.or
+  i64.const 32
+  i64.rotr
+  return
+ )
  (func $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#get:ptr (param $this i32) (result i32)
   local.get $this
   i32.load
@@ -10169,6 +10199,26 @@
   local.get $data
   return
  )
+ (func $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#getMask (param $this i32) (param $partialKey i32) (result i32)
+  (local $mask i32)
+  local.get $this
+  local.get $partialKey
+  call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#getMaskPointer
+  call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#get
+  local.set $mask
+  local.get $mask
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.const 0
+  i32.eq
+  if
+   i32.const 0
+   i32.const 32
+   call $~lib/arraybuffer/ArrayBuffer#constructor
+   return
+  end
+  local.get $mask
+  return
+ )
  (func $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#_findBoundaryFromPartial (param $this i32) (param $keyBytes i32) (param $seekHigher i32) (result i64)
   (local $partialKey i32)
   (local $newPartial i32)
@@ -10199,8 +10249,7 @@
     i32.add
     local.get $this
     local.get $partialKey
-    call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#getMaskPointer
-    call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#get
+    call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#getMask
     local.get $seekHigher
     call $~lib/metashrew-as/assembly/indexer/bst/binarySearchU256
     i32.store8
