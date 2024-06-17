@@ -6,8 +6,8 @@
  (type $4 (func))
  (type $5 (func (param i32 i32 i32)))
  (type $6 (func (param i32) (result i64)))
- (type $7 (func (param i32 i64)))
- (type $8 (func (param i32 i32 i32 i32) (result i32)))
+ (type $7 (func (param i32 i32 i32 i32) (result i32)))
+ (type $8 (func (param i32 i64)))
  (type $9 (func (result i32)))
  (type $10 (func (param i32)))
  (type $11 (func (param i32 i64) (result i32)))
@@ -3991,7 +3991,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $7)
     local.set $acc
     local.get $i
     i32.const 1
@@ -4065,7 +4065,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $7)
     local.set $acc
     local.get $i
     i32.const 1
@@ -10424,29 +10424,13 @@
   call $assembly/index/SatSource#constructor
   return
  )
- (func $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#nullify (param $this i32) (param $k i64)
-  (local $key i64)
-  (local $keyBytes i32)
-  local.get $k
-  call $~lib/polyfills/bswap<u64>
-  local.set $key
-  i32.const 0
-  i32.const 8
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $keyBytes
-  local.get $this
-  call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#get:ptr
-  local.get $keyBytes
-  call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
-  i32.const 0
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
- )
  (func $assembly/index/SatRanges#pull~anonymous|0 (param $v i64) (param $i i32) (param $ary i32)
   global.get $assembly/tables/SAT_TO_OUTPOINT
   local.get $v
-  call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#nullify
+  i32.const 0
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#set
  )
  (func $~lib/array/Array<u64>#forEach (param $this i32) (param $fn i32)
   (local $i i32)
@@ -13228,7 +13212,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $7)
     local.set $acc
     local.get $i
     i32.const 1
@@ -17105,7 +17089,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $7)
     local.set $acc
     local.get $i
     i32.const 1
@@ -17174,7 +17158,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $8)
+    call_indirect (type $7)
     local.set $acc
     local.get $i
     i32.const 1

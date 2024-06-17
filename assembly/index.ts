@@ -84,7 +84,7 @@ class SatRanges {
   }
   pull(): SatRanges {
     this.sats.forEach((v: u64, i: i32, ary: Array<u64>) => {
-      SAT_TO_OUTPOINT.nullify(v);
+      SAT_TO_OUTPOINT.set(v, new ArrayBuffer(0));
     });
     return this;
   }
