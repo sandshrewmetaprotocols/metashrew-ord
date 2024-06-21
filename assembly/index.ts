@@ -76,7 +76,7 @@ class SatRanges {
     this.distances = distances;
   }
   static fromSats(sats: Array<u64>): SatRanges {
-    const distances = new Array<u64>(sats.length);
+    const distances = new Array<u64>(max(sats.length, 1));
     for (let i = 0; i < sats.length; i++) {
       distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], STARTING_SAT.getValue<u64>());
     }

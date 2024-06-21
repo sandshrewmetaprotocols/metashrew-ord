@@ -28,6 +28,7 @@
     "assemblyscript": "^0.27.22",
     "assemblyscript-prettier": "^3.0.1",
     "chai": "^5.1.0",
+    "clone": "^2.1.2",
     "fs-extra": "^11.2.0",
     "metashrew-as": "https://github.com/sandshrewmetaprotocols/metashrew-as",
     "metashrew-test": "https://github.com/sandshrewmetaprotocols/metashrew-test",

@@ -6979,8 +6979,6 @@
  (func $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set (param $this i32) (param $v i32)
   local.get $this
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#unwrap
-  call $~lib/metashrew-as/assembly/utils/box/Box.from
-  call $~lib/metashrew-as/assembly/utils/box/Box#toArrayBuffer
   local.get $v
   call $~lib/metashrew-as/assembly/indexer/index/set
  )
@@ -8303,7 +8301,7 @@
    if
     local.get $mask
     i32.const 8
-    i32.const 8
+    local.get $i
     i32.mul
     i32.add
     i64.load
@@ -9655,6 +9653,17 @@
   local.get $result
   return
  )
+ (func $assembly/index/max<i32> (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
+  i32.lt_s
+  if
+   local.get $b
+   return
+  end
+  local.get $a
+  return
+ )
  (func $~lib/metashrew-as/assembly/indexer/bst/byteAt<i32> (param $v i32) (param $byte i32) (result i32)
   local.get $v
   local.get $byte
@@ -10375,6 +10384,8 @@
   i32.const 0
   local.get $sats
   call $~lib/array/Array<u64>#get:length
+  i32.const 1
+  call $assembly/index/max<i32>
   call $~lib/array/Array<u64>#constructor
   local.set $distances
   i32.const 0

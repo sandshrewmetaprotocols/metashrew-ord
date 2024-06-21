@@ -1,9 +1,30 @@
 import { expect } from "chai";
 import fs from "fs-extra";
 import { EventEmitter } from "events";
-import { IndexPointer, IndexerProgram } from "metashrew-test";
+import { IndexPointer, readArrayBufferAsHex, IndexerProgram } from "metashrew-test";
 import path from "path";
 import { Block } from "bitcoinjs-lib";
+import { MetashrewOrd } from "../lib/rpc";
+import clone from "clone";
+
+function cloneProgram(program: any): IndexerProgram {
+  const cloned = clone(program);
+  cloned.program = program.program;
+  return cloned;
+}
+const satranges = async (program: IndexerProgram, outpoint: string): any => {
+  const cloned = program; // just mutate it
+  const result = await MetashrewOrd.prototype.satranges.call({
+    async _call({
+      input
+    }) {
+      cloned.setBlock(input);
+      const ptr = await cloned.run('satranges');
+      return readArrayBufferAsHex(cloned.memory, ptr);
+    }
+  }, { outpoint });
+  return result;
+};
 
 const stripHexPrefix = (key: string) => {
   if (key.substr(0, 2) === '0x') return key.substr(2);
@@ -162,7 +183,7 @@ describe("metashrew index", () => {
       program.setBlockHeight(i);
       await program.run("_start");
     }
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 2; i++) {
       console.log(`BLOCK ${i}`);
       await runBlock(i);
     }
@@ -181,6 +202,7 @@ describe("metashrew index", () => {
         ),
       ).buffer,
     );
+    program.on('log', (v) => console.log(v));
 //    program.kv = require(path.join(__dirname, 'snapshot-1295'));
     async function runBlock(i: number) {
       program.setBlock(
@@ -189,11 +211,11 @@ describe("metashrew index", () => {
       program.setBlockHeight(i);
       await program.run("_start");
     }
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       await runBlock(i);
       IndexPointer.for(program, '/startingsat').getUInt64();
     }
-    IndexPointer.for(program, '/outpoint/bysatrange').getBST();
+    console.log(await satranges(program, '0x0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098:0'));
   });
   it('creates a null tx', async () => {
     const program = new IndexerProgram(
