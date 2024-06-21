@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@protobuf-ts/plugin": "^2.9.4",
+    "bitcoinjs-lib": "^6.1.6",
     "ethers": "^6.12.2"
   },
   "devDependencies": {
