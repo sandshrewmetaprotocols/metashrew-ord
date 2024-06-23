@@ -10,6 +10,8 @@ const addHexPrefix = (s) => s.substr(0, 2) === '0x' ? s : '0x' + s;
 
 let id = 0;
 
+const toBeArray = (v) => v === '0x' ? new Uint8Array() : ethers.toBeArray(v);
+
 export class MetashrewOrd {
   public baseUrl: string;
   public blockTag: string;
@@ -59,7 +61,9 @@ export class MetashrewOrd {
       method: 'satranges',
       input: buffer
     });
-    return ordinals.SatRangesResponse.fromBinary(ethers.toBeArray(byteString)).satranges.ranges.map((v) => ({
+    const decoded = ordinals.SatRangesResponse.fromBinary(toBeArray(byteString));
+    if (Object.getPrototypeOf(Object.getPrototypeOf(decoded)) === null) return null;
+    return decoded.satranges.ranges.map((v) => ({
       start: v.start,
       distance: v.distance
     }));
