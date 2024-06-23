@@ -10365,8 +10365,15 @@
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#seekGreater
   local.set $greater
   local.get $greater
-  i64.const 0
-  i64.eq
+  local.get $max
+  i64.gt_u
+  if (result i32)
+   i32.const 1
+  else
+   local.get $greater
+   i64.const 0
+   i64.eq
+  end
   if (result i64)
    local.get $max
   else

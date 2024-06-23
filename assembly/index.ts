@@ -39,7 +39,7 @@ export function trap(): void { unreachable(); }
 
 function rangeLength<K>(bst: BST<K>, key: K, max: K): K {
   const greater = bst.seekGreater(key);
-  const end = greater === 0 ? max : greater;
+  const end = (greater > max || greater === 0) ? max : greater;
   return end - key;
 }
 
