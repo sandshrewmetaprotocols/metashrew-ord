@@ -8405,11 +8405,11 @@
      if
       local.get $ptr
       call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#nullify
-      br $for-break0
      else
       local.get $ptr
       local.get $newMask
       call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#set
+      br $for-break0
      end
      local.get $i
      i32.const 1
@@ -10231,40 +10231,64 @@
  (func $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#_findBoundaryFromPartial (param $this i32) (param $keyBytes i32) (param $seekHigher i32) (result i64)
   (local $partialKey i32)
   (local $newPartial i32)
+  (local $mask i32)
+  (local $symbol i32)
   local.get $keyBytes
   local.set $partialKey
-  loop $while-continue|0
-   local.get $partialKey
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   i32.const 8
-   i32.ne
-   if
-    i32.const 0
+  block $while-break|0
+   loop $while-continue|0
     local.get $partialKey
     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.const 1
-    i32.add
-    call $~lib/arraybuffer/ArrayBuffer#constructor
-    local.set $newPartial
-    local.get $newPartial
-    local.get $partialKey
-    local.get $partialKey
-    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    call $~lib/metashrew-as/assembly/utils/memcpy/memcpy
-    drop
-    local.get $newPartial
-    local.get $partialKey
-    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-    i32.add
-    local.get $this
-    local.get $partialKey
-    call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#getMask
-    local.get $seekHigher
-    call $~lib/metashrew-as/assembly/indexer/bst/binarySearchU256
-    i32.store8
-    local.get $newPartial
-    local.set $partialKey
-    br $while-continue|0
+    i32.const 8
+    i32.ne
+    if
+     i32.const 0
+     local.get $partialKey
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+     i32.const 1
+     i32.add
+     call $~lib/arraybuffer/ArrayBuffer#constructor
+     local.set $newPartial
+     local.get $newPartial
+     local.get $partialKey
+     local.get $partialKey
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+     call $~lib/metashrew-as/assembly/utils/memcpy/memcpy
+     drop
+     local.get $this
+     local.get $partialKey
+     call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#getMask
+     local.set $mask
+     local.get $mask
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+     i32.const 0
+     i32.eq
+     if (result i32)
+      i32.const 0
+      i32.const 32
+      call $~lib/arraybuffer/ArrayBuffer#constructor
+     else
+      local.get $mask
+     end
+     local.get $seekHigher
+     call $~lib/metashrew-as/assembly/indexer/bst/binarySearchU256
+     local.set $symbol
+     local.get $symbol
+     i32.const -1
+     i32.eq
+     if
+      br $while-break|0
+     end
+     local.get $newPartial
+     local.get $partialKey
+     call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+     i32.add
+     local.get $symbol
+     i32.store8
+     local.get $newPartial
+     local.set $partialKey
+     br $while-continue|0
+    end
    end
   end
   local.get $partialKey
@@ -12242,6 +12266,8 @@
   local.get $keyBytes
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
   call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#get
+  call $~lib/metashrew-as/assembly/utils/box/Box.from
+  call $~lib/metashrew-as/assembly/utils/box/Box#toArrayBuffer
   return
  )
  (func $assembly/index/Index.indexTransactionInscriptions (param $tx i32) (param $txid i32) (param $height i32)
