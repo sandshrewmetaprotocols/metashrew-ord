@@ -10383,7 +10383,6 @@
  )
  (func $assembly/index/rangeLength<u64> (param $bst i32) (param $key i64) (param $max i64) (result i64)
   (local $greater i64)
-  (local $end i64)
   local.get $bst
   local.get $key
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#seekGreater
@@ -10398,18 +10397,18 @@
    i64.const 0
    i64.eq
   end
-  if (result i64)
+  if
    local.get $max
-  else
-   local.get $greater
+   local.get $key
+   i64.sub
+   return
   end
-  local.set $end
-  local.get $end
+  local.get $greater
   local.get $key
   i64.sub
   return
  )
- (func $assembly/index/SatRanges.fromSats (param $sats i32) (result i32)
+ (func $assembly/index/SatRanges.fromSats (param $sats i32) (param $rangeEnd i64) (result i32)
   (local $distances i32)
   (local $i i32)
   i32.const 0
@@ -10433,8 +10432,7 @@
     local.get $sats
     local.get $i
     call $~lib/array/Array<u64>#__get
-    global.get $assembly/tables/STARTING_SAT
-    call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getValue<u64>
+    local.get $rangeEnd
     call $assembly/index/rangeLength<u64>
     call $~lib/array/Array<u64>#__set
     local.get $i
@@ -10450,18 +10448,20 @@
   call $assembly/index/SatRanges#constructor
   return
  )
- (func $assembly/index/SatRanges.fromTransaction (param $tx i32) (result i32)
+ (func $assembly/index/SatRanges.fromTransaction (param $tx i32) (param $rangeEnd i64) (result i32)
   local.get $tx
   call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:ins
   i32.const 6128
   call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#map<~lib/array/Array<u64>>
   call $assembly/index/flatten<u64>
+  local.get $rangeEnd
   call $assembly/index/SatRanges.fromSats
   return
  )
- (func $assembly/index/SatSource.fromTransaction (param $tx i32) (result i32)
+ (func $assembly/index/SatSource.fromTransaction (param $tx i32) (param $rangeEnd i64) (result i32)
   i32.const 0
   local.get $tx
+  local.get $rangeEnd
   call $assembly/index/SatRanges.fromTransaction
   call $assembly/index/SatSource#constructor
   return
@@ -12680,6 +12680,7 @@
     call $assembly/index/SatSink.fromTransaction
     local.set $transactionSink
     local.get $tx
+    local.get $startingSat
     call $assembly/index/SatSource.fromTransaction
     call $assembly/index/SatSource#pull
     local.set $transactionSource

@@ -39,8 +39,8 @@ export function trap(): void { unreachable(); }
 
 function rangeLength<K>(bst: BST<K>, key: K, max: K): K {
   const greater = bst.seekGreater(key);
-  const end = (greater > max || greater === 0) ? max : greater;
-  return end - key;
+  if (greater > max || greater === 0) return max - key;
+  return greater - key;
 }
 
 function min<T>(a: T, b: T): T {
@@ -75,10 +75,10 @@ class SatRanges {
     this.sats = sats;
     this.distances = distances;
   }
-  static fromSats(sats: Array<u64>): SatRanges {
+  static fromSats(sats: Array<u64>, rangeEnd: u64): SatRanges {
     const distances = new Array<u64>(max(sats.length, 1));
     for (let i = 0; i < sats.length; i++) {
-      distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], STARTING_SAT.getValue<u64>());
+      distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], rangeEnd);
     }
     return new SatRanges(sats, distances);
   }
@@ -88,8 +88,8 @@ class SatRanges {
     });
     return this;
   }
-  static fromTransaction(tx: Transaction): SatRanges {
-    return SatRanges.fromSats(flatten(tx.ins.map<Array<u64>>((v: Input) => OUTPOINT_TO_SAT.select(v.previousOutput().toArrayBuffer()).getListValues<u64>())));
+  static fromTransaction(tx: Transaction, rangeEnd: u64): SatRanges {
+    return SatRanges.fromSats(flatten(tx.ins.map<Array<u64>>((v: Input) => OUTPOINT_TO_SAT.select(v.previousOutput().toArrayBuffer()).getListValues<u64>())), rangeEnd);
   }
 }
 
@@ -100,8 +100,8 @@ class SatSource {
   constructor(ranges: SatRanges) {
     this.ranges = ranges;
   }
-  static fromTransaction(tx: Transaction): SatSource {
-    return new SatSource(SatRanges.fromTransaction(tx));
+  static fromTransaction(tx: Transaction, rangeEnd: u64): SatSource {
+    return new SatSource(SatRanges.fromTransaction(tx, rangeEnd));
   }
   consumed(): boolean {
     return this.pointer >= this.ranges.sats.length || this.pointer === this.ranges.sats.length - 1 && this.offset >= this.ranges.distances[this.ranges.distances.length - 1];
@@ -285,7 +285,7 @@ class Index {
     for (let i: i32 = 1; i < block.transactions.length; i++) {
       const tx = block.transactions[i];
       const transactionSink = SatSink.fromTransaction(tx);
-      const transactionSource = SatSource.fromTransaction(tx).pull();
+      const transactionSource = SatSource.fromTransaction(tx, startingSat).pull();
       transactionSink.consume(transactionSource);
       const txid = tx.txid();
       if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
