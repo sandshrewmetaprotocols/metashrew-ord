@@ -15,14 +15,11 @@ const toBeArray = (v) => v === '0x' ? new Uint8Array() : ethers.toBeArray(v);
 export class MetashrewOrd {
   public baseUrl: string;
   public blockTag: string;
-  public programHash: string;
   constructor({
     baseUrl,
-    programHash,
     blockTag
   }: any) {
     this.baseUrl = baseUrl || 'http://localhost:8080';
-    this.programHash = programHash || process.env.PROGRAM_HASH || ethers.solidityPackedKeccak256(['bytes'], [ ethers.hexlify(fs.readFileSync(process.env.PROGRAM_PATH)) ]);
     this.blockTag = blockTag || 'latest';
   }
   async _call({
@@ -39,7 +36,7 @@ export class MetashrewOrd {
         id: id++,
 	jsonrpc: '2.0',
 	method: 'metashrew_view',
-	params: [ this.programHash, method, input, this.blockTag ]
+	params: [ method, input, this.blockTag ]
       }),
       headers: {
         'Content-Type': 'application/json',
