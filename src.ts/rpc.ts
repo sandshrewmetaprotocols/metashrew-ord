@@ -26,7 +26,6 @@ export class MetashrewOrd {
     method,
     input
   }): Promise<string> {
-    console.log(input);
     const response = (await (await fetch(url.format({
       ...url.parse(this.baseUrl),
       pathname: '/'
@@ -43,7 +42,6 @@ export class MetashrewOrd {
 	'Accept': 'application/json'
       }
     })).json());
-    console.log(response);
     return addHexPrefix(response.result);
   }
   async satranges({

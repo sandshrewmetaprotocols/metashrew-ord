@@ -3,9 +3,137 @@ import fs from "fs-extra";
 import { EventEmitter } from "events";
 import { IndexPointer, readArrayBufferAsHex, IndexerProgram } from "metashrew-test";
 import path from "path";
-import { Block } from "bitcoinjs-lib";
+import * as bitcoinjs from "bitcoinjs-lib";
 import { MetashrewOrd } from "../lib/rpc";
 import clone from "clone";
+
+const stripHexPrefix = (key: string) => {
+  if (key.substr(0, 2) === "0x") return key.substr(2);
+  return key;
+};
+
+const addHexPrefix = (s: string) => {
+  if (s.substr(0, 2) === "0x") return s;
+  return "0x" + s;
+};
+
+const split = (ary, sym) => {
+  return ary.reduce((r, v) => {
+    if (v === sym) {
+      r.push([]);
+    } else {
+      if (r.length === 0) r.push([]);
+      r[r.length - 1].push(v);
+    }
+    return r;
+  }, []);
+};
+
+const formatKey = (key: string) => {
+  return split(
+    Array.from(Buffer.from(stripHexPrefix(key), "hex")),
+    Buffer.from("/")[0],
+  ).reduce((r, v, i, ary) => {
+    const token = Buffer.from(v).toString("utf8");
+    if (!(i + v.length)) {
+      return r + "/";
+    } else if (token.match(/^[0-9a-zA-Z]+$/)) {
+      return r + "/" + token;
+    } else {
+      return r + "/" + addHexPrefix(Buffer.from(v).toString("hex"));
+    }
+  }, "");
+};
+
+const formatValue = (v) => {
+  const token = Buffer.from(v.substr(2), "hex").toString("utf8");
+  if (token.match(/^[0-9a-zA-Z]+$/)) return token;
+  return v;
+};
+
+const formatKv = (kv: any) => {
+  return Object.fromEntries(
+    Object.entries(kv).map(([key, value]) => [formatKey(key), formatValue(value)]),
+  );
+};
+
+const DEBUG_WASM = fs.readFileSync(
+  path.join(__dirname, "..", "build", "debug.wasm"),
+);
+
+const buildProgram = () => {
+  const program = new IndexerProgram(
+    new Uint8Array(Array.from(DEBUG_WASM)).buffer,
+  );
+  program.on("log", (v) => console.log(v.replace(/\0/g, "").trim()));
+  return program;
+};
+
+const buildBytes32 = () => Buffer.allocUnsafe(32);
+
+const EMPTY_BUFFER = Buffer.allocUnsafe(0);
+const EMPTY_WITNESS = [];
+
+const TEST_BTC_ADDRESS1 = "16aE44Au1UQ5XqKMUhCMXTX7ZxbmAcQNA1";
+const TEST_BTC_ADDRESS2 = "1AdAhGdUgGF6ip7bBcVvuWYuuCxAeonNaK";
+
+const buildCoinbase = (outputs) => {
+  const tx = new bitcoinjs.Transaction();
+  tx.ins.push({
+    hash: buildBytes32(),
+    index: bitcoinjs.Transaction.DEFAULT_SEQUENCE,
+    script: EMPTY_BUFFER,
+    sequence: bitcoinjs.Transaction.DEFAULT_SEQUENCE,
+    witness: EMPTY_WITNESS,
+  });
+  outputs.forEach((v) => tx.outs.push(v));
+  return tx;
+};
+
+const buildInput = (o) => {
+  return {
+    ...o,
+    script: EMPTY_BUFFER,
+    sequence: bitcoinjs.Transaction.DEFAULT_SEQUENCE,
+    witness: EMPTY_WITNESS,
+  };
+};
+
+const buildTransaction = (ins, outs) => {
+  const tx = new bitcoinjs.Transaction();
+  ins.forEach((v) => tx.ins.push(v));
+  outs.forEach((v) => tx.outs.push(v));
+  return tx;
+};
+
+const buildCoinbaseToTestAddress = () =>
+  buildCoinbase([
+    {
+      script: bitcoinjs.payments.p2pkh({
+        address: TEST_BTC_ADDRESS1,
+        network: bitcoinjs.networks.bitcoin,
+      }).output,
+      value: 625000000,
+    },
+  ]);
+
+const buildDefaultBlock = () => {
+  const block = new bitcoinjs.Block();
+  block.prevHash = buildBytes32();
+  block.merkleRoot = buildBytes32();
+  block.witnessCommit = buildBytes32();
+  block.transactions = [];
+  return block;
+};
+
+const runTest = (s) =>
+  it(s, async () => {
+    const program = buildProgram();
+    await program.run(s);
+    await new Promise((r) => setTimeout(r, 2000));
+    return program;
+  });
+
 
 function cloneProgram(program: any): IndexerProgram {
   const cloned = clone(program);
@@ -24,16 +152,6 @@ const satranges = async (program: IndexerProgram, outpoint: string): any => {
     }
   }, { outpoint });
   return result;
-};
-
-const stripHexPrefix = (key: string) => {
-  if (key.substr(0, 2) === '0x') return key.substr(2);
-  return key;
-};
-
-const addHexPrefix = (s: string) => {
-  if (s.substr(0, 2) === '0x') return s;
-  return '0x' + s;
 };
 
 async function rpcCall(method, params) {
@@ -55,184 +173,74 @@ async function rpcCall(method, params) {
   return (await response.json()).result;
 }
 
-const split = (ary, sym) => {
-  return ary.reduce((r, v) => {
-    if (v === sym) {
-      r.push([]);
-    } else {
-      if (r.length ===0) r.push([]);
-      r[r.length - 1].push(v);
-    }
-    return r;
-  }, []);
-};
-  
-const formatKey = (key: string) => {
-  return split(Array.from(Buffer.from(stripHexPrefix(key), 'hex')), Buffer.from('/')[0]).reduce((r, v, i, ary) => {
-    const token = Buffer.from(v).toString('utf8');
-    if (!(i + v.length)) {
-      return  r + '/';
-    } else if (token.match(/^[0-9a-zA-Z]+$/)) {
-      return r + '/' + token;
-    } else {
-      return r + '/' + addHexPrefix(Buffer.from(v).toString('hex'));
-    }
-  }, '');
-};
-
-const formatKv = (kv: any) => {
-  return Object.fromEntries(Object.entries(kv).map(([key, value]) => [ formatKey(key), value ]));
-};
-
-  
-
-
-describe("metashrew index", () => {
-	/*
-  it("indexes the genesis block", async () => {
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "release.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-    program.setBlock(
-      await fs.readFile(path.join(__dirname, "genesis.hex"), "utf8"),
-    );
+describe("metashrew-ord", () => {
+  it("should index satranges", async () => {
+    const program = buildProgram();
     program.setBlockHeight(0);
-    program.on("log", (v) => console.log(v));
+    const block = buildDefaultBlock();
+    const coinbase = buildCoinbaseToTestAddress();
+    block.transactions.push(coinbase);
+    const transaction = buildTransaction(
+      [
+        {
+          hash: coinbase.getHash(),
+          index: 0,
+          witness: EMPTY_WITNESS,
+          script: EMPTY_BUFFER,
+        },
+      ],
+      [
+        {
+          script: bitcoinjs.payments.p2pkh({
+            address: TEST_BTC_ADDRESS1,
+            network: bitcoinjs.networks.bitcoin,
+          }).output,
+          value: 1,
+        },
+        {
+          script: bitcoinjs.payments.p2pkh({
+            network: bitcoinjs.networks.bitcoin,
+            address: TEST_BTC_ADDRESS1,
+          }).output,
+          value: 62399999,
+        },
+      ],
+    );
+    const block2 = buildDefaultBlock();
+    const coinbase2 = buildCoinbaseToTestAddress();
+    block2.transactions.push(coinbase2);
+    const transaction2 = buildTransaction(
+      [
+        {
+          hash: transaction.getHash(),
+          index: 0,
+          witness: EMPTY_WITNESS,
+          script: EMPTY_BUFFER,
+        },
+        {
+          hash: transaction.getHash(),
+          index: 1,
+          witness: EMPTY_WITNESS,
+          script: EMPTY_BUFFER,
+        },
+      ],
+      [
+        {
+          script: bitcoinjs.payments.p2pkh({
+            address: TEST_BTC_ADDRESS2,
+            network: bitcoinjs.networks.bitcoin,
+          }).output,
+          value: 623000000,
+        }
+      ],
+    );
+    block2.transactions.push(transaction2);
+    program.setBlock(block.toHex());
     await program.run("_start");
-    // console.log(program.kv);
+    program.setBlockHeight(1);
+    program.setBlock(block2.toHex());
+    await program.run("_start");
+    const result = await satranges(program, `${transaction2.getHash().toString('hex')}:0`);
+    console.log("satranges output", result);
   });
-  it("indexes the first inscription", async () => {
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "release.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-    program.setBlock(
-      await fs.readFile(path.join(__dirname, "ordinal-genesis.hex"), "utf8"),
-    );
-    program.setBlockHeight(767430);
-    program.on("log", (v) => console.log(v));
-    const ms = await program.run("_start");
-    // console.log(program.kv);
-    // console.log(String(ms) + "ms");
-  });
-  it("indexes block 785391", async () => {
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "release.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-    program.setBlock(
-      await fs.readFile(path.join(__dirname, "785391.hex"), "utf8"),
-    );
-    program.setBlockHeight(785391);
-    program.on("log", (v) => console.log(v));
-    const ms = await program.run("_start");
-    // console.log(program.kv);
-    // console.log(String(ms) + "ms");
-  });
-  it("indexes block 772904", async () => {
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "release.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-    program.setBlock(
-      await fs.readFile(path.join(__dirname, "772904.hex"), "utf8"),
-    );
-    program.setBlockHeight(772904);
-    prograom.on("log", (v) => console.log(v));
-    const mos = await program.run("_start");
-    // console.log(program.kv);
-    // console.log(String(ms) + "ms");
-  });
-  it("indexes a range of blocks", async () => {
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "release.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-//    program.kv = require(path.join(__dirname, 'snapshot-1295'));
-    program.on("log", (v) => console.log(v));
-    async function runBlock(i: number) {
-      program.setBlock(
-        await rpcCall("getblock", [await rpcCall("getblockhash", [i]), 0]),
-      );
-      program.setBlockHeight(i);
-      await program.run("_start");
-    }
-    for (let i = 0; i < 2; i++) {
-      console.log(`BLOCK ${i}`);
-      await runBlock(i);
-    }
-  });
-  */
-  it('correctly indexes satranges', async () => {
-    const block = await rpcCall('getblock', [ await rpcCall('getblockhash', [ 1 ]), 0 ]);
-    const fee = 50000;
-    const decoded = Block.fromHex(block);
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "debug.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-    program.on('log', (v) => console.log(v));
-//    program.kv = require(path.join(__dirname, 'snapshot-1295'));
-    async function runBlock(i: number) {
-      program.setBlock(
-        await rpcCall("getblock", [await rpcCall("getblockhash", [i]), 0]),
-      );
-      program.setBlockHeight(i);
-      await program.run("_start");
-    }
-    for (let i = 0; i < 10; i++) {
-      await runBlock(i);
-      IndexPointer.for(program, '/startingsat').getUInt64();
-    }
-    console.log(await satranges(program, '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b:0'));
-    console.log(await satranges(program, '0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098:0'));
-  });
-  /*
-  it('creates a null tx', async () => {
-    const program = new IndexerProgram(
-      new Uint8Array(
-        Array.from(
-          await fs.readFile(
-            path.join(__dirname, "..", "build", "debug.wasm"),
-          ),
-        ),
-      ).buffer,
-    );
-    program.on('log', (v) => console.log(v));
-    program.setBlockHeight(0);
-    program.setBlock('0x');
-    await program.run('test_nullTx');
-  });
- */
 });

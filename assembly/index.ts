@@ -328,7 +328,8 @@ export function satranges(): ArrayBuffer {
   const height = parsePrimitive<u32>(box);
   const data = box.toArrayBuffer();
   const request = ordinals.SatRangesRequest.decode(data);
-  const sats = OUTPOINT_TO_SAT.select(OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout).toArrayBuffer()).getListValues<u64>();
+  const outpoint = OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout).toArrayBuffer();
+  const sats = OUTPOINT_TO_SAT.select(outpoint).getListValues<u64>();
   const response = new ordinals.SatRangesResponse();
   const distances = sats.map<u64>((v: u64, i: i32, ary: Array<u64>) => {
     return rangeLength<u64>(SAT_TO_OUTPOINT, v, STARTING_SAT.getValue<u64>());
