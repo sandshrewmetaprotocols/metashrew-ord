@@ -207,7 +207,13 @@ describe("metashrew-ord", () => {
       ],
     );
     const block2 = buildDefaultBlock();
-    const coinbase2 = buildCoinbaseToTestAddress();
+    const coinbase2 = buildCoinbase([{
+      script: bitcoinjs.payments.p2pkh({
+        address: TEST_BTC_ADDRESS2,
+        network: bitcoinjs.networks.bitcoin,
+      }).output,
+      value: 625000000,
+    }]);
     block2.transactions.push(coinbase2);
     const transaction2 = buildTransaction(
       [

@@ -7,6 +7,7 @@ import url from "url";
 import fs from "fs";
 
 const addHexPrefix = (s) => s.substr(0, 2) === '0x' ? s : '0x' + s;
+const stripHexPrefix = (s) => addHexPrefix(s).substr(2);
 
 let id = 0;
 
@@ -48,9 +49,12 @@ export class MetashrewOrd {
     outpoint
   }: any): Promise<any> { 
     const [ hash, vout ] = outpoint.split(':');
+    const hashBytes = Array.from(Buffer.from(stripHexPrefix(hash), 'hex'));
+    const reversed = Buffer.from(hashBytes).toString('hex');
+    console.log(reversed);
     const buffer = ethers.hexlify(ordinals.SatRangesRequest.toBinary({
       outpoint: {
-        hash: ethers.toBeArray(addHexPrefix(hash)),
+        hash: ethers.toBeArray(addHexPrefix(reversed)),
 	vout: Number(vout)
       }
     }));

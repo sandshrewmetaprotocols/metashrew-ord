@@ -84,7 +84,7 @@ class SatRanges {
   }
   pull(): SatRanges {
     this.sats.forEach((v: u64, i: i32, ary: Array<u64>) => {
-      SAT_TO_OUTPOINT.set(v, new ArrayBuffer(0));
+      setSat(v, new ArrayBuffer(0));
     });
     return this;
   }
@@ -139,7 +139,7 @@ class SatSink {
       const targetRemaining = this.target.outs[this.pointer].value - this.offset;
       const outpoint = this.currentOutpoint();
       const sat = source.ranges.sats[source.pointer] + source.offset;
-      SAT_TO_OUTPOINT.set(sat, outpoint);
+      setSat(sat, outpoint);
       OUTPOINT_TO_SAT.select(outpoint).appendValue<u64>(sat);
       if (targetRemaining < sourceRemaining) {
         this.pointer++;
@@ -162,13 +162,18 @@ class SatSink {
   }
 }
 
+function setSat(sat: u64, outpoint: ArrayBuffer): void {
+  console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
+  SAT_TO_OUTPOINT.set(sat, outpoint);
+}
+
 function excessSats(source: SatSource): void {
   while (!source.consumed()) {
     const sourceRemaining = source.ranges.distances[source.pointer] - source.offset;
     const outpoint = new ArrayBuffer(36);
     store<u32>(changetype<usize>(outpoint) + 34, bswap<u16>(0xdead));
     const sat = source.ranges.sats[source.pointer] + source.offset;
-    SAT_TO_OUTPOINT.set(sat, outpoint);
+    setSat(sat, outpoint);
     OUTPOINT_TO_SAT.select(outpoint).appendValue<u64>(sat);
     source.offset = 0;
     source.pointer++;
@@ -190,10 +195,7 @@ class Index {
     let total = 0;
     let offset: u64 = 0;
     let outputIndex: i32 = 0;
-    //console.log(height.toString(10));
-    //console.log(Box.from(txid).toHexString());
     for (let i = 0; i < tx.ins.length; i++) {
-      //console.log(i.toString(10));
       if (outputIndex >= tx.outs.length) break;
       const inscription = tx.ins[i].inscription();
       if (inscription !== null) {
@@ -291,6 +293,7 @@ class Index {
       if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
       Index.indexTransactionInscriptions(tx, txid, height);
     }
+    
     excessSats(coinbaseSource);
   }
 }
@@ -302,16 +305,6 @@ function decodeHex(hex: string): ArrayBuffer {
   }
   return result;
 }
-
-
-/*
-function test_storage_persisted(): void {
-  let outpoint = OutPoint.from(decodeHex("04c3d4dd40af599514fa2861fbc884f7ee9bcb7717763cb84332319bb16c5fac"), 17).toArrayBuffer();
-  let value = OUTPOINT_TO_VALUE.select(outpoint).getValue<u64>();
-  console.log('value: ' + value.toString(10));
-  //if (value !== 0) throw Error('abort');
-}
-*/
 
 
 export function _start(): void {
@@ -388,22 +381,9 @@ export function output(): ArrayBuffer {
 export function test_arrayBufferCopy(): void {
   const buffer = new ArrayBuffer(4);
   store<u32>(changetype<usize>(buffer), 0x55443322);
-  /*
-  console.log(load<usize>(changetype<usize>(buffer)).toString(10));
-  */
   const ary = new Array<u8>(4);
-  /*
-  console.log(changetype<usize>(ary.buffer).toString(10));
-  */
   store<usize>(changetype<usize>(ary), changetype<usize>(buffer));
   store<usize>(changetype<usize>(ary) + sizeof<usize>(), changetype<usize>(buffer));
-  /*
-  console.log(load<usize>(changetype<usize>(ary)).toString(10));
-  console.log(changetype<usize>(ary.buffer).toString(10));
-  console.log(changetype<usize>(ary.dataStart).toString(10));
-  console.log(load<usize>(changetype<usize>(ary) + sizeof<usize>()).toString(10));
-  console.log(ary[0].toString(10));
-  */
 }
 
 export function test_nullTx(): void {
