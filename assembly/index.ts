@@ -1,11 +1,24 @@
-import { Box, RCBox } from "metashrew-as/assembly/utils/box"
+import { Box, RCBox } from "metashrew-as/assembly/utils/box";
 import { _flush, input, get, set } from "metashrew-as/assembly/indexer/index";
-import { parseBytes, parsePrimitive, concat, primitiveToBuffer } from "metashrew-as/assembly/utils/utils";
+import {
+  parseBytes,
+  parsePrimitive,
+  concat,
+  primitiveToBuffer,
+} from "metashrew-as/assembly/utils/utils";
 import { Block } from "metashrew-as/assembly/blockdata/block";
-import { Transaction, Input, Output, OutPoint } from "metashrew-as/assembly/blockdata/transaction";
+import {
+  Transaction,
+  Input,
+  Output,
+  OutPoint,
+} from "metashrew-as/assembly/blockdata/transaction";
 import { console } from "metashrew-as/assembly/utils/logging";
 import { toRLP, RLPItem } from "metashrew-as/assembly/utils/rlp";
-import { encodeHexFromBuffer, encodeHex } from "metashrew-as/assembly/utils/hex";
+import {
+  encodeHexFromBuffer,
+  encodeHex,
+} from "metashrew-as/assembly/utils/hex";
 import { Inscription } from "metashrew-as/assembly/blockdata/inscription";
 import { subsidy } from "metashrew-as/assembly/utils/ordinals";
 import { Height } from "metashrew-as/assembly/blockdata/height";
@@ -31,11 +44,12 @@ import {
   HEIGHT_TO_INSCRIPTION_IDS,
   NEXT_SEQUENCE_NUMBER,
   SEQUENCE_NUMBER_TO_INSCRIPTION_ID,
-  INSCRIPTION_ID_TO_SEQUENCE_NUMBER
+  INSCRIPTION_ID_TO_SEQUENCE_NUMBER,
 } from "./tables";
 
-
-export function trap(): void { unreachable(); }
+export function trap(): void {
+  unreachable();
+}
 
 function rangeLength<K>(bst: BST<K>, key: K, max: K): K {
   const greater = bst.seekGreater(key);
@@ -63,9 +77,11 @@ function flatten<T>(ary: Array<Array<T>>): Array<T> {
   return result;
 }
 
-
 function toID(satpoint: ArrayBuffer, index: u32): ArrayBuffer {
-  return Box.concat([ Box.from(satpoint), Box.from(primitiveToBuffer<u32>(index)) ]);
+  return Box.concat([
+    Box.from(satpoint),
+    Box.from(primitiveToBuffer<u32>(index)),
+  ]);
 }
 
 class SatRanges {
@@ -89,14 +105,23 @@ class SatRanges {
     return this;
   }
   static fromTransaction(tx: Transaction, rangeEnd: u64): SatRanges {
-    return SatRanges.fromSats(flatten(tx.ins.map<Array<u64>>((v: Input) => OUTPOINT_TO_SAT.select(v.previousOutput().toArrayBuffer()).getListValues<u64>())), rangeEnd);
+    return SatRanges.fromSats(
+      flatten(
+        tx.ins.map<Array<u64>>((v: Input) =>
+          OUTPOINT_TO_SAT.select(
+            v.previousOutput().toArrayBuffer(),
+          ).getListValues<u64>(),
+        ),
+      ),
+      rangeEnd,
+    );
   }
 }
 
 class SatSource {
   public ranges: SatRanges;
   public pointer: i32;
-  public offset: u64
+  public offset: u64;
   constructor(ranges: SatRanges) {
     this.ranges = ranges;
   }
@@ -104,7 +129,11 @@ class SatSource {
     return new SatSource(SatRanges.fromTransaction(tx, rangeEnd));
   }
   consumed(): boolean {
-    return this.pointer >= this.ranges.sats.length || this.pointer === this.ranges.sats.length - 1 && this.offset >= this.ranges.distances[this.ranges.distances.length - 1];
+    return (
+      this.pointer >= this.ranges.sats.length ||
+      (this.pointer === this.ranges.sats.length - 1 &&
+        this.offset >= this.ranges.distances[this.ranges.distances.length - 1])
+    );
   }
   pull(): SatSource {
     this.ranges.pull();
@@ -117,7 +146,6 @@ class SatSource {
     distances[0] = distance;
     return new SatSource(new SatRanges(sats, distances));
   }
-
 }
 
 class SatSink {
@@ -128,35 +156,43 @@ class SatSink {
     this.target = target;
   }
   filled(): boolean {
-     return this.pointer >= this.target.outs.length || this.pointer === this.target.outs.length - 1 && this.offset >= this.target.outs[this.target.outs.length - 1].value
+    return (
+      this.pointer >= this.target.outs.length ||
+      (this.pointer === this.target.outs.length - 1 &&
+        this.offset >= this.target.outs[this.target.outs.length - 1].value)
+    );
   }
   currentOutpoint(): ArrayBuffer {
     return OutPoint.from(this.target.txid(), this.pointer).toArrayBuffer();
   }
   consume(source: SatSource): void {
-    console.log(Box.from(this.target.txid()).toHexString());
+    console.log("Transaction " + Box.from(this.target.txid()).toHexString());
     console.log(source.consumed() ? "consumed" : "not consumed");
     console.log(this.filled() ? "filled" : "not filled");
     while (!source.consumed() && !this.filled()) {
-      const sourceRemaining = source.ranges.distances[source.pointer] - source.offset;
-      const targetRemaining = this.target.outs[this.pointer].value - this.offset;
+      const sourceRemaining =
+        source.ranges.distances[source.pointer] - source.offset;
+
+      console.log("sourceRemaining " + sourceRemaining.toString());
+      const targetRemaining =
+        this.target.outs[this.pointer].value - this.offset;
       const outpoint = this.currentOutpoint();
       const sat = source.ranges.sats[source.pointer] + source.offset;
       setSat(sat, outpoint);
       OUTPOINT_TO_SAT.select(outpoint).appendValue<u64>(sat);
       if (targetRemaining < sourceRemaining) {
         this.pointer++;
-	this.offset = 0;
-	source.offset += targetRemaining;
+        this.offset = 0;
+        source.offset += targetRemaining;
       } else if (sourceRemaining < targetRemaining) {
         source.pointer++;
-	source.offset = 0;
-	this.offset += sourceRemaining;
+        source.offset = 0;
+        this.offset += sourceRemaining;
       } else {
         source.offset = 0;
-	source.pointer++;
-	this.offset = 0;
-	this.pointer++;
+        source.pointer++;
+        this.offset = 0;
+        this.pointer++;
       }
     }
   }
@@ -166,13 +202,14 @@ class SatSink {
 }
 
 function setSat(sat: u64, outpoint: ArrayBuffer): void {
-  console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
+  console.log(sat.toString(10) + ":" + Box.from(outpoint).toHexString());
   SAT_TO_OUTPOINT.set(sat, outpoint);
 }
 
 function excessSats(source: SatSource): void {
   while (!source.consumed()) {
-    const sourceRemaining = source.ranges.distances[source.pointer] - source.offset;
+    const sourceRemaining =
+      source.ranges.distances[source.pointer] - source.offset;
     const outpoint = new ArrayBuffer(36);
     store<u32>(changetype<usize>(outpoint) + 34, bswap<u16>(0xdead));
     const sat = source.ranges.sats[source.pointer] + source.offset;
@@ -184,15 +221,14 @@ function excessSats(source: SatSource): void {
 }
 
 function blockReward(height: u64): u64 {
-  return <u64>50e8 / <u64>(<u64>1 << (<u64>height / 210000));
+  return <u64>50e8 / <u64>((<u64>1) << (<u64>height / 210000));
 }
-
 
 class Index {
   static indexTransactionInscriptions(
     tx: Transaction,
     txid: ArrayBuffer,
-    height: u32
+    height: u32,
   ): void {
     const jubilant = height >= JUBILEE_HEIGHT;
     let total = 0;
@@ -203,40 +239,68 @@ class Index {
       const inscription = tx.ins[i].inscription();
       if (inscription !== null) {
         const sequenceNumber = NEXT_SEQUENCE_NUMBER.getValue<u64>();
-	const outpoint = OutPoint.from(txid, <u32>outputIndex).toArrayBuffer();
-	const satpoint = SatPoint.from(outpoint, <u64>offset).toArrayBuffer();
-	const value = OUTPOINT_TO_VALUE.select(tx.ins[i].previousOutput().toArrayBuffer()).getValue<u64>();
-	offset += value;
-	if (offset >= tx.outs[outputIndex].value) {
+        const outpoint = OutPoint.from(txid, <u32>outputIndex).toArrayBuffer();
+        const satpoint = SatPoint.from(outpoint, <u64>offset).toArrayBuffer();
+        const value = OUTPOINT_TO_VALUE.select(
+          tx.ins[i].previousOutput().toArrayBuffer(),
+        ).getValue<u64>();
+        offset += value;
+        if (offset >= tx.outs[outputIndex].value) {
           outputIndex++;
-	  offset = 0;
-	}
-	const sat = OUTPOINT_TO_SAT.select(outpoint).selectIndex(0).getValue<u64>();
-	const inscriptionId = toID(satpoint, 0);
-	SATPOINT_TO_SAT.select(satpoint).setValue<u64>(sat);
-	SATPOINT_TO_INSCRIPTION_ID.select(satpoint).set(inscriptionId);
-	INSCRIPTION_ID_TO_SATPOINT.select(inscriptionId).set(satpoint);
-        INSCRIPTION_ID_TO_BLOCKHEIGHT.select(inscriptionId).setValue<u32>(height);
-	HEIGHT_TO_INSCRIPTION_IDS.selectValue<u32>(height).append(inscriptionId);
-	SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(sequenceNumber).set(inscriptionId);
-	INSCRIPTION_ID_TO_SEQUENCE_NUMBER.select(inscriptionId).setValue<u64>(sequenceNumber);
-	INSCRIPTION_ID_TO_INSCRIPTION.select(inscriptionId).set(inscription.toArrayBuffer());
-	OUTPOINT_TO_SEQUENCE_NUMBERS.select(outpoint).appendValue<u64>(sequenceNumber);
+          offset = 0;
+        }
+        const sat = OUTPOINT_TO_SAT.select(outpoint)
+          .selectIndex(0)
+          .getValue<u64>();
+        const inscriptionId = toID(satpoint, 0);
+        SATPOINT_TO_SAT.select(satpoint).setValue<u64>(sat);
+        SATPOINT_TO_INSCRIPTION_ID.select(satpoint).set(inscriptionId);
+        INSCRIPTION_ID_TO_SATPOINT.select(inscriptionId).set(satpoint);
+        INSCRIPTION_ID_TO_BLOCKHEIGHT.select(inscriptionId).setValue<u32>(
+          height,
+        );
+        HEIGHT_TO_INSCRIPTION_IDS.selectValue<u32>(height).append(
+          inscriptionId,
+        );
+        SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(sequenceNumber).set(
+          inscriptionId,
+        );
+        INSCRIPTION_ID_TO_SEQUENCE_NUMBER.select(inscriptionId).setValue<u64>(
+          sequenceNumber,
+        );
+        INSCRIPTION_ID_TO_INSCRIPTION.select(inscriptionId).set(
+          inscription.toArrayBuffer(),
+        );
+        OUTPOINT_TO_SEQUENCE_NUMBERS.select(outpoint).appendValue<u64>(
+          sequenceNumber,
+        );
       } else {
         const previousOutput = tx.ins[i].previousOutput().toArrayBuffer();
-        const inscriptionsForOutpoint = OUTPOINT_TO_SEQUENCE_NUMBERS.select(previousOutput).getListValues<u64>();
+        const inscriptionsForOutpoint =
+          OUTPOINT_TO_SEQUENCE_NUMBERS.select(
+            previousOutput,
+          ).getListValues<u64>();
         for (let j = 0; j < inscriptionsForOutpoint.length; j++) {
-          const inscriptionId = SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(inscriptionsForOutpoint[j]).get();
-	  const previousSatPoint = INSCRIPTION_ID_TO_SATPOINT.select(inscriptionId).get();
-	  const sat = SATPOINT_TO_SAT.select(previousSatPoint).getValue<u64>();
-	  const startingSat = SAT_TO_OUTPOINT.seekLower(sat + 1);
-	  const outpoint = SAT_TO_OUTPOINT.get(startingSat);
-	  const satpoint = SatPoint.from(outpoint, sat - startingSat).toArrayBuffer();
-	  SATPOINT_TO_SAT.select(satpoint).setValue<u64>(sat);
-	  SATPOINT_TO_INSCRIPTION_ID.select(satpoint).set(inscriptionId);
-	  INSCRIPTION_ID_TO_SATPOINT.select(inscriptionId).set(satpoint);
-	  OUTPOINT_TO_SEQUENCE_NUMBERS.select(outpoint).appendValue<u64>(inscriptionsForOutpoint[j]);
-	}
+          const inscriptionId =
+            SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(
+              inscriptionsForOutpoint[j],
+            ).get();
+          const previousSatPoint =
+            INSCRIPTION_ID_TO_SATPOINT.select(inscriptionId).get();
+          const sat = SATPOINT_TO_SAT.select(previousSatPoint).getValue<u64>();
+          const startingSat = SAT_TO_OUTPOINT.seekLower(sat + 1);
+          const outpoint = SAT_TO_OUTPOINT.get(startingSat);
+          const satpoint = SatPoint.from(
+            outpoint,
+            sat - startingSat,
+          ).toArrayBuffer();
+          SATPOINT_TO_SAT.select(satpoint).setValue<u64>(sat);
+          SATPOINT_TO_INSCRIPTION_ID.select(satpoint).set(inscriptionId);
+          INSCRIPTION_ID_TO_SATPOINT.select(inscriptionId).set(satpoint);
+          OUTPOINT_TO_SEQUENCE_NUMBERS.select(outpoint).appendValue<u64>(
+            inscriptionsForOutpoint[j],
+          );
+        }
       }
     }
   }
@@ -251,7 +315,9 @@ class Index {
   static totalInputs(tx: Transaction): u64 {
     let total: u64 = 0;
     for (let i: i32 = 0; i < tx.ins.length; i++) {
-      total += OUTPOINT_TO_VALUE.select(tx.ins[i].previousOutput().toArrayBuffer()).getValue<u64>();
+      total += OUTPOINT_TO_VALUE.select(
+        tx.ins[i].previousOutput().toArrayBuffer(),
+      ).getValue<u64>();
     }
     return total;
   }
@@ -259,15 +325,16 @@ class Index {
     let total: u64 = 0;
     for (let i: i32 = 1; i < block.transactions.length; i++) {
       const tx = block.transactions[i];
-      total += (Index.totalInputs(tx) - Index.totalOutputs(tx));
-      
+      total += Index.totalInputs(tx) - Index.totalOutputs(tx);
     }
     return total;
   }
   static indexOutputValuesForTransaction(tx: Transaction): void {
     const txid = tx.txid();
     for (let i = 0; i < tx.outs.length; i++) {
-      OUTPOINT_TO_VALUE.select(OutPoint.from(txid, i).toArrayBuffer()).setValue(tx.outs[i].value);
+      OUTPOINT_TO_VALUE.select(OutPoint.from(txid, i).toArrayBuffer()).setValue(
+        tx.outs[i].value,
+      );
     }
   }
   static indexOutputValuesForBlock(block: Block): void {
@@ -276,6 +343,7 @@ class Index {
     }
   }
   static indexBlock(height: u32, block: Block): void {
+    console.log("Indexing Block " + height.toString());
     HEIGHT_TO_BLOCKHASH.selectValue<u32>(height).set(block.blockhash());
     BLOCKHASH_TO_HEIGHT.select(block.blockhash()).setValue<u32>(height);
     Index.indexOutputValuesForBlock(block);
@@ -290,13 +358,17 @@ class Index {
     for (let i: i32 = 1; i < block.transactions.length; i++) {
       const tx = block.transactions[i];
       const transactionSink = SatSink.fromTransaction(tx);
-      const transactionSource = SatSource.fromTransaction(tx, startingSat).pull();
+      const transactionSource = SatSource.fromTransaction(
+        tx,
+        startingSat,
+      ).pull();
       transactionSink.consume(transactionSource);
       const txid = tx.txid();
-      if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
+      if (!transactionSource.consumed())
+        coinbaseSink.consume(transactionSource);
       Index.indexTransactionInscriptions(tx, txid, height);
     }
-    
+
     excessSats(coinbaseSource);
   }
 }
@@ -304,11 +376,13 @@ class Index {
 function decodeHex(hex: string): ArrayBuffer {
   const result = new ArrayBuffer(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    store<u8>(changetype<usize>(result) + (i / 2), <u8>parseInt(hex.substring(i, i + 2), 16));
+    store<u8>(
+      changetype<usize>(result) + i / 2,
+      <u8>parseInt(hex.substring(i, i + 2), 16),
+    );
   }
   return result;
 }
-
 
 export function _start(): void {
   const data = input();
@@ -324,7 +398,10 @@ export function satranges(): ArrayBuffer {
   const height = parsePrimitive<u32>(box);
   const data = box.toArrayBuffer();
   const request = ordinals.SatRangesRequest.decode(data);
-  const outpoint = OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout).toArrayBuffer();
+  const outpoint = OutPoint.from(
+    request.outpoint.hash.buffer,
+    request.outpoint.vout,
+  ).toArrayBuffer();
   const sats = OUTPOINT_TO_SAT.select(outpoint).getListValues<u64>();
   const response = new ordinals.SatRangesResponse();
   const distances = sats.map<u64>((v: u64, i: i32, ary: Array<u64>) => {
@@ -341,17 +418,22 @@ export function satranges(): ArrayBuffer {
 
 export function sat(): ArrayBuffer {
   const point = new Sat(parsePrimitive<u64>(Box.from(input())));
-  return toRLP(RLPItem.fromList([
-    RLPItem.fromValue(<usize> point.n()),
-    RLPItem.fromArrayBuffer(String.UTF8.encode(point.height().n().toString(10) + "." + point.third().toString(10))),
-    RLPItem.fromValue(<usize> point.height().n()),
-    RLPItem.fromValue(<usize> point.cycle()),
-    RLPItem.fromValue(<usize> point.epoch().n()),
-    RLPItem.fromValue(<usize> point.period()),
-    RLPItem.fromValue(<usize> point.third()),
-  ]));
+  return toRLP(
+    RLPItem.fromList([
+      RLPItem.fromValue(<usize>point.n()),
+      RLPItem.fromArrayBuffer(
+        String.UTF8.encode(
+          point.height().n().toString(10) + "." + point.third().toString(10),
+        ),
+      ),
+      RLPItem.fromValue(<usize>point.height().n()),
+      RLPItem.fromValue(<usize>point.cycle()),
+      RLPItem.fromValue(<usize>point.epoch().n()),
+      RLPItem.fromValue(<usize>point.period()),
+      RLPItem.fromValue(<usize>point.third()),
+    ]),
+  );
 }
-
 
 export function inscription(): ArrayBuffer {
   const data = input();
@@ -360,7 +442,9 @@ export function inscription(): ArrayBuffer {
 
 export function content(): ArrayBuffer {
   const number = parsePrimitive<u32>(Box.from(input()));
-  const inscriptionId = SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(<u64>number).get();
+  const inscriptionId = SEQUENCE_NUMBER_TO_INSCRIPTION_ID.selectValue<u64>(
+    <u64>number,
+  ).get();
   return INSCRIPTION_ID_TO_INSCRIPTION.select(inscriptionId).get();
 }
 
@@ -386,7 +470,10 @@ export function test_arrayBufferCopy(): void {
   store<u32>(changetype<usize>(buffer), 0x55443322);
   const ary = new Array<u8>(4);
   store<usize>(changetype<usize>(ary), changetype<usize>(buffer));
-  store<usize>(changetype<usize>(ary) + sizeof<usize>(), changetype<usize>(buffer));
+  store<usize>(
+    changetype<usize>(ary) + sizeof<usize>(),
+    changetype<usize>(buffer),
+  );
 }
 
 export function test_nullTx(): void {
