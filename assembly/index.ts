@@ -134,6 +134,9 @@ class SatSink {
     return OutPoint.from(this.target.txid(), this.pointer).toArrayBuffer();
   }
   consume(source: SatSource): void {
+    console.log(Box.from(this.target.txid()).toHexString());
+    console.log(source.consumed() ? "consumed" : "not consumed");
+    console.log(this.filled() ? "filled" : "not filled");
     while (!source.consumed() && !this.filled()) {
       const sourceRemaining = source.ranges.distances[source.pointer] - source.offset;
       const targetRemaining = this.target.outs[this.pointer].value - this.offset;
