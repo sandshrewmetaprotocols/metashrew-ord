@@ -319,8 +319,14 @@ function createBlockchain() {
 }
 
 describe("metashrew-ord", () => {
-  it("block simulator", () => {
-    console.log(createBlockchain());
+  it("block simulator", async () => {
+    const program = buildProgram();
+    let i = 0;
+    for (const block of createBlockchain()) {
+      program.setBlockHeight(i++);
+      program.setBlock(block.toHex());
+      await program.run('_start');
+    }
   });
 
   // it("should index satranges", async () => {
