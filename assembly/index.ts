@@ -368,7 +368,7 @@ export function sat(): ArrayBuffer {
   const outpoint = new OutPoint(Box.from(SAT_TO_OUTPOINT.get(start)));
   response.outpoint.hash = arrayBufferToArray(outpoint.txid.toArrayBuffer());
   response.outpoint.vout = outpoint.index;
-  response.satrange.start = response.pointer;
+  response.satrange.start = start;
   response.satrange.distance = SAT_TO_OUTPOINT.seekGreater(response.pointer);
   response.satranges = outpointToSatRanges(outpoint);
   return response.encode();

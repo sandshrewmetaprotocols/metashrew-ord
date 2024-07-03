@@ -4612,14 +4612,14 @@
     if (result i32)
      i32.const 0
     else
-     block $__inlined_func$~lib/string/String.__eq$1327 (result i32)
+     block $__inlined_func$~lib/string/String.__eq$1326 (result i32)
       i32.const 1
       local.get $5
       i32.load
       local.tee $2
       local.get $1
       i32.eq
-      br_if $__inlined_func$~lib/string/String.__eq$1327
+      br_if $__inlined_func$~lib/string/String.__eq$1326
       drop
       i32.const 0
       local.get $1
@@ -4627,7 +4627,7 @@
       local.get $2
       i32.eqz
       i32.or
-      br_if $__inlined_func$~lib/string/String.__eq$1327
+      br_if $__inlined_func$~lib/string/String.__eq$1326
       drop
       i32.const 0
       local.get $2
@@ -4644,7 +4644,7 @@
       i32.const 1
       i32.shr_u
       i32.ne
-      br_if $__inlined_func$~lib/string/String.__eq$1327
+      br_if $__inlined_func$~lib/string/String.__eq$1326
       drop
       local.get $1
       local.set $3
@@ -8443,17 +8443,17 @@
     if
      i32.const 0
      local.set $8
-     block $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$1212
+     block $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$1211
       local.get $4
       local.get $9
       call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
       i32.load offset=20
       local.tee $4
       i32.eqz
-      br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$1212
+      br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$1211
       i32.const 0
       local.set $7
-      block $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1340
+      block $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1339
        local.get $4
        i32.load offset=4
        local.tee $5
@@ -8461,7 +8461,7 @@
        local.tee $6
        i32.const 0
        i32.le_s
-       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1340
+       br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1339
        local.get $6
        i32.const 2
        i32.ge_s
@@ -8479,7 +8479,7 @@
         local.tee $5
         i32.const 1
         i32.le_s
-        br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1340
+        br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1339
         local.get $4
         i32.load offset=4
         local.get $5
@@ -8488,7 +8488,7 @@
         call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
         i32.load8_u offset=5
         i32.eqz
-        br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1340
+        br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1339
         local.get $4
         i32.load offset=4
         local.get $5
@@ -8510,7 +8510,7 @@
          i32.const 31
          i32.and
         end
-        br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1340
+        br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/witness/Witness#tapscript$1339
         local.get $4
         i32.load offset=4
         local.get $5
@@ -8650,7 +8650,7 @@
        i32.const 0
       end
       i32.eqz
-      br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$1212
+      br_if $__inlined_func$~lib/metashrew-as/assembly/blockdata/transaction/Input#inscription$1211
       local.get $7
       call $~lib/metashrew-as/assembly/blockdata/inscription/Inscription#constructor
       local.set $8
@@ -10685,11 +10685,11 @@
  (func $assembly/protobuf/__proto.SafeDecoder#varint (param $0 i32) (result i64)
   (local $1 i64)
   (local $2 i32)
-  block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260 (result i32)
+  block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1259 (result i32)
    i32.const 1
    local.get $0
    i32.load8_u offset=8
-   br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260
+   br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1259
    drop
    local.get $0
    i32.load offset=4
@@ -10700,7 +10700,7 @@
     i32.const 1
     i32.store8 offset=8
     i32.const 1
-    br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260
+    br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1259
    end
    i32.const 0
   end
@@ -11085,11 +11085,11 @@
   local.get $1
  )
  (func $assembly/protobuf/__proto.SafeDecoder#skipType (param $0 i32) (param $1 i32)
-  block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1262 (result i32)
+  block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261 (result i32)
    i32.const 1
    local.get $0
    i32.load8_u offset=8
-   br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1262
+   br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261
    drop
    local.get $0
    i32.load offset=4
@@ -11100,7 +11100,7 @@
     i32.const 1
     i32.store8 offset=8
     i32.const 1
-    br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1262
+    br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261
    end
    i32.const 0
   end
@@ -11122,11 +11122,11 @@
         drop
         br $break|0
        end
-       block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261 (result i32)
+       block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260 (result i32)
         i32.const 1
         local.get $0
         i32.load8_u offset=8
-        br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261
+        br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260
         drop
         local.get $0
         i32.load offset=4
@@ -11137,7 +11137,7 @@
          i32.const 1
          i32.store8 offset=8
          i32.const 1
-         br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261
+         br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260
         end
         i32.const 0
        end
@@ -11179,11 +11179,11 @@
       call $assembly/protobuf/__proto.Decoder#varint@override
       i32.wrap_i64
       local.set $1
-      block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12610 (result i32)
+      block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12600 (result i32)
        i32.const 1
        local.get $0
        i32.load8_u offset=8
-       br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12610
+       br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12600
        drop
        local.get $0
        i32.load offset=4
@@ -11194,7 +11194,7 @@
         i32.const 1
         i32.store8 offset=8
         i32.const 1
-        br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12610
+        br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12600
        end
        i32.const 0
       end
@@ -11250,11 +11250,11 @@
      end
      br $break|0
     end
-    block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12611 (result i32)
+    block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12601 (result i32)
      i32.const 1
      local.get $0
      i32.load8_u offset=8
-     br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12611
+     br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12601
      drop
      local.get $0
      i32.load offset=4
@@ -11265,7 +11265,7 @@
       i32.const 1
       i32.store8 offset=8
       i32.const 1
-      br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12611
+      br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12601
      end
      i32.const 0
     end
@@ -11336,11 +11336,11 @@
   call $assembly/protobuf/ordinals.OutPoint#constructor
   i32.store
   loop $while-continue|0
-   block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1251 (result i32)
+   block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1250 (result i32)
     i32.const 1
     local.get $1
     i32.load8_u offset=8
-    br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1251
+    br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1250
     drop
     local.get $1
     i32.load offset=4
@@ -11351,7 +11351,7 @@
      i32.const 1
      i32.store8 offset=8
      i32.const 1
-     br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1251
+     br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1250
     end
     i32.const 0
    end
@@ -11381,7 +11381,7 @@
      i32.wrap_i64
      local.set $3
      local.get $0
-     block $__inlined_func$assembly/protobuf/ordinals.OutPoint.decodeDataView$1350 (result i32)
+     block $__inlined_func$assembly/protobuf/ordinals.OutPoint.decodeDataView$1349 (result i32)
       local.get $1
       i32.load
       local.tee $2
@@ -11401,11 +11401,11 @@
       call $assembly/protobuf/ordinals.OutPoint#constructor
       local.set $6
       loop $while-continue|01
-       block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12510 (result i32)
+       block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12500 (result i32)
         i32.const 1
         local.get $5
         i32.load8_u offset=8
-        br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12510
+        br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12500
         drop
         local.get $5
         i32.load offset=4
@@ -11416,7 +11416,7 @@
          i32.const 1
          i32.store8 offset=8
          i32.const 1
-         br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12510
+         br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$12500
         end
         i32.const 0
        end
@@ -11454,11 +11454,11 @@
           block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#bytes$63 (result i32)
            i32.const 0
            local.set $2
-           block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1258 (result i32)
+           block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1257 (result i32)
             i32.const 1
             local.get $5
             i32.load8_u offset=8
-            br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1258
+            br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1257
             drop
             local.get $5
             i32.load offset=4
@@ -11469,7 +11469,7 @@
              i32.const 1
              i32.store8 offset=8
              i32.const 1
-             br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1258
+             br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1257
             end
             i32.const 0
            end
@@ -11589,11 +11589,11 @@
        end
       end
       i32.const 0
-      block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1264 (result i32)
+      block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1263 (result i32)
        i32.const 1
        local.get $5
        i32.load8_u offset=8
-       br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1264
+       br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1263
        drop
        local.get $5
        i32.load offset=4
@@ -11604,20 +11604,20 @@
         i32.const 1
         i32.store8 offset=8
         i32.const 1
-        br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1264
+        br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1263
        end
        i32.const 0
       end
-      br_if $__inlined_func$assembly/protobuf/ordinals.OutPoint.decodeDataView$1350
+      br_if $__inlined_func$assembly/protobuf/ordinals.OutPoint.decodeDataView$1349
       drop
       local.get $6
      end
      i32.store
-     block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261 (result i32)
+     block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260 (result i32)
       i32.const 1
       local.get $1
       i32.load8_u offset=8
-      br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261
+      br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260
       drop
       local.get $1
       i32.load offset=4
@@ -11628,7 +11628,7 @@
        i32.const 1
        i32.store8 offset=8
        i32.const 1
-       br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1261
+       br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1260
       end
       i32.const 0
      end
@@ -11674,11 +11674,11 @@
     br $while-continue|0
    end
   end
-  block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1267 (result i32)
+  block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1266 (result i32)
    i32.const 1
    local.get $1
    i32.load8_u offset=8
-   br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1267
+   br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1266
    drop
    local.get $1
    i32.load offset=4
@@ -11689,7 +11689,7 @@
     i32.const 1
     i32.store8 offset=8
     i32.const 1
-    br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1267
+    br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1266
    end
    i32.const 0
   end
@@ -12607,7 +12607,7 @@
   i32.const 4
   i32.sub
   i32.store offset=4
-  block $__inlined_func$assembly/protobuf/ordinals.SatRequest.decodeDataView$1358 (result i32)
+  block $__inlined_func$assembly/protobuf/ordinals.SatRequest.decodeDataView$1357 (result i32)
    local.get $0
    i32.load offset=4
    call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -12638,11 +12638,11 @@
    i64.const 0
    i64.store
    loop $while-continue|0
-    block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1251 (result i32)
+    block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1250 (result i32)
      i32.const 1
      local.get $2
      i32.load8_u offset=8
-     br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1251
+     br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1250
      drop
      local.get $2
      i32.load offset=4
@@ -12653,7 +12653,7 @@
       i32.const 1
       i32.store8 offset=8
       i32.const 1
-      br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1251
+      br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1250
      end
      i32.const 0
     end
@@ -12693,11 +12693,11 @@
     end
    end
    i32.const 0
-   block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1283 (result i32)
+   block $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1282 (result i32)
     i32.const 1
     local.get $2
     i32.load8_u offset=8
-    br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1283
+    br_if $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1282
     drop
     local.get $2
     i32.load offset=4
@@ -12708,11 +12708,11 @@
      i32.const 1
      i32.store8 offset=8
      i32.const 1
-     br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1283
+     br $__inlined_func$assembly/protobuf/__proto.SafeDecoder#invalid$1282
     end
     i32.const 0
    end
-   br_if $__inlined_func$assembly/protobuf/ordinals.SatRequest.decodeDataView$1358
+   br_if $__inlined_func$assembly/protobuf/ordinals.SatRequest.decodeDataView$1357
    drop
    local.get $0
   end
@@ -12789,8 +12789,7 @@
   i32.store offset=4
   local.get $0
   i32.load offset=8
-  local.get $0
-  i64.load
+  local.get $1
   i64.store
   local.get $0
   i32.load offset=8

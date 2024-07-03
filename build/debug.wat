@@ -17658,13 +17658,13 @@
   local.get $this
   i32.load offset=8
  )
- (func $assembly/protobuf/ordinals.SatResponse#get:pointer (param $this i32) (result i64)
-  local.get $this
-  i64.load
- )
  (func $assembly/protobuf/ordinals.SatResponse#get:satrange (param $this i32) (result i32)
   local.get $this
   i32.load offset=8
+ )
+ (func $assembly/protobuf/ordinals.SatResponse#get:pointer (param $this i32) (result i64)
+  local.get $this
+  i64.load
  )
  (func $assembly/protobuf/ordinals.OutPoint#size (param $this i32) (result i32)
   (local $size i32)
@@ -18066,8 +18066,7 @@
   call $assembly/protobuf/ordinals.OutPoint#set:vout
   local.get $response
   call $assembly/protobuf/ordinals.SatResponse#get:satrange
-  local.get $response
-  call $assembly/protobuf/ordinals.SatResponse#get:pointer
+  local.get $start
   call $assembly/protobuf/ordinals.SatRange#set:start
   local.get $response
   call $assembly/protobuf/ordinals.SatResponse#get:satrange
