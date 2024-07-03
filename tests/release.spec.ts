@@ -6,6 +6,7 @@ import path from "path";
 import * as bitcoinjs from "bitcoinjs-lib";
 import { MetashrewOrd } from "../lib/rpc";
 import clone from "clone";
+import crypto from "crypto";
 
 const stripHexPrefix = (key: string) => {
   if (key.substr(0, 2) === "0x") return key.substr(2);
@@ -77,6 +78,10 @@ const EMPTY_WITNESS = [];
 const TEST_BTC_ADDRESS1 = "16aE44Au1UQ5XqKMUhCMXTX7ZxbmAcQNA1";
 const TEST_BTC_ADDRESS2 = "1AdAhGdUgGF6ip7bBcVvuWYuuCxAeonNaK";
 
+const randomAddress = () => {
+  return bitcoinjs.address.toBase58Check(crypto.randomBytes(20), 0);
+}
+
 const buildCoinbase = (outputs) => {
   const tx = new bitcoinjs.Transaction();
   tx.ins.push({
@@ -106,6 +111,17 @@ const buildTransaction = (ins, outs) => {
   return tx;
 };
 
+const buildCoinbaseToAddress = (address) =>
+  buildCoinbase([
+    {
+      script: bitcoinjs.payments.p2pkh({
+        address: address,
+        network: bitcoinjs.networks.bitcoin,
+      }).output,
+      value: 5000000000
+    },
+  ]);
+  	
 const buildCoinbaseToTestAddress = () =>
   buildCoinbase([
     {
@@ -113,7 +129,18 @@ const buildCoinbaseToTestAddress = () =>
         address: TEST_BTC_ADDRESS1,
         network: bitcoinjs.networks.bitcoin,
       }).output,
-      value: 625000000,
+      value: 5000000000,
+    },
+  ]);
+
+const buildCoinbaseToRandomAddress = () =>
+  buildCoinbase([
+    {
+      script: bitcoinjs.payments.p2pkh({
+        address: randomAddress(),
+        network: bitcoinjs.networks.bitcoin,
+      }).output,
+      value: 5000000000
     },
   ]);
 
@@ -179,7 +206,10 @@ describe("metashrew-ord", () => {
     program.setBlockHeight(0);
     const block = buildDefaultBlock();
     const coinbase = buildCoinbaseToTestAddress();
-    block.transactions.push(coinbase);
+    coinbase.outs[0].value += 50
+    const coinbaseBlock = buildDefaultBlock();
+    coinbaseBlock.transactions.push(coinbase);
+    block.transactions.push(buildCoinbaseToRandomAddress());
     const transaction = buildTransaction(
       [
         {
@@ -202,18 +232,12 @@ describe("metashrew-ord", () => {
             network: bitcoinjs.networks.bitcoin,
             address: TEST_BTC_ADDRESS1,
           }).output,
-          value: 62399999,
+          value: 50e8 - 51
         },
       ],
     );
     const block2 = buildDefaultBlock();
-    const coinbase2 = buildCoinbase([{
-      script: bitcoinjs.payments.p2pkh({
-        address: TEST_BTC_ADDRESS2,
-        network: bitcoinjs.networks.bitcoin,
-      }).output,
-      value: 625000000,
-    }]);
+    const coinbase2 = buildCoinbaseToRandomAddress();
     block2.transactions.push(coinbase2);
     const transaction2 = buildTransaction(
       [
@@ -236,11 +260,10 @@ describe("metashrew-ord", () => {
             address: TEST_BTC_ADDRESS2,
             network: bitcoinjs.networks.bitcoin,
           }).output,
-          value: 623000000,
+          value: 50e8 - 100,
         }
       ],
     );
-    block2.transactions.push(transaction2);
     program.setBlock(block.toHex());
     await program.run("_start");
     program.setBlockHeight(1);

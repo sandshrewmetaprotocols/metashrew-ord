@@ -134,9 +134,14 @@ class SatSink {
     return OutPoint.from(this.target.txid(), this.pointer).toArrayBuffer();
   }
   consume(source: SatSource): void {
+    /*
     console.log(Box.from(this.target.txid()).toHexString());
     console.log(source.consumed() ? "consumed" : "not consumed");
     console.log(this.filled() ? "filled" : "not filled");
+    source.ranges.distances.forEach((v: u64, i: i32, ary: Array<u64>) => {
+      console.log('distance:' + v.toString(10));
+    });
+    */
     while (!source.consumed() && !this.filled()) {
       const sourceRemaining = source.ranges.distances[source.pointer] - source.offset;
       const targetRemaining = this.target.outs[this.pointer].value - this.offset;
@@ -166,7 +171,7 @@ class SatSink {
 }
 
 function setSat(sat: u64, outpoint: ArrayBuffer): void {
-  console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
+  //console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
   SAT_TO_OUTPOINT.set(sat, outpoint);
 }
 
