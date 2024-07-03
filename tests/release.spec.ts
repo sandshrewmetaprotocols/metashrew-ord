@@ -7,6 +7,7 @@ import * as bitcoinjs from "bitcoinjs-lib";
 import { MetashrewOrd } from "../lib/rpc";
 import clone from "clone";
 import crypto from "crypto";
+import HDKey = require("hdkey");
 
 const stripHexPrefix = (key: string) => {
   if (key.substr(0, 2) === "0x") return key.substr(2);
@@ -77,9 +78,14 @@ const EMPTY_WITNESS = [];
 
 const TEST_BTC_ADDRESS1 = "16aE44Au1UQ5XqKMUhCMXTX7ZxbmAcQNA1";
 const TEST_BTC_ADDRESS2 = "1AdAhGdUgGF6ip7bBcVvuWYuuCxAeonNaK";
+const TEST_BTC_SEED = 'fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542'
+var hdkey = HDKey.fromMasterSeed(Buffer.from(TEST_BTC_SEED, 'hex'));
+const derivation = hdkey.derive("m/44'/49'/84'/0'/0'")
+
+let keyIndex = 0;
 
 const randomAddress = () => {
-  return bitcoinjs.address.toBase58Check(crypto.randomBytes(20), 0);
+  return bitcoinjs.address.toBase58Check(derivation.deriveChild(keyIndex++).pubKeyHash, 0);
 }
 
 const buildCoinbase = (outputs) => {
@@ -236,6 +242,8 @@ describe("metashrew-ord", () => {
         },
       ],
     );
+    block.transactions.push(transaction);
+    block.transactions[0].outs[0].value += 50;
     const block2 = buildDefaultBlock();
     const coinbase2 = buildCoinbaseToRandomAddress();
     block2.transactions.push(coinbase2);
@@ -264,6 +272,7 @@ describe("metashrew-ord", () => {
         }
       ],
     );
+    block2.transactions[0].outs[0].value += 50;
     block2.transactions.push(transaction2);
     program.setBlockHeight(0);
     program.setBlock(coinbaseBlock.toHex());
@@ -274,6 +283,8 @@ describe("metashrew-ord", () => {
     program.setBlockHeight(2);
     program.setBlock(block2.toHex());
     await program.run("_start");
+    const endRange = await satranges(program, '583f8f359262735d36d552706c4fddacde4a0fa48a43d918196a57ffda02ee0e:0');
+    console.log(endRange);
     const result = await satranges(program, `${transaction2.getHash().toString('hex')}:0`);
     console.log("satranges output", result);
   });

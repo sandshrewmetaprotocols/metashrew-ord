@@ -171,7 +171,7 @@ class SatSink {
 }
 
 function setSat(sat: u64, outpoint: ArrayBuffer): void {
-  //console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
+  console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
   SAT_TO_OUTPOINT.set(sat, outpoint);
 }
 
