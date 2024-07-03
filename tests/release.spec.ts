@@ -264,9 +264,14 @@ describe("metashrew-ord", () => {
         }
       ],
     );
+    block2.transactions.push(transaction2);
+    program.setBlockHeight(0);
+    program.setBlock(coinbaseBlock.toHex());
+    await program.run("_start");
+    program.setBlockHeight(1)!
     program.setBlock(block.toHex());
     await program.run("_start");
-    program.setBlockHeight(1);
+    program.setBlockHeight(2);
     program.setBlock(block2.toHex());
     await program.run("_start");
     const result = await satranges(program, `${transaction2.getHash().toString('hex')}:0`);
