@@ -173,6 +173,7 @@ class SatSink {
 function setSat(sat: u64, outpoint: ArrayBuffer): void {
   console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
   SAT_TO_OUTPOINT.set(sat, outpoint);
+  if (outpoint.byteLength === 0) SAT_TO_OUTPOINT.unmarkPath(sat);
 }
 
 function excessSats(source: SatSource): void {

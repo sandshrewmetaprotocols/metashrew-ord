@@ -297,10 +297,10 @@ describe("metashrew-ord", () => {
     program.setBlockHeight(2);
     program.setBlock(block2.toHex());
     await program.run("_start");
-    const endRange = await satranges(program, '583f8f359262735d36d552706c4fddacde4a0fa48a43d918196a57ffda02ee0e:0');
     const satResult = await sat(program, 5);
-    console.log(endRange);
     console.log(satResult);
+    const endRange = await satranges(program, '583f8f359262735d36d552706c4fddacde4a0fa48a43d918196a57ffda02ee0e:0');
+    console.log(endRange);
     const result = await satranges(program, `${transaction2.getHash().toString('hex')}:0`);
     console.log("satranges output", result);
   });

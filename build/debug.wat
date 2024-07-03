@@ -9457,6 +9457,15 @@
   local.get $sat
   local.get $outpoint
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#set
+  local.get $outpoint
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  i32.const 0
+  i32.eq
+  if
+   global.get $assembly/tables/SAT_TO_OUTPOINT
+   local.get $sat
+   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#unmarkPath
+  end
  )
  (func $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#lengthKey (param $this i32) (result i32)
   local.get $this
