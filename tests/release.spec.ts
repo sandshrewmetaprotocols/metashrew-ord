@@ -251,21 +251,7 @@ function sample<T>(array: T[]): T[] {
 
   return result;
 }
-
-function createTransactions(maxOutputs, possibleInputs) {
-  let spendableValue = 0;
-  let inputs = sample(possibleInputs).map((input) => {
-    spendableValue += input[0].outs[input[1]].value;
-    let _in = {
-      hash: input[0].getHash(),
-      index: input[1],
-      witness: EMPTY_WITNESS,
-      script: EMPTY_BUFFER,
-    };
-
-    return _in;
-  });
-
+function createTransactionFromInputs(maxOutputs, possibleInputs, inputs, spendableValue) {
   let outputs = generateRandomSubdivisions(spendableValue, maxOutputs).map(
     (val) => {
       let out = {
@@ -275,7 +261,6 @@ function createTransactions(maxOutputs, possibleInputs) {
         }).output,
         value: val,
       };
-      console.log(out);
       return out;
     },
   );
@@ -283,35 +268,59 @@ function createTransactions(maxOutputs, possibleInputs) {
   let transaction = buildTransaction(inputs, outputs);
 
   transaction.outs.forEach((out, i) =>
-    possibleInputs.push([transaction.getHash(), i]),
+    possibleInputs.push([transaction, i]),
   );
 
   return transaction;
 }
 
-function createBlock(unspent) {
-  // let template = buildDefaultBlock()
-  // unspent.forEach(tx) => {
-  // }
-  // lastUnspent.forEach(tx) => {
-  // spend unspent transactions
-  // add the outputs to unspent transaction list
-  // add the transactions to new block
-  // }
+function mapToInput(input) {
+  return {
+    hash: input[0].getHash(),
+    index: input[1],
+    witness: EMPTY_WITNESS,
+    script: EMPTY_BUFFER,
+  };
 }
 
-function createNBlocks() {}
+function createTransaction(maxOutputs, possibleInputs) {
+  let spendableValue = 0;
+  let inputs = sample(possibleInputs).map((input) => {
+    spendableValue += input[0].outs[input[1]].value
+    return mapToInput(input);
+  });
+  return createTransactionFromInputs(maxOutputs, possibleInputs, inputs, spendableValue);
+}
+
+function createCoinbaseTransaction(maxOutputs, possibleInputs, blockReward) {
+  const tx = buildCoinbase([]);
+  const coinbase = [[{
+    getHash() {
+      return Buffer.allocUnsafe(32);
+    }
+  }, 0]];
+  return createTransactionFromInputs(maxOutputs, possibleInputs, coinbase.map((v) => mapToInput(v)), blockReward);
+}
+
+  
+
+function createBlockchain() {
+   const blocks = [];
+   let [ last, output ] = genesisBlock();
+   let outputs = [ [output, 0] ];
+   blocks.push(last);
+   Array(5).fill(0).forEach((_, i) => {
+     const block = last = buildDefaultBlock();
+     block.transactions.push(createCoinbaseTransaction(Math.floor(Math.random()*2) + 1, outputs, 5000000000));
+     Array(1 + Math.floor(Math.random()*2)).fill(0).map((_, i) => createTransaction(2 + Math.floor(Math.random()*5), outputs)).forEach((v) => block.transactions.push(v));
+     blocks.push(block);
+   });
+   return blocks;
+}
 
 describe("metashrew-ord", () => {
-  it("should test my block simulator", async () => {
-    let unspentOutputs = [];
-    let [block, unspent] = genesisBlock();
-    unspentOutputs.push([unspent, 0]);
-
-    let transaction = createTransactions(5, unspentOutputs);
-
-    console.log(transaction);
-    console.log(unspentOutputs.length);
+  it("block simulator", () => {
+    console.log(createBlockchain());
   });
 
   // it("should index satranges", async () => {
