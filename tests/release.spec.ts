@@ -200,6 +200,22 @@ function genesisBlock() {
   return [genesis, coinbase];
 }
 
+function templateBlock() {
+  let template = buildDefaultBlock();
+  let coinbase = buildCoinbase([
+    {
+      script: bitcoinjs.payments.p2pkh({
+        address: TEST_BTC_ADDRESS1,
+        network: bitcoinjs.networks.bitcoin,
+      }).output,
+      value: 50000000000,
+    },
+  ]);
+  template.transactions.push(coinbase);
+
+  return [template, coinbase];
+}
+
 // simulate
 function simulateForward(block) {
   block.transactions.forEach((tx, offset) => {
@@ -223,23 +239,8 @@ function generateRandomSubdivisions(n: number, x: number): number[] {
 
   return result;
 }
-// function generateRandomSubdivisions(n: number, x: number): number[] {
-//   if (x <= 0 || n <= 0) {
-//     throw new Error("Both n and x must be greater than 0");
-//   }
 
-//   const result: number[] = new Array(x).fill(1);
-//   let remaining = n - x;
-
-//   while (remaining > 0) {
-//     const index = Math.floor(Math.random() * x);
-//     result[index]++;
-//     remaining--;
-//   }
-
-//   return result;
-// }
-
+// samples a random number of array items returning a subarray and mutating (removing) sampled elements
 function sample<T>(array: T[]): T[] {
   const n = Math.floor(Math.random() * array.length) + 1;
   const result: T[] = [];
@@ -252,66 +253,94 @@ function sample<T>(array: T[]): T[] {
   return result;
 }
 
-function createTransactions(maxOutputs, possibleInputs) {
-  let spendableValue = 0;
-  let inputs = sample(possibleInputs).map((input) => {
-    spendableValue += input[0].outs[input[1]].value;
-    let _in = {
+// constructs input array given sampled inputs
+// returns (inputArray, totalVal)
+function constructInputs<T>(inputs: T[]) {
+  let totalVal = 0;
+  let inputArr = inputs.map((input) => {
+    totalVal += input[0].outs[input[1]].value;
+    let el = {
       hash: input[0].getHash(),
       index: input[1],
       witness: EMPTY_WITNESS,
       script: EMPTY_BUFFER,
     };
-
-    return _in;
+    return el;
   });
 
-  let outputs = generateRandomSubdivisions(spendableValue, maxOutputs).map(
-    (val) => {
-      let out = {
-        script: bitcoinjs.payments.p2pkh({
-          address: TEST_BTC_ADDRESS1,
-          network: bitcoinjs.networks.bitcoin,
-        }).output,
-        value: val,
-      };
-      console.log(out);
-      return out;
-    },
+  return [inputArr, totalVal];
+}
+
+// constructs output array given input values
+// returns outputArr
+function constructOutputs(outputVals) {
+  let outputArr = outputVals.map((val) => {
+    let el = {
+      script: bitcoinjs.payments.p2pkh({
+        address: TEST_BTC_ADDRESS1,
+        network: bitcoinjs.networks.bitcoin,
+      }).output,
+      value: val,
+    };
+    return el;
+  });
+
+  return outputArr;
+}
+
+// returns created transaction and a subset of the mempool
+function createTransactions(maxOutputs, possibleInputs) {
+  let mempool = [];
+  let [inputs, totalVal] = constructInputs(sample(possibleInputs));
+  let outputs = constructOutputs(
+    generateRandomSubdivisions(totalVal, maxOutputs),
   );
 
+  // console.log(inputs.length, outputs.length);
+  // construct transaction given inputs & outputs
   let transaction = buildTransaction(inputs, outputs);
-
-  transaction.outs.forEach((out, i) =>
-    possibleInputs.push([transaction.getHash(), i]),
-  );
-
-  return transaction;
+  // assign new outputs to possibleInputs list
+  transaction.outs.forEach((out, i) => mempool.push([transaction, i]));
+  return [transaction, mempool];
 }
 
-function createBlock(unspent) {
-  // let template = buildDefaultBlock()
-  // unspent.forEach(tx) => {
-  // }
-  // lastUnspent.forEach(tx) => {
-  // spend unspent transactions
-  // add the outputs to unspent transaction list
-  // add the transactions to new block
-  // }
+function createBlock(unspentOutputs) {
+  let mempool = [];
+  // create new block
+  const [template, coinbase] = templateBlock();
+  // add coinbase transaction to mempool
+  mempool.push([coinbase, 0]);
+
+  while (unspentOutputs.length >= 1) {
+    let [transaction, mempoolSubset] = createTransactions(10, unspentOutputs);
+    template.transactions.push(transaction);
+    mempool = mempool.concat(mempoolSubset);
+  }
+
+  unspentOutputs.push(...mempool);
+
+  return template;
 }
 
-function createNBlocks() {}
+function simulateNHeightBlockchain(n) {
+  let unspentOutputs = [];
+
+  let [genesis, unspent] = genesisBlock();
+  unspentOutputs.push([unspent, 0]);
+
+  let blocks = [genesis];
+  while (n > 0) {
+    blocks.push(createBlock(unspentOutputs));
+    n--;
+  }
+  return blocks;
+}
 
 describe("metashrew-ord", () => {
   it("should test my block simulator", async () => {
-    let unspentOutputs = [];
-    let [block, unspent] = genesisBlock();
-    unspentOutputs.push([unspent, 0]);
+    let blocks = simulateNHeightBlockchain(10);
 
-    let transaction = createTransactions(5, unspentOutputs);
-
-    console.log(transaction);
-    console.log(unspentOutputs.length);
+    console.log(blocks);
   });
 
   // it("should index satranges", async () => {
