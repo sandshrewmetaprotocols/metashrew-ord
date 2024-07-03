@@ -324,14 +324,9 @@ export function _start(): void {
   _flush();
 }
 
-export function satranges(): ArrayBuffer {
-  const box = Box.from(input());
-  const height = parsePrimitive<u32>(box);
-  const data = box.toArrayBuffer();
-  const request = ordinals.SatRangesRequest.decode(data);
-  const outpoint = OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout).toArrayBuffer();
-  const sats = OUTPOINT_TO_SAT.select(outpoint).getListValues<u64>();
-  const response = new ordinals.SatRangesResponse();
+function outpointToSatRanges(outpoint: OutPoint): ordinals.SatRanges {
+  const sats = OUTPOINT_TO_SAT.select(outpoint.toArrayBuffer()).getListValues<u64>();
+  const result = new ordinals.SatRanges();
   const distances = sats.map<u64>((v: u64, i: i32, ary: Array<u64>) => {
     return rangeLength<u64>(SAT_TO_OUTPOINT, v, STARTING_SAT.getValue<u64>());
   });
@@ -339,24 +334,45 @@ export function satranges(): ArrayBuffer {
     const range = new ordinals.SatRange();
     range.start = sats[i];
     range.distance = distances[i];
-    response.satranges.ranges.push(range);
+    result.ranges.push(range);
   }
+  return result;
+}
+
+export function satranges(): ArrayBuffer {
+  const box = Box.from(input());
+  const height = parsePrimitive<u32>(box);
+  const data = box.toArrayBuffer();
+  const request = ordinals.SatRangesRequest.decode(data);
+  const outpoint = OutPoint.from(request.outpoint.hash.buffer, request.outpoint.vout);
+  const response = new ordinals.SatRangesResponse();
+  response.satranges = outpointToSatRanges(outpoint);
   return response.encode();
 }
 
-export function sat(): ArrayBuffer {
-  const point = new Sat(parsePrimitive<u64>(Box.from(input())));
-  return toRLP(RLPItem.fromList([
-    RLPItem.fromValue(<usize> point.n()),
-    RLPItem.fromArrayBuffer(String.UTF8.encode(point.height().n().toString(10) + "." + point.third().toString(10))),
-    RLPItem.fromValue(<usize> point.height().n()),
-    RLPItem.fromValue(<usize> point.cycle()),
-    RLPItem.fromValue(<usize> point.epoch().n()),
-    RLPItem.fromValue(<usize> point.period()),
-    RLPItem.fromValue(<usize> point.third()),
-  ]));
+function arrayBufferToArray(data: ArrayBuffer): Array<u8> {
+  const result = new Array<u8>(data.byteLength);
+  store<usize>(changetype<usize>(result), changetype<usize>(data));
+  store<usize>(changetype<usize>(result) + sizeof<usize>(), changetype<usize>(data));
+  return result;
 }
 
+export function sat(): ArrayBuffer {
+  const box = Box.from(input());
+  const height = parsePrimitive<u32>(box);
+  const data = box.toArrayBuffer();
+  const request = ordinals.SatRequest.decode(data);
+  const response = new ordinals.SatResponse();
+  const start = SAT_TO_OUTPOINT.seekLower(request.sat + 1);
+  response.pointer = request.sat - start;
+  const outpoint = new OutPoint(Box.from(SAT_TO_OUTPOINT.get(start)));
+  response.outpoint.hash = arrayBufferToArray(outpoint.txid.toArrayBuffer());
+  response.outpoint.vout = outpoint.index;
+  response.satrange.start = response.pointer;
+  response.satrange.distance = SAT_TO_OUTPOINT.seekGreater(response.pointer);
+  response.satranges = outpointToSatRanges(outpoint);
+  return response.encode();
+}
 
 export function inscription(): ArrayBuffer {
   const data = input();

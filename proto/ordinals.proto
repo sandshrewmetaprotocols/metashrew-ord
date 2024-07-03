@@ -23,3 +23,14 @@ message SatRangesRequest {
 message SatRangesResponse {
   SatRanges satranges = 1;
 }
+
+message SatRequest {
+  uint64 sat = 1;
+}
+
+message SatResponse {
+  uint64 pointer = 1;
+  SatRange satrange = 2;
+  OutPoint outpoint = 3;
+  SatRanges satranges = 4;
+}

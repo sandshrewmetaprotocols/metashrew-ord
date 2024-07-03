@@ -63,6 +63,36 @@ export interface SatRangesResponse {
      */
     satranges?: SatRanges;
 }
+/**
+ * @generated from protobuf message ordinals.SatRequest
+ */
+export interface SatRequest {
+    /**
+     * @generated from protobuf field: uint64 sat = 1;
+     */
+    sat: bigint;
+}
+/**
+ * @generated from protobuf message ordinals.SatResponse
+ */
+export interface SatResponse {
+    /**
+     * @generated from protobuf field: uint64 pointer = 1;
+     */
+    pointer: bigint;
+    /**
+     * @generated from protobuf field: ordinals.SatRange satrange = 2;
+     */
+    satrange?: SatRange;
+    /**
+     * @generated from protobuf field: ordinals.OutPoint outpoint = 3;
+     */
+    outpoint?: OutPoint;
+    /**
+     * @generated from protobuf field: ordinals.SatRanges satranges = 4;
+     */
+    satranges?: SatRanges;
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class OutPoint$Type extends MessageType<OutPoint> {
     constructor() {
@@ -312,3 +342,118 @@ class SatRangesResponse$Type extends MessageType<SatRangesResponse> {
  * @generated MessageType for protobuf message ordinals.SatRangesResponse
  */
 export const SatRangesResponse = new SatRangesResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SatRequest$Type extends MessageType<SatRequest> {
+    constructor() {
+        super("ordinals.SatRequest", [
+            { no: 1, name: "sat", kind: "scalar", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SatRequest>): SatRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.sat = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<SatRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SatRequest): SatRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 sat */ 1:
+                    message.sat = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SatRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 sat = 1; */
+        if (message.sat !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.sat);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message ordinals.SatRequest
+ */
+export const SatRequest = new SatRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SatResponse$Type extends MessageType<SatResponse> {
+    constructor() {
+        super("ordinals.SatResponse", [
+            { no: 1, name: "pointer", kind: "scalar", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "satrange", kind: "message", T: () => SatRange },
+            { no: 3, name: "outpoint", kind: "message", T: () => OutPoint },
+            { no: 4, name: "satranges", kind: "message", T: () => SatRanges }
+        ]);
+    }
+    create(value?: PartialMessage<SatResponse>): SatResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pointer = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<SatResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SatResponse): SatResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 pointer */ 1:
+                    message.pointer = reader.uint64().toBigInt();
+                    break;
+                case /* ordinals.SatRange satrange */ 2:
+                    message.satrange = SatRange.internalBinaryRead(reader, reader.uint32(), options, message.satrange);
+                    break;
+                case /* ordinals.OutPoint outpoint */ 3:
+                    message.outpoint = OutPoint.internalBinaryRead(reader, reader.uint32(), options, message.outpoint);
+                    break;
+                case /* ordinals.SatRanges satranges */ 4:
+                    message.satranges = SatRanges.internalBinaryRead(reader, reader.uint32(), options, message.satranges);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SatResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 pointer = 1; */
+        if (message.pointer !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.pointer);
+        /* ordinals.SatRange satrange = 2; */
+        if (message.satrange)
+            SatRange.internalBinaryWrite(message.satrange, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* ordinals.OutPoint outpoint = 3; */
+        if (message.outpoint)
+            OutPoint.internalBinaryWrite(message.outpoint, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* ordinals.SatRanges satranges = 4; */
+        if (message.satranges)
+            SatRanges.internalBinaryWrite(message.satranges, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message ordinals.SatResponse
+ */
+export const SatResponse = new SatResponse$Type();

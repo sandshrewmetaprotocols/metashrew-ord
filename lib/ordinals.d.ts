@@ -57,6 +57,36 @@ export interface SatRangesResponse {
      */
     satranges?: SatRanges;
 }
+/**
+ * @generated from protobuf message ordinals.SatRequest
+ */
+export interface SatRequest {
+    /**
+     * @generated from protobuf field: uint64 sat = 1;
+     */
+    sat: bigint;
+}
+/**
+ * @generated from protobuf message ordinals.SatResponse
+ */
+export interface SatResponse {
+    /**
+     * @generated from protobuf field: uint64 pointer = 1;
+     */
+    pointer: bigint;
+    /**
+     * @generated from protobuf field: ordinals.SatRange satrange = 2;
+     */
+    satrange?: SatRange;
+    /**
+     * @generated from protobuf field: ordinals.OutPoint outpoint = 3;
+     */
+    outpoint?: OutPoint;
+    /**
+     * @generated from protobuf field: ordinals.SatRanges satranges = 4;
+     */
+    satranges?: SatRanges;
+}
 declare class OutPoint$Type extends MessageType<OutPoint> {
     constructor();
     create(value?: PartialMessage<OutPoint>): OutPoint;
@@ -107,4 +137,24 @@ declare class SatRangesResponse$Type extends MessageType<SatRangesResponse> {
  * @generated MessageType for protobuf message ordinals.SatRangesResponse
  */
 export declare const SatRangesResponse: SatRangesResponse$Type;
+declare class SatRequest$Type extends MessageType<SatRequest> {
+    constructor();
+    create(value?: PartialMessage<SatRequest>): SatRequest;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SatRequest): SatRequest;
+    internalBinaryWrite(message: SatRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter;
+}
+/**
+ * @generated MessageType for protobuf message ordinals.SatRequest
+ */
+export declare const SatRequest: SatRequest$Type;
+declare class SatResponse$Type extends MessageType<SatResponse> {
+    constructor();
+    create(value?: PartialMessage<SatResponse>): SatResponse;
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SatResponse): SatResponse;
+    internalBinaryWrite(message: SatResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter;
+}
+/**
+ * @generated MessageType for protobuf message ordinals.SatResponse
+ */
+export declare const SatResponse: SatResponse$Type;
 export {};

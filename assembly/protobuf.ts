@@ -1072,4 +1072,233 @@ export namespace ordinals {
       return buf;
     } // encode SatRangesResponse
   } // SatRangesResponse
+
+  export class SatRequest {
+    public sat: u64;
+
+    // Decodes SatRequest from an ArrayBuffer
+    static decode(buf: ArrayBuffer): SatRequest {
+      return SatRequest.decodeDataView(new DataView(buf));
+    }
+
+    // Decodes SatRequest from a DataView
+    static decodeDataView(view: DataView): SatRequest {
+      const decoder = new __proto.SafeDecoder(view);
+      const obj = new SatRequest();
+
+      while (!decoder.eof()) {
+        const tag = decoder.tag();
+        const number = tag >>> 3;
+
+        switch (number) {
+          case 1: {
+            obj.sat = decoder.uint64();
+            break;
+          }
+
+          default:
+            decoder.skipType(tag & 7);
+            break;
+        }
+      }
+      if (decoder.invalid()) return changetype<SatRequest>(0);
+      return obj;
+    } // decode SatRequest
+
+    public size(): u32 {
+      let size: u32 = 0;
+
+      size += this.sat == 0 ? 0 : 1 + __proto.Sizer.uint64(this.sat);
+
+      return size;
+    }
+
+    // Encodes SatRequest to the ArrayBuffer
+    encode(): ArrayBuffer {
+      return changetype<ArrayBuffer>(
+        StaticArray.fromArray<u8>(this.encodeU8Array())
+      );
+    }
+
+    // Encodes SatRequest to the Array<u8>
+    encodeU8Array(
+      encoder: __proto.Encoder = new __proto.Encoder(new Array<u8>())
+    ): Array<u8> {
+      const buf = encoder.buf;
+
+      if (this.sat != 0) {
+        encoder.uint32(0x8);
+        encoder.uint64(this.sat);
+      }
+
+      return buf;
+    } // encode SatRequest
+  } // SatRequest
+
+  export class SatResponse {
+    public pointer: u64;
+    public satrange: SatRange = new SatRange();
+    public outpoint: OutPoint = new OutPoint();
+    public satranges: SatRanges = new SatRanges();
+
+    // Decodes SatResponse from an ArrayBuffer
+    static decode(buf: ArrayBuffer): SatResponse {
+      return SatResponse.decodeDataView(new DataView(buf));
+    }
+
+    // Decodes SatResponse from a DataView
+    static decodeDataView(view: DataView): SatResponse {
+      const decoder = new __proto.SafeDecoder(view);
+      const obj = new SatResponse();
+
+      while (!decoder.eof()) {
+        const tag = decoder.tag();
+        const number = tag >>> 3;
+
+        switch (number) {
+          case 1: {
+            obj.pointer = decoder.uint64();
+            break;
+          }
+          case 2: {
+            const length = decoder.uint32();
+            obj.satrange = SatRange.decodeDataView(
+              new DataView(
+                decoder.view.buffer,
+                decoder.pos + decoder.view.byteOffset,
+                length
+              )
+            );
+            decoder.skip(length);
+
+            break;
+          }
+          case 3: {
+            const length = decoder.uint32();
+            obj.outpoint = OutPoint.decodeDataView(
+              new DataView(
+                decoder.view.buffer,
+                decoder.pos + decoder.view.byteOffset,
+                length
+              )
+            );
+            decoder.skip(length);
+
+            break;
+          }
+          case 4: {
+            const length = decoder.uint32();
+            obj.satranges = SatRanges.decodeDataView(
+              new DataView(
+                decoder.view.buffer,
+                decoder.pos + decoder.view.byteOffset,
+                length
+              )
+            );
+            decoder.skip(length);
+
+            break;
+          }
+
+          default:
+            decoder.skipType(tag & 7);
+            break;
+        }
+      }
+      if (decoder.invalid()) return changetype<SatResponse>(0);
+      return obj;
+    } // decode SatResponse
+
+    public size(): u32 {
+      let size: u32 = 0;
+
+      size += this.pointer == 0 ? 0 : 1 + __proto.Sizer.uint64(this.pointer);
+
+      if (this.satrange != null) {
+        const f: SatRange = this.satrange as SatRange;
+        const messageSize = f.size();
+
+        if (messageSize > 0) {
+          size += 1 + __proto.Sizer.varint64(messageSize) + messageSize;
+        }
+      }
+
+      if (this.outpoint != null) {
+        const f: OutPoint = this.outpoint as OutPoint;
+        const messageSize = f.size();
+
+        if (messageSize > 0) {
+          size += 1 + __proto.Sizer.varint64(messageSize) + messageSize;
+        }
+      }
+
+      if (this.satranges != null) {
+        const f: SatRanges = this.satranges as SatRanges;
+        const messageSize = f.size();
+
+        if (messageSize > 0) {
+          size += 1 + __proto.Sizer.varint64(messageSize) + messageSize;
+        }
+      }
+
+      return size;
+    }
+
+    // Encodes SatResponse to the ArrayBuffer
+    encode(): ArrayBuffer {
+      return changetype<ArrayBuffer>(
+        StaticArray.fromArray<u8>(this.encodeU8Array())
+      );
+    }
+
+    // Encodes SatResponse to the Array<u8>
+    encodeU8Array(
+      encoder: __proto.Encoder = new __proto.Encoder(new Array<u8>())
+    ): Array<u8> {
+      const buf = encoder.buf;
+
+      if (this.pointer != 0) {
+        encoder.uint32(0x8);
+        encoder.uint64(this.pointer);
+      }
+
+      if (this.satrange != null) {
+        const f = this.satrange as SatRange;
+
+        const messageSize = f.size();
+
+        if (messageSize > 0) {
+          encoder.uint32(0x12);
+          encoder.uint32(messageSize);
+          f.encodeU8Array(encoder);
+        }
+      }
+
+      if (this.outpoint != null) {
+        const f = this.outpoint as OutPoint;
+
+        const messageSize = f.size();
+
+        if (messageSize > 0) {
+          encoder.uint32(0x1a);
+          encoder.uint32(messageSize);
+          f.encodeU8Array(encoder);
+        }
+      }
+
+      if (this.satranges != null) {
+        const f = this.satranges as SatRanges;
+
+        const messageSize = f.size();
+
+        if (messageSize > 0) {
+          encoder.uint32(0x22);
+          encoder.uint32(messageSize);
+          f.encodeU8Array(encoder);
+        }
+      }
+
+      return buf;
+    } // encode SatResponse
+  } // SatResponse
 } // ordinals
