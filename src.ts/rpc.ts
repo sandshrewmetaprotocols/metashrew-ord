@@ -69,4 +69,32 @@ export class MetashrewOrd {
       distance: v.distance
     }));
   }
+  async sat({
+    sat
+  }: any): Promise<any> { 
+    const buffer = ethers.hexlify(ordinals.SatRequest.toBinary({
+      sat
+    }));
+    const byteString = await this._call({
+      method: 'sat',
+      input: buffer
+    });
+    const ary = toBeArray(byteString);
+    const decoded = ordinals.SatResponse.fromBinary(ary);
+    return {
+      pointer: decoded.pointer,
+      satrange: {
+        start: decoded.satrange.start,
+	distance: decoded.satrange.distance
+      },
+      satrangesOnOutpoint: decoded.satranges.ranges.map((v) => ({
+        start: v.start,
+        distance: v.distance
+      })),
+      outpoint: {
+        txid: stripHexPrefix(ethers.hexlify(decoded.outpoint.hash)),
+	vout: decoded.outpoint.vout
+      }
+    };
+  }
 }

@@ -7,4 +7,5 @@ export declare class MetashrewOrd {
         input: any;
     }): Promise<string>;
     satranges({ outpoint }: any): Promise<any>;
+    sat({ sat }: any): Promise<any>;
 }

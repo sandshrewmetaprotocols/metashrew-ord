@@ -187,6 +187,20 @@ const satranges = async (program: IndexerProgram, outpoint: string): any => {
   return result;
 };
 
+const sat = async (program: IndexerProgram, sat: number): any => {
+  const cloned = program; // just mutate it
+  const result = await MetashrewOrd.prototype.sat.call({
+    async _call({
+      input
+    }) {
+      cloned.setBlock(input);
+      const ptr = await cloned.run('sat');
+      return readArrayBufferAsHex(cloned.memory, ptr);
+    }
+  }, { sat });
+  return result;
+};
+
 async function rpcCall(method, params) {
   const response = await fetch(
     "https://mainnet.sandshrew.io/v1/154f9aaa25a986241357836c37f8d71",
@@ -284,7 +298,9 @@ describe("metashrew-ord", () => {
     program.setBlock(block2.toHex());
     await program.run("_start");
     const endRange = await satranges(program, '583f8f359262735d36d552706c4fddacde4a0fa48a43d918196a57ffda02ee0e:0');
+    const satResult = await sat(program, 5);
     console.log(endRange);
+    console.log(satResult);
     const result = await satranges(program, `${transaction2.getHash().toString('hex')}:0`);
     console.log("satranges output", result);
   });
