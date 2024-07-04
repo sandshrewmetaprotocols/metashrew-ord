@@ -1,13 +1,18 @@
 import { expect } from "chai";
 import fs from "fs-extra";
 import { EventEmitter } from "events";
-import { IndexPointer, readArrayBufferAsHex, IndexerProgram } from "metashrew-test";
+import {
+  IndexPointer,
+  readArrayBufferAsHex,
+  IndexerProgram,
+} from "metashrew-test";
 import path from "path";
 import * as bitcoinjs from "bitcoinjs-lib";
 import { MetashrewOrd } from "../lib/rpc";
 import clone from "clone";
 import crypto from "crypto";
 import HDKey = require("hdkey");
+import { expect } from "chai";
 
 const stripHexPrefix = (key: string) => {
   if (key.substr(0, 2) === "0x") return key.substr(2);
@@ -55,7 +60,10 @@ const formatValue = (v) => {
 
 const formatKv = (kv: any) => {
   return Object.fromEntries(
-    Object.entries(kv).map(([key, value]) => [formatKey(key), formatValue(value)]),
+    Object.entries(kv).map(([key, value]) => [
+      formatKey(key),
+      formatValue(value),
+    ]),
   );
 };
 
@@ -78,22 +86,28 @@ const EMPTY_WITNESS = [];
 
 const TEST_BTC_ADDRESS1 = "16aE44Au1UQ5XqKMUhCMXTX7ZxbmAcQNA1";
 const TEST_BTC_ADDRESS2 = "1AdAhGdUgGF6ip7bBcVvuWYuuCxAeonNaK";
-const TEST_BTC_SEED = 'fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542'
-var hdkey = HDKey.fromMasterSeed(Buffer.from(TEST_BTC_SEED, 'hex'));
-const derivation = hdkey.derive("m/44'/49'/84'/0'/0'")
+const TEST_BTC_SEED =
+  "fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542";
+var hdkey = HDKey.fromMasterSeed(Buffer.from(TEST_BTC_SEED, "hex"));
+const derivation = hdkey.derive("m/44'/49'/84'/0'/0'");
 
 let keyIndex = 0;
 
 const randomAddress = () => {
-  return bitcoinjs.address.toBase58Check(derivation.deriveChild(keyIndex++).pubKeyHash, 0);
-}
+  return bitcoinjs.address.toBase58Check(
+    derivation.deriveChild(keyIndex++).pubKeyHash,
+    0,
+  );
+};
 
 const buildCoinbase = (outputs) => {
   const tx = new bitcoinjs.Transaction();
-  tx.ins.push(buildInput({
-    hash: buildBytes32(),
-    index: bitcoinjs.Transaction.DEFAULT_SEQUENCE
-  }));
+  tx.ins.push(
+    buildInput({
+      hash: buildBytes32(),
+      index: bitcoinjs.Transaction.DEFAULT_SEQUENCE,
+    }),
+  );
   outputs.forEach((v) => tx.outs.push(v));
   return tx;
 };
@@ -104,7 +118,7 @@ const buildInput = (o) => {
     script: EMPTY_BUFFER,
     sequence: bitcoinjs.Transaction.DEFAULT_SEQUENCE,
     witness: EMPTY_WITNESS,
-    hash: Buffer.isBuffer(o.hash) ? o.hash : Buffer.from(o.hash, 'hex')
+    hash: Buffer.isBuffer(o.hash) ? o.hash : Buffer.from(o.hash, "hex"),
   };
 };
 
@@ -122,10 +136,10 @@ const buildCoinbaseToAddress = (address) =>
         address: address,
         network: bitcoinjs.networks.bitcoin,
       }).output,
-      value: 5000000000
+      value: 5000000000,
     },
   ]);
-  	
+
 const buildCoinbaseToTestAddress = () =>
   buildCoinbase([
     {
@@ -144,7 +158,7 @@ const buildCoinbaseToRandomAddress = () =>
         address: randomAddress(),
         network: bitcoinjs.networks.bitcoin,
       }).output,
-      value: 5000000000
+      value: 5000000000,
     },
   ]);
 
@@ -165,7 +179,6 @@ const runTest = (s) =>
     return program;
   });
 
-
 function cloneProgram(program: any): IndexerProgram {
   const cloned = clone(program);
   cloned.program = program.program;
@@ -173,29 +186,31 @@ function cloneProgram(program: any): IndexerProgram {
 }
 const satranges = async (program: IndexerProgram, outpoint: string): any => {
   const cloned = program; // just mutate it
-  const result = await MetashrewOrd.prototype.satranges.call({
-    async _call({
-      input
-    }) {
-      cloned.setBlock(input);
-      const ptr = await cloned.run('satranges');
-      return readArrayBufferAsHex(cloned.memory, ptr);
-    }
-  }, { outpoint });
+  const result = await MetashrewOrd.prototype.satranges.call(
+    {
+      async _call({ input }) {
+        cloned.setBlock(input);
+        const ptr = await cloned.run("satranges");
+        return readArrayBufferAsHex(cloned.memory, ptr);
+      },
+    },
+    { outpoint },
+  );
   return result;
 };
 
 const sat = async (program: IndexerProgram, sat: number): any => {
   const cloned = program; // just mutate it
-  const result = await MetashrewOrd.prototype.sat.call({
-    async _call({
-      input
-    }) {
-      cloned.setBlock(input);
-      const ptr = await cloned.run('sat');
-      return readArrayBufferAsHex(cloned.memory, ptr);
-    }
-  }, { sat });
+  const result = await MetashrewOrd.prototype.sat.call(
+    {
+      async _call({ input }) {
+        cloned.setBlock(input);
+        const ptr = await cloned.run("sat");
+        return readArrayBufferAsHex(cloned.memory, ptr);
+      },
+    },
+    { sat },
+  );
   return result;
 };
 
@@ -221,7 +236,7 @@ async function rpcCall(method, params) {
 const satRangesForTransaction = async (program, tx) => {
   const result = {};
   for (let i = 0; i < tx.outs.length; i++) {
-    const outpoint = `${tx.getId().toString('hex')}:${i}`;
+    const outpoint = `${tx.getId().toString("hex")}:${i}`;
     result[outpoint] = await satranges(program, outpoint);
   }
   return result;
@@ -233,19 +248,25 @@ describe("metashrew-ord", () => {
     program.setBlockHeight(0);
     const block = buildDefaultBlock();
     const coinbase = buildCoinbaseToTestAddress();
-    coinbase.outs[0].value += 50
+    coinbase.outs[0].value += 50;
     const coinbaseBlock = buildDefaultBlock();
     coinbaseBlock.transactions.push(coinbase);
     program.setBlockHeight(0);
     program.setBlock(coinbaseBlock.toHex());
     await program.run("_start");
-    console.log(await satRangesForTransaction(program, coinbaseBlock.transactions[0]));
+    expect(
+      await satRangesForTransaction(program, coinbaseBlock.transactions[0]),
+    ).to.eql({
+      "5c28236f2c0ca66a078c01ed45b7cefc21e5b8373458be17bbb5ce0a00e00bab:0": [
+        { start: 0n, distance: 5000000000n },
+      ],
+    });
     block.transactions.push(buildCoinbaseToRandomAddress());
     const transaction = buildTransaction(
       [
         {
           hash: coinbase.getId(),
-          index: 0
+          index: 0,
         },
       ],
       [
@@ -261,22 +282,23 @@ describe("metashrew-ord", () => {
             network: bitcoinjs.networks.bitcoin,
             address: TEST_BTC_ADDRESS1,
           }).output,
-          value: 50e8 - 51
+          value: 50e8 - 51,
         },
       ],
     );
     block.transactions.push(transaction);
     block.transactions[0].outs[0].value += 50;
-    program.setBlockHeight(1)!
+    program.setBlockHeight(1)!;
     program.setBlock(block.toHex());
     await program.run("_start");
-    /*
-    console.log('transaction hashes:');
-    console.log(coinbaseBlock.transactions[0].getId());
-    console.log(block.transactions[0].getId());
-    console.log(block.transactions[1].getId());
-   */
-    console.log(await satRangesForTransaction(program, transaction));
+    expect(await satRangesForTransaction(program, transaction)).to.eql({
+      "9f66d35f50d859fb0e9c0e1d2cf83c25abd737d26b1f10dd79e23a27363e38bf:0": [
+        { start: 0n, distance: 1n },
+      ],
+      "9f66d35f50d859fb0e9c0e1d2cf83c25abd737d26b1f10dd79e23a27363e38bf:1": [
+        { start: 1n, distance: 4999999949n },
+      ],
+    });
     const block2 = buildDefaultBlock();
     const coinbase2 = buildCoinbaseToRandomAddress();
     block2.transactions.push(coinbase2);
@@ -284,11 +306,11 @@ describe("metashrew-ord", () => {
       [
         {
           hash: transaction.getId(),
-          index: 0
+          index: 0,
         },
         {
           hash: transaction.getId(),
-          index: 1
+          index: 1,
         },
       ],
       [
@@ -298,7 +320,7 @@ describe("metashrew-ord", () => {
             network: bitcoinjs.networks.bitcoin,
           }).output,
           value: 50e8 - 100,
-        }
+        },
       ],
     );
     block2.transactions[0].outs[0].value += 50;
@@ -306,15 +328,24 @@ describe("metashrew-ord", () => {
     program.setBlockHeight(2);
     program.setBlock(block2.toHex());
     await program.run("_start");
-    const satResult = await sat(program, 5);
-    console.log(satResult);
-    /*
-    const endRange = await satranges(program, '583f8f359262735d36d552706c4fddacde4a0fa48a43d918196a57ffda02ee0e:0');
-    console.log(endRange);
-   */
-    const result = await satranges(program, `${transaction2.getId().toString('hex')}:0`);
-    console.log(await satRangesForTransaction(program, block2.transactions[1]));
-    console.log(await satRangesForTransaction(program, block2.transactions[0]));
-    console.log("satranges output", result);
+    expect(await sat(program, 5)).to.eql({
+      pointer: 5n,
+      satrange: { start: 0n, distance: 4999999950n },
+      satrangesOnOutpoint: [{ start: 0n, distance: 4999999950n }],
+      outpoint: {
+        txid: "61a15730ff805422dca92f92e38dace5446bb22f0050a7bd985d79f0df716905",
+        vout: 0,
+      },
+    });
+    expect(
+      await satranges(program, `${transaction2.getId().toString("hex")}:0`),
+    ).to.eql([{ start: 0n, distance: 4999999950n }]);
+    expect(
+      await satRangesForTransaction(program, block2.transactions[1]),
+    ).to.eql({
+      "61a15730ff805422dca92f92e38dace5446bb22f0050a7bd985d79f0df716905:0": [
+        { start: 0n, distance: 4999999950n },
+      ],
+    });
   });
 });
