@@ -50,11 +50,9 @@ export class MetashrewOrd {
   }: any): Promise<any> { 
     const [ hash, vout ] = outpoint.split(':');
     const hashBytes = Array.from(Buffer.from(stripHexPrefix(hash), 'hex'));
-    const reversed = Buffer.from(hashBytes).toString('hex');
-    console.log(reversed);
     const buffer = ethers.hexlify(ordinals.SatRangesRequest.toBinary({
       outpoint: {
-        hash: ethers.toBeArray(addHexPrefix(reversed)),
+        hash: new Uint8Array(hashBytes),
 	vout: Number(vout)
       }
     }));
