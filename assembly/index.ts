@@ -105,6 +105,11 @@ class SatRanges {
     return this;
   }
   static fromSats(sats: Array<u64>, rangeEnd: u64): SatRanges {
+    sats.sort((a: u64, b: u64) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    });
     const distances = new Array<u64>(max(sats.length, 1));
     for (let i = 0; i < sats.length; i++) {
       distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], rangeEnd);
@@ -215,7 +220,7 @@ class SatSink {
 }
 
 function setSat(sat: u64, outpoint: ArrayBuffer): void {
-  //console.log(sat.toString(10) + ':' + Box.from(outpoint).toHexString());
+//  console.log(sat.toString(10) + ":" + Box.from(outpoint).toHexString());
   SAT_TO_OUTPOINT.set(sat, outpoint);
   if (outpoint.byteLength === 0) SAT_TO_OUTPOINT.unmarkPath(sat);
 }
@@ -341,7 +346,7 @@ class Index {
       const tx = block.transactions[i];
       //console.log('tx: ' + Box.from(tx.txid()).toHexString());
       const transactionSink = SatSink.fromTransaction(tx);
-      const transactionSource = SatSource.fromTransaction(tx, startingSat + reward).pull();
+      const transactionSource = SatSource.fromTransaction(tx, startingSat).pull();
       transactionSink.consume(transactionSource);
       const txid = tx.txid();
       if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
@@ -411,7 +416,7 @@ export function sat(): ArrayBuffer {
   const response = new ordinals.SatResponse();
   const start = SAT_TO_OUTPOINT.seekLower(request.sat + 1);
   response.pointer = request.sat - start;
-  const outpoint = new OutPoint(Box.from(SAT_TO_OUTPOINT.get(start)));
+  const outpoint = new OutPoint(Box.from(reverseOutput(SAT_TO_OUTPOINT.get(start))));
   response.outpoint.hash = arrayBufferToArray(outpoint.txid.toArrayBuffer());
   response.outpoint.vout = outpoint.index;
   response.satrange.start = start;

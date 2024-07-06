@@ -4,31 +4,33 @@
  (type $2 (func (param i32 i32) (result i32)))
  (type $3 (func (param i32 i32 i32) (result i32)))
  (type $4 (func))
- (type $5 (func (param i32 i64)))
- (type $6 (func (param i32 i32 i32)))
+ (type $5 (func (param i32 i32 i32)))
+ (type $6 (func (param i32 i64)))
  (type $7 (func (param i32) (result i64)))
  (type $8 (func (result i32)))
- (type $9 (func (param i32)))
- (type $10 (func (param i32 i32 i32 i32) (result i32)))
- (type $11 (func (param i32 i64) (result i32)))
- (type $12 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $13 (func (param i32 i32 i32 i32)))
- (type $14 (func (param i64) (result i64)))
- (type $15 (func (param i32 i64 i32)))
- (type $16 (func (param i64 i32) (result i32)))
- (type $17 (func (param i32 i64) (result i64)))
- (type $18 (func (param i64 i32 i32)))
- (type $19 (func (param i64 i32 i32) (result i64)))
- (type $20 (func (param i32 i32 i64)))
- (type $21 (func (param i64 i64) (result i32)))
+ (type $9 (func (param i64 i64) (result i32)))
+ (type $10 (func (param i32)))
+ (type $11 (func (param i32 i32 i32 i32) (result i32)))
+ (type $12 (func (param i32 i64) (result i32)))
+ (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $14 (func (param i32 i32 i32 i32)))
+ (type $15 (func (param i64) (result i64)))
+ (type $16 (func (param i32 i64 i32)))
+ (type $17 (func (param i64 i32) (result i32)))
+ (type $18 (func (param i32 i64) (result i64)))
+ (type $19 (func (param i64 i32 i32)))
+ (type $20 (func (param i64 i32 i32) (result i64)))
+ (type $21 (func (param i32 i32 i64)))
  (type $22 (func (param i32 i32) (result i64)))
  (type $23 (func (param i64 i32)))
  (type $24 (func (param i32 i64 i32 i32)))
- (type $25 (func (param i64 i64 i32) (result i32)))
- (type $26 (func (param i32 i32 i32) (result i64)))
- (type $27 (func (param i32 i64 i64) (result i64)))
- (type $28 (func (param i32 i32 i64) (result i32)))
- (type $29 (func (param i64) (result i32)))
+ (type $25 (func (param i32 i32 i32 i32 i32)))
+ (type $26 (func (param i32 i32 i32 i32 i32 i32)))
+ (type $27 (func (param i64 i64 i32) (result i32)))
+ (type $28 (func (param i32 i32 i32) (result i64)))
+ (type $29 (func (param i32 i64 i64) (result i64)))
+ (type $30 (func (param i32 i32 i64) (result i32)))
+ (type $31 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "__host_len" (func $~lib/metashrew-as/assembly/indexer/index/__host_len (result i32)))
  (import "env" "__load_input" (func $~lib/metashrew-as/assembly/indexer/index/__load_input (param i32)))
@@ -105,7 +107,7 @@
  (global $~lib/number/U16.MAX_VALUE i32 (i32.const 65535))
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
  (global $~lib/number/U8.MAX_VALUE i32 (i32.const 255))
- (global $~lib/memory/__heap_base i32 (i32.const 6652))
+ (global $~lib/memory/__heap_base i32 (i32.const 6684))
  (memory $0 1 65335)
  (data $0 (i32.const 12) "\1c\02\00\00\00\00\00\00\00\00\00\00\04\00\00\00\00\02\00\00000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $1 (i32.const 556) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -162,16 +164,17 @@
  (data $52 (i32.const 6076) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $53 (i32.const 6108) "\1c\00\00\00\00\00\00\00\00\00\00\00)\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
  (data $54 (i32.const 6140) "\1c\00\00\00\00\00\00\00\00\00\00\00*\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
- (data $55 (i32.const 6172) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00f\00\00\00~\00l\00i\00b\00/\00m\00e\00t\00a\00s\00h\00r\00e\00w\00-\00a\00s\00/\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00l\00o\00c\00k\00d\00a\00t\00a\00/\00i\00n\00s\00c\00r\00i\00p\00t\00i\00o\00n\00.\00t\00s\00\00\00\00\00\00\00")
- (data $56 (i32.const 6300) "\1c\00\00\00\00\00\00\00\00\00\00\002\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
- (data $57 (i32.const 6332) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $58 (i32.const 6396) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00D\00e\00c\00o\00d\00e\00r\00 \00p\00o\00s\00i\00t\00i\00o\00n\00 \00\00\00\00\00\00\00\00\00\00\00")
- (data $59 (i32.const 6460) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00 \00i\00s\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00!\00\00\00\00\00\00\00\00\00\00\00")
- (data $60 (i32.const 6524) "\1c\00\00\00\03\00\00\00\00\00\00\00:\00\00\00\0c\00\00\00\10\19\00\00\00\00\00\00P\19\00\00")
- (data $61 (i32.const 6556) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00p\00r\00o\00t\00o\00b\00u\00f\00.\00t\00s\00\00\00\00\00")
- (data $62 (i32.const 6620) "\1c\00\00\00\00\00\00\00\00\00\00\00?\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 8 8 funcref)
- (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/index/SatRanges.fromTransaction~anonymous|0 $assembly/index/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $assembly/index/outpointToSatRanges~anonymous|0)
+ (data $55 (i32.const 6172) "\1c\00\00\00\00\00\00\00\00\00\00\00+\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
+ (data $56 (i32.const 6204) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00f\00\00\00~\00l\00i\00b\00/\00m\00e\00t\00a\00s\00h\00r\00e\00w\00-\00a\00s\00/\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00l\00o\00c\00k\00d\00a\00t\00a\00/\00i\00n\00s\00c\00r\00i\00p\00t\00i\00o\00n\00.\00t\00s\00\00\00\00\00\00\00")
+ (data $57 (i32.const 6332) "\1c\00\00\00\00\00\00\00\00\00\00\003\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
+ (data $58 (i32.const 6364) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $59 (i32.const 6428) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00D\00e\00c\00o\00d\00e\00r\00 \00p\00o\00s\00i\00t\00i\00o\00n\00 \00\00\00\00\00\00\00\00\00\00\00")
+ (data $60 (i32.const 6492) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00 \00i\00s\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00!\00\00\00\00\00\00\00\00\00\00\00")
+ (data $61 (i32.const 6556) "\1c\00\00\00\03\00\00\00\00\00\00\00;\00\00\00\0c\00\00\000\19\00\00\00\00\00\00p\19\00\00")
+ (data $62 (i32.const 6588) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00p\00r\00o\00t\00o\00b\00u\00f\00.\00t\00s\00\00\00\00\00")
+ (data $63 (i32.const 6652) "\1c\00\00\00\00\00\00\00\00\00\00\00@\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 9 9 funcref)
+ (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/index/SatRanges.fromTransaction~anonymous|0 $assembly/index/SatRanges.fromSats~anonymous|0 $assembly/index/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $assembly/index/outpointToSatRanges~anonymous|0)
  (export "trap" (func $assembly/index/trap))
  (export "_start" (func $assembly/index/_start))
  (export "satranges" (func $assembly/index/satranges))
@@ -3983,7 +3986,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $10)
+    call_indirect (type $11)
     local.set $acc
     local.get $i
     i32.const 1
@@ -4057,7 +4060,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $10)
+    call_indirect (type $11)
     local.set $acc
     local.get $i
     i32.const 1
@@ -9659,6 +9662,1010 @@
   local.get $result
   return
  )
+ (func $assembly/index/SatRanges.fromSats~anonymous|0 (param $a i64) (param $b i64) (result i32)
+  local.get $a
+  local.get $b
+  i64.lt_u
+  if
+   i32.const -1
+   return
+  end
+  local.get $a
+  local.get $b
+  i64.gt_u
+  if
+   i32.const 1
+   return
+  end
+  i32.const 0
+  return
+ )
+ (func $~lib/util/sort/insertionSort<u64> (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
+  (local $range i32)
+  (local $i i32)
+  (local $a i64)
+  (local $b i64)
+  (local $min i64)
+  (local $max i64)
+  (local $j i32)
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
+  local.get $right
+  local.get $left
+  i32.sub
+  i32.const 1
+  i32.add
+  local.set $range
+  local.get $left
+  local.get $range
+  i32.const 1
+  i32.and
+  local.get $presorted
+  local.get $range
+  local.get $presorted
+  i32.sub
+  i32.const 1
+  i32.and
+  i32.sub
+  local.get $presorted
+  i32.const 0
+  i32.eq
+  select
+  i32.add
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $right
+   i32.le_s
+   if
+    local.get $ptr
+    local.get $i
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $a
+    local.get $ptr
+    local.get $i
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load offset=8
+    local.set $b
+    local.get $b
+    local.set $min
+    local.get $a
+    local.set $max
+    local.get $a
+    local.get $b
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $comparator
+    i32.load
+    call_indirect (type $9)
+    i32.const 0
+    i32.le_s
+    if
+     local.get $a
+     local.set $min
+     local.get $b
+     local.set $max
+    end
+    local.get $i
+    i32.const 1
+    i32.sub
+    local.set $j
+    block $while-break|1
+     loop $while-continue|1
+      local.get $j
+      local.get $left
+      i32.ge_s
+      if
+       local.get $ptr
+       local.get $j
+       i32.const 3
+       i32.shl
+       i32.add
+       i64.load
+       local.set $a
+       local.get $a
+       local.get $max
+       i32.const 2
+       global.set $~argumentsLength
+       local.get $comparator
+       i32.load
+       call_indirect (type $9)
+       i32.const 0
+       i32.gt_s
+       if
+        local.get $ptr
+        local.get $j
+        i32.const 3
+        i32.shl
+        i32.add
+        local.get $a
+        i64.store offset=16
+        local.get $j
+        i32.const 1
+        i32.sub
+        local.set $j
+       else
+        br $while-break|1
+       end
+       br $while-continue|1
+      end
+     end
+    end
+    local.get $ptr
+    local.get $j
+    i32.const 3
+    i32.shl
+    i32.add
+    local.get $max
+    i64.store offset=16
+    block $while-break|2
+     loop $while-continue|2
+      local.get $j
+      local.get $left
+      i32.ge_s
+      if
+       local.get $ptr
+       local.get $j
+       i32.const 3
+       i32.shl
+       i32.add
+       i64.load
+       local.set $a
+       local.get $a
+       local.get $min
+       i32.const 2
+       global.set $~argumentsLength
+       local.get $comparator
+       i32.load
+       call_indirect (type $9)
+       i32.const 0
+       i32.gt_s
+       if
+        local.get $ptr
+        local.get $j
+        i32.const 3
+        i32.shl
+        i32.add
+        local.get $a
+        i64.store offset=8
+        local.get $j
+        i32.const 1
+        i32.sub
+        local.set $j
+       else
+        br $while-break|2
+       end
+       br $while-continue|2
+      end
+     end
+    end
+    local.get $ptr
+    local.get $j
+    i32.const 3
+    i32.shl
+    i32.add
+    local.get $min
+    i64.store offset=8
+    local.get $i
+    i32.const 2
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
+ )
+ (func $~lib/util/sort/extendRunRight<u64> (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
+  (local $j i32)
+  (local $k i32)
+  (local $tmp i64)
+  local.get $i
+  local.get $right
+  i32.eq
+  if
+   local.get $i
+   return
+  end
+  local.get $i
+  local.set $j
+  local.get $ptr
+  local.get $j
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+  local.get $ptr
+  local.get $j
+  i32.const 1
+  i32.add
+  local.tee $j
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+  i32.const 2
+  global.set $~argumentsLength
+  local.get $comparator
+  i32.load
+  call_indirect (type $9)
+  i32.const 0
+  i32.gt_s
+  if
+   loop $while-continue|0
+    local.get $j
+    local.get $right
+    i32.lt_s
+    if (result i32)
+     local.get $ptr
+     local.get $j
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load offset=8
+     local.get $ptr
+     local.get $j
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $comparator
+     i32.load
+     call_indirect (type $9)
+     i32.const 31
+     i32.shr_u
+    else
+     i32.const 0
+    end
+    if
+     local.get $j
+     i32.const 1
+     i32.add
+     local.set $j
+     br $while-continue|0
+    end
+   end
+   local.get $j
+   local.set $k
+   loop $while-continue|1
+    local.get $i
+    local.get $k
+    i32.lt_s
+    if
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load
+     local.set $tmp
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $k
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load
+     i64.store
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     local.get $ptr
+     local.get $k
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $tmp
+     i64.store
+     local.get $k
+     i32.const 1
+     i32.sub
+     local.set $k
+     br $while-continue|1
+    end
+   end
+  else
+   loop $while-continue|2
+    local.get $j
+    local.get $right
+    i32.lt_s
+    if (result i32)
+     local.get $ptr
+     local.get $j
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load offset=8
+     local.get $ptr
+     local.get $j
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $comparator
+     i32.load
+     call_indirect (type $9)
+     i32.const 0
+     i32.ge_s
+    else
+     i32.const 0
+    end
+    if
+     local.get $j
+     i32.const 1
+     i32.add
+     local.set $j
+     br $while-continue|2
+    end
+   end
+  end
+  local.get $j
+  return
+ )
+ (func $~lib/util/sort/nodePower (param $left i32) (param $right i32) (param $startA i32) (param $startB i32) (param $endB i32) (result i32)
+  (local $n i64)
+  (local $s i32)
+  (local $l i32)
+  (local $r i32)
+  (local $a i64)
+  (local $b i64)
+  local.get $right
+  local.get $left
+  i32.sub
+  i32.const 1
+  i32.add
+  i64.extend_i32_u
+  local.set $n
+  local.get $startB
+  local.get $left
+  i32.const 1
+  i32.shl
+  i32.sub
+  local.set $s
+  local.get $startA
+  local.get $s
+  i32.add
+  local.set $l
+  local.get $endB
+  local.get $s
+  i32.add
+  i32.const 1
+  i32.add
+  local.set $r
+  local.get $l
+  i64.extend_i32_u
+  i64.const 30
+  i64.shl
+  local.get $n
+  i64.div_u
+  local.set $a
+  local.get $r
+  i64.extend_i32_u
+  i64.const 30
+  i64.shl
+  local.get $n
+  i64.div_u
+  local.set $b
+  local.get $a
+  local.get $b
+  i64.xor
+  i32.wrap_i64
+  i32.clz
+  return
+ )
+ (func $~lib/util/sort/mergeRuns<u64> (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
+  (local $i i32)
+  (local $j i32)
+  (local $t i32)
+  (local $k i32)
+  (local $a i64)
+  (local $b i64)
+  local.get $m
+  i32.const 1
+  i32.sub
+  local.set $m
+  local.get $r
+  local.get $m
+  i32.add
+  local.set $t
+  local.get $m
+  i32.const 1
+  i32.add
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $l
+   i32.gt_s
+   if
+    local.get $buffer
+    local.get $i
+    i32.const 1
+    i32.sub
+    i32.const 3
+    i32.shl
+    i32.add
+    local.get $ptr
+    local.get $i
+    i32.const 1
+    i32.sub
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    i64.store
+    local.get $i
+    i32.const 1
+    i32.sub
+    local.set $i
+    br $for-loop|0
+   end
+  end
+  local.get $m
+  local.set $j
+  loop $for-loop|1
+   local.get $j
+   local.get $r
+   i32.lt_s
+   if
+    local.get $buffer
+    local.get $t
+    local.get $j
+    i32.sub
+    i32.const 3
+    i32.shl
+    i32.add
+    local.get $ptr
+    local.get $j
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load offset=8
+    i64.store
+    local.get $j
+    i32.const 1
+    i32.add
+    local.set $j
+    br $for-loop|1
+   end
+  end
+  local.get $l
+  local.set $k
+  loop $for-loop|2
+   local.get $k
+   local.get $r
+   i32.le_s
+   if
+    local.get $buffer
+    local.get $j
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $a
+    local.get $buffer
+    local.get $i
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $b
+    local.get $a
+    local.get $b
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $comparator
+    i32.load
+    call_indirect (type $9)
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $ptr
+     local.get $k
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $a
+     i64.store
+     local.get $j
+     i32.const 1
+     i32.sub
+     local.set $j
+    else
+     local.get $ptr
+     local.get $k
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $b
+     i64.store
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+    end
+    local.get $k
+    i32.const 1
+    i32.add
+    local.set $k
+    br $for-loop|2
+   end
+  end
+ )
+ (func $~lib/rt/stub/__free (param $ptr i32)
+  (local $block i32)
+  local.get $ptr
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $ptr
+   i32.const 15
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 640
+   i32.const 70
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $ptr
+  i32.const 4
+  i32.sub
+  local.set $block
+  local.get $ptr
+  local.get $block
+  call $~lib/rt/common/BLOCK#get:mmInfo
+  i32.add
+  global.get $~lib/rt/stub/offset
+  i32.eq
+  if
+   local.get $block
+   global.set $~lib/rt/stub/offset
+  end
+ )
+ (func $~lib/util/sort/SORT<u64> (param $ptr i32) (param $len i32) (param $comparator i32)
+  (local $3 i32)
+  (local $a i64)
+  (local $b i64)
+  (local $c i32)
+  (local $a|7 i64)
+  (local $b|8 i64)
+  (local $c|9 i32)
+  (local $n i32)
+  (local $lgPlus2 i32)
+  (local $lgPlus2Size i32)
+  (local $leftRunStartBuf i32)
+  (local $leftRunEndBuf i32)
+  (local $i i32)
+  (local $buffer i32)
+  (local $hi i32)
+  (local $endA i32)
+  (local $lenA i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $top i32)
+  (local $startA i32)
+  (local $startB i32)
+  (local $endB i32)
+  (local $lenB i32)
+  (local $27 i32)
+  (local $28 i32)
+  (local $k i32)
+  (local $i|30 i32)
+  (local $start i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
+  local.get $len
+  i32.const 48
+  i32.le_s
+  if
+   local.get $len
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
+   block $break|0
+    block $case1|0
+     block $case0|0
+      local.get $len
+      local.set $3
+      local.get $3
+      i32.const 3
+      i32.eq
+      br_if $case0|0
+      local.get $3
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
+     end
+     local.get $ptr
+     i64.load
+     local.set $a
+     local.get $ptr
+     i64.load offset=8
+     local.set $b
+     local.get $a
+     local.get $b
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $comparator
+     i32.load
+     call_indirect (type $9)
+     i32.const 0
+     i32.gt_s
+     local.set $c
+     local.get $ptr
+     local.get $b
+     local.get $a
+     local.get $c
+     select
+     i64.store
+     local.get $a
+     local.get $b
+     local.get $c
+     select
+     local.set $a
+     local.get $ptr
+     i64.load offset=16
+     local.set $b
+     local.get $a
+     local.get $b
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $comparator
+     i32.load
+     call_indirect (type $9)
+     i32.const 0
+     i32.gt_s
+     local.set $c
+     local.get $ptr
+     local.get $b
+     local.get $a
+     local.get $c
+     select
+     i64.store offset=8
+     local.get $ptr
+     local.get $a
+     local.get $b
+     local.get $c
+     select
+     i64.store offset=16
+    end
+    local.get $ptr
+    i64.load
+    local.set $a|7
+    local.get $ptr
+    i64.load offset=8
+    local.set $b|8
+    local.get $a|7
+    local.get $b|8
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $comparator
+    i32.load
+    call_indirect (type $9)
+    i32.const 0
+    i32.gt_s
+    local.set $c|9
+    local.get $ptr
+    local.get $b|8
+    local.get $a|7
+    local.get $c|9
+    select
+    i64.store
+    local.get $ptr
+    local.get $a|7
+    local.get $b|8
+    local.get $c|9
+    select
+    i64.store offset=8
+    return
+   end
+   local.get $ptr
+   i32.const 0
+   local.get $len
+   i32.const 1
+   i32.sub
+   i32.const 0
+   local.get $comparator
+   call $~lib/util/sort/insertionSort<u64>
+   return
+  end
+  block $~lib/util/sort/log2u|inlined.0 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.0
+  end
+  i32.const 2
+  i32.add
+  local.set $lgPlus2
+  local.get $lgPlus2
+  i32.const 2
+  i32.shl
+  local.set $lgPlus2Size
+  local.get $lgPlus2Size
+  i32.const 1
+  i32.shl
+  call $~lib/rt/stub/__alloc
+  local.set $leftRunStartBuf
+  local.get $leftRunStartBuf
+  local.get $lgPlus2Size
+  i32.add
+  local.set $leftRunEndBuf
+  i32.const 0
+  local.set $i
+  loop $for-loop|1
+   local.get $i
+   local.get $lgPlus2
+   i32.lt_u
+   if
+    local.get $leftRunStartBuf
+    local.get $i
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.const -1
+    i32.store
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|1
+   end
+  end
+  local.get $len
+  i32.const 3
+  i32.shl
+  call $~lib/rt/stub/__alloc
+  local.set $buffer
+  local.get $len
+  i32.const 1
+  i32.sub
+  local.set $hi
+  local.get $ptr
+  i32.const 0
+  local.get $hi
+  local.get $comparator
+  call $~lib/util/sort/extendRunRight<u64>
+  local.set $endA
+  local.get $endA
+  i32.const 1
+  i32.add
+  local.set $lenA
+  local.get $lenA
+  i32.const 32
+  i32.lt_s
+  if
+   local.get $hi
+   local.tee $20
+   i32.const 32
+   i32.const 1
+   i32.sub
+   local.tee $21
+   local.get $20
+   local.get $21
+   i32.lt_s
+   select
+   local.set $endA
+   local.get $ptr
+   i32.const 0
+   local.get $endA
+   local.get $lenA
+   local.get $comparator
+   call $~lib/util/sort/insertionSort<u64>
+  end
+  i32.const 0
+  local.set $top
+  i32.const 0
+  local.set $startA
+  loop $while-continue|2
+   local.get $endA
+   local.get $hi
+   i32.lt_s
+   if
+    local.get $endA
+    i32.const 1
+    i32.add
+    local.set $startB
+    local.get $ptr
+    local.get $startB
+    local.get $hi
+    local.get $comparator
+    call $~lib/util/sort/extendRunRight<u64>
+    local.set $endB
+    local.get $endB
+    local.get $startB
+    i32.sub
+    i32.const 1
+    i32.add
+    local.set $lenB
+    local.get $lenB
+    i32.const 32
+    i32.lt_s
+    if
+     local.get $hi
+     local.tee $27
+     local.get $startB
+     i32.const 32
+     i32.add
+     i32.const 1
+     i32.sub
+     local.tee $28
+     local.get $27
+     local.get $28
+     i32.lt_s
+     select
+     local.set $endB
+     local.get $ptr
+     local.get $startB
+     local.get $endB
+     local.get $lenB
+     local.get $comparator
+     call $~lib/util/sort/insertionSort<u64>
+    end
+    i32.const 0
+    local.get $hi
+    local.get $startA
+    local.get $startB
+    local.get $endB
+    call $~lib/util/sort/nodePower
+    local.set $k
+    local.get $top
+    local.set $i|30
+    loop $for-loop|3
+     local.get $i|30
+     local.get $k
+     i32.gt_u
+     if
+      local.get $leftRunStartBuf
+      local.get $i|30
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      local.set $start
+      local.get $start
+      i32.const -1
+      i32.ne
+      if
+       local.get $ptr
+       local.get $start
+       local.get $leftRunEndBuf
+       local.get $i|30
+       i32.const 2
+       i32.shl
+       i32.add
+       i32.load
+       i32.const 1
+       i32.add
+       local.get $endA
+       local.get $buffer
+       local.get $comparator
+       call $~lib/util/sort/mergeRuns<u64>
+       local.get $start
+       local.set $startA
+       local.get $leftRunStartBuf
+       local.get $i|30
+       i32.const 2
+       i32.shl
+       i32.add
+       i32.const -1
+       i32.store
+      end
+      local.get $i|30
+      i32.const 1
+      i32.sub
+      local.set $i|30
+      br $for-loop|3
+     end
+    end
+    local.get $leftRunStartBuf
+    local.get $k
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $startA
+    i32.store
+    local.get $leftRunEndBuf
+    local.get $k
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $endA
+    i32.store
+    local.get $startB
+    local.set $startA
+    local.get $endB
+    local.set $endA
+    local.get $k
+    local.set $top
+    br $while-continue|2
+   end
+  end
+  local.get $top
+  local.set $i|32
+  loop $for-loop|4
+   local.get $i|32
+   i32.const 0
+   i32.ne
+   if
+    local.get $leftRunStartBuf
+    local.get $i|32
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load
+    local.set $start|33
+    local.get $start|33
+    i32.const -1
+    i32.ne
+    if
+     local.get $ptr
+     local.get $start|33
+     local.get $leftRunEndBuf
+     local.get $i|32
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load
+     i32.const 1
+     i32.add
+     local.get $hi
+     local.get $buffer
+     local.get $comparator
+     call $~lib/util/sort/mergeRuns<u64>
+    end
+    local.get $i|32
+    i32.const 1
+    i32.sub
+    local.set $i|32
+    br $for-loop|4
+   end
+  end
+  local.get $buffer
+  call $~lib/rt/stub/__free
+  local.get $leftRunStartBuf
+  call $~lib/rt/stub/__free
+ )
+ (func $~lib/array/Array<u64>#sort (param $this i32) (param $comparator i32) (result i32)
+  local.get $this
+  call $~lib/array/Array<u64>#get:dataStart
+  local.get $this
+  call $~lib/array/Array<u64>#get:length_
+  local.get $comparator
+  call $~lib/util/sort/SORT<u64>
+  local.get $this
+  return
+ )
  (func $assembly/index/max<i32> (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
@@ -10417,6 +11424,10 @@
  (func $assembly/index/SatRanges.fromSats (param $sats i32) (param $rangeEnd i64) (result i32)
   (local $distances i32)
   (local $i i32)
+  local.get $sats
+  i32.const 6160
+  call $~lib/array/Array<u64>#sort
+  drop
   i32.const 0
   local.get $sats
   call $~lib/array/Array<u64>#get:length
@@ -10515,7 +11526,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $18)
+    call_indirect (type $19)
     local.get $i
     i32.const 1
     i32.add
@@ -10527,7 +11538,7 @@
  (func $assembly/index/SatRanges#pull (param $this i32) (result i32)
   local.get $this
   call $assembly/index/SatRanges#get:sats
-  i32.const 6160
+  i32.const 6192
   call $~lib/array/Array<u64>#forEach
   local.get $this
   return
@@ -11233,7 +12244,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 45
+   i32.const 46
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -11662,7 +12673,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 44
+   i32.const 45
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -11820,7 +12831,7 @@
   i32.eqz
   if
    i32.const 9
-   i32.const 43
+   i32.const 44
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -11864,7 +12875,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 6192
+   i32.const 6224
    i32.const 74
    i32.const 7
    call $~lib/builtins/abort
@@ -12016,7 +13027,7 @@
   i32.eqz
   if
    i32.const 12
-   i32.const 46
+   i32.const 47
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -12791,8 +13802,6 @@
     local.set $transactionSink
     local.get $tx
     local.get $startingSat
-    local.get $reward
-    i64.add
     call $assembly/index/SatSource.fromTransaction
     call $assembly/index/SatSource#pull
     local.set $transactionSource
@@ -12857,7 +13866,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 47
+   i32.const 48
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13085,7 +14094,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 49
+   i32.const 50
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13184,7 +14193,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 48
+   i32.const 49
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13369,7 +14378,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $10)
+    call_indirect (type $11)
     local.set $acc
     local.get $i
     i32.const 1
@@ -13395,7 +14404,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 51
+   i32.const 52
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13701,7 +14710,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 52
+   i32.const 53
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13779,7 +14788,7 @@
   call $~lib/array/Array<~lib/array/Array<u8>>#constructor
   local.set $protobufInput
   local.get $hashKeys
-  i32.const 6320
+  i32.const 6352
   local.get $protobufInput
   call $~lib/array/Array<~lib/string/String>#reduce<~lib/array/Array<~lib/array/Array<u8>>>
   drop
@@ -13842,7 +14851,7 @@
   i32.eqz
   if
    i32.const 12
-   i32.const 55
+   i32.const 56
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13867,7 +14876,7 @@
   i32.or
   if
    i32.const 1584
-   i32.const 6352
+   i32.const 6384
    i32.const 25
    i32.const 7
    call $~lib/builtins/abort
@@ -13932,7 +14941,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 57
+   i32.const 58
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13960,7 +14969,7 @@
   i32.eqz
   if
    i32.const 9
-   i32.const 56
+   i32.const 57
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -13992,7 +15001,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 54
+   i32.const 55
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -14023,7 +15032,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 53
+   i32.const 54
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -14105,7 +15114,7 @@
   i32.ge_u
   if
    i32.const 2320
-   i32.const 6352
+   i32.const 6384
    i32.const 72
    i32.const 50
    call $~lib/builtins/abort
@@ -15062,14 +16071,14 @@
    i32.const 10
    call $~lib/number/I32#toString
    local.set $54
-   i32.const 6544
+   i32.const 6576
    i32.const 1
    local.get $54
    call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
-   i32.const 6544
+   i32.const 6576
    i32.const 6096
    call $~lib/staticarray/StaticArray<~lib/string/String>#join
-   i32.const 6576
+   i32.const 6608
    i32.const 278
    i32.const 7
    call $~lib/builtins/abort
@@ -16282,7 +17291,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 62
+   i32.const 63
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -16362,7 +17371,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 60
+   i32.const 61
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -16390,7 +17399,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 59
+   i32.const 60
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -16459,7 +17468,7 @@
     global.set $~argumentsLength
     local.get $fn
     i32.load
-    call_indirect (type $19)
+    call_indirect (type $20)
     local.set $result
     local.get $outStart
     local.get $i
@@ -16495,7 +17504,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 61
+   i32.const 62
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -16573,7 +17582,7 @@
   call $assembly/protobuf/ordinals.SatRanges#constructor
   local.set $result
   local.get $sats
-  i32.const 6640
+  i32.const 6672
   call $~lib/array/Array<u64>#map<u64>
   local.set $distances
   i32.const 0
@@ -17059,7 +18068,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 64
+   i32.const 65
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -17149,7 +18158,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 65
+   i32.const 66
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -17289,7 +18298,7 @@
   i32.eqz
   if
    i32.const 20
-   i32.const 66
+   i32.const 67
    call $~lib/rt/stub/__new
    local.set $this
   end
@@ -17316,6 +18325,39 @@
  (func $assembly/protobuf/ordinals.SatRequest#get:sat (param $this i32) (result i64)
   local.get $this
   i64.load
+ )
+ (func $assembly/index/reverseOutput (param $v i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 2
+  i32.const 2
+  i32.const 27
+  i32.const 0
+  call $~lib/rt/__newArray
+  local.set $1
+  local.get $1
+  i32.load offset=4
+  local.set $2
+  local.get $1
+  i32.const 0
+  local.get $v
+  call $~lib/metashrew-as/assembly/utils/box/Box.from
+  i32.const 4
+  call $~lib/metashrew-as/assembly/utils/box/Box#shrinkBack
+  call $~lib/metashrew-as/assembly/utils/box/Box#toArrayBuffer
+  call $~lib/metashrew-as/assembly/utils/utils/reverse
+  call $~lib/metashrew-as/assembly/utils/box/Box.from
+  call $~lib/array/Array<~lib/metashrew-as/assembly/utils/box/Box>#__set
+  local.get $1
+  i32.const 1
+  local.get $v
+  call $~lib/metashrew-as/assembly/utils/box/Box.from
+  i32.const 32
+  call $~lib/metashrew-as/assembly/utils/box/Box#shrinkFront
+  call $~lib/array/Array<~lib/metashrew-as/assembly/utils/box/Box>#__set
+  local.get $1
+  call $~lib/metashrew-as/assembly/utils/box/Box.concat
+  return
  )
  (func $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint#get:txid (param $this i32) (result i32)
   local.get $this
@@ -17738,6 +18780,7 @@
   global.get $assembly/tables/SAT_TO_OUTPOINT
   local.get $start
   call $~lib/metashrew-as/assembly/indexer/bst/BST<u64>#get
+  call $assembly/index/reverseOutput
   call $~lib/metashrew-as/assembly/utils/box/Box.from
   call $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint#constructor
   local.set $outpoint
@@ -17958,7 +19001,7 @@
     i32.load
     local.set $1
     local.get $1
-    i32.const 56
+    i32.const 57
     i32.eq
     br_if $case0
     br $default
