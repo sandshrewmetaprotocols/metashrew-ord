@@ -7,9 +7,9 @@
  (type $5 (func (param i32 i32 i32)))
  (type $6 (func (param i32 i64)))
  (type $7 (func (param i32) (result i64)))
- (type $8 (func (result i32)))
- (type $9 (func (param i64 i64) (result i32)))
- (type $10 (func (param i32)))
+ (type $8 (func (param i64 i64) (result i32)))
+ (type $9 (func (param i32)))
+ (type $10 (func (result i32)))
  (type $11 (func (param i32 i32 i32 i32) (result i32)))
  (type $12 (func (param i32 i64) (result i32)))
  (type $13 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -107,7 +107,7 @@
  (global $~lib/number/U16.MAX_VALUE i32 (i32.const 65535))
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
  (global $~lib/number/U8.MAX_VALUE i32 (i32.const 255))
- (global $~lib/memory/__heap_base i32 (i32.const 6684))
+ (global $~lib/memory/__heap_base i32 (i32.const 6716))
  (memory $0 1 65335)
  (data $0 (i32.const 12) "\1c\02\00\00\00\00\00\00\00\00\00\00\04\00\00\00\00\02\00\00000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff\00\00\00\00\00\00\00\00\00\00\00\00")
  (data $1 (i32.const 556) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -166,15 +166,16 @@
  (data $54 (i32.const 6140) "\1c\00\00\00\00\00\00\00\00\00\00\00*\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
  (data $55 (i32.const 6172) "\1c\00\00\00\00\00\00\00\00\00\00\00+\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
  (data $56 (i32.const 6204) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00f\00\00\00~\00l\00i\00b\00/\00m\00e\00t\00a\00s\00h\00r\00e\00w\00-\00a\00s\00/\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00l\00o\00c\00k\00d\00a\00t\00a\00/\00i\00n\00s\00c\00r\00i\00p\00t\00i\00o\00n\00.\00t\00s\00\00\00\00\00\00\00")
- (data $57 (i32.const 6332) "\1c\00\00\00\00\00\00\00\00\00\00\003\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
- (data $58 (i32.const 6364) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data $59 (i32.const 6428) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00D\00e\00c\00o\00d\00e\00r\00 \00p\00o\00s\00i\00t\00i\00o\00n\00 \00\00\00\00\00\00\00\00\00\00\00")
- (data $60 (i32.const 6492) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00 \00i\00s\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00!\00\00\00\00\00\00\00\00\00\00\00")
- (data $61 (i32.const 6556) "\1c\00\00\00\03\00\00\00\00\00\00\00;\00\00\00\0c\00\00\000\19\00\00\00\00\00\00p\19\00\00")
- (data $62 (i32.const 6588) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00p\00r\00o\00t\00o\00b\00u\00f\00.\00t\00s\00\00\00\00\00")
- (data $63 (i32.const 6652) "\1c\00\00\00\00\00\00\00\00\00\00\00@\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 9 9 funcref)
- (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/index/SatRanges.fromTransaction~anonymous|0 $assembly/index/SatRanges.fromSats~anonymous|0 $assembly/index/SatRanges#pull~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $assembly/index/outpointToSatRanges~anonymous|0)
+ (data $57 (i32.const 6332) "\1c\00\00\00\00\00\00\00\00\00\00\00*\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
+ (data $58 (i32.const 6364) "\1c\00\00\00\00\00\00\00\00\00\00\003\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
+ (data $59 (i32.const 6396) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data $60 (i32.const 6460) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00D\00e\00c\00o\00d\00e\00r\00 \00p\00o\00s\00i\00t\00i\00o\00n\00 \00\00\00\00\00\00\00\00\00\00\00")
+ (data $61 (i32.const 6524) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\"\00\00\00 \00i\00s\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00!\00\00\00\00\00\00\00\00\00\00\00")
+ (data $62 (i32.const 6588) "\1c\00\00\00\03\00\00\00\00\00\00\00;\00\00\00\0c\00\00\00P\19\00\00\00\00\00\00\90\19\00\00")
+ (data $63 (i32.const 6620) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00p\00r\00o\00t\00o\00b\00u\00f\00.\00t\00s\00\00\00\00\00")
+ (data $64 (i32.const 6684) "\1c\00\00\00\00\00\00\00\00\00\00\00@\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 10 10 funcref)
+ (elem $0 (i32.const 1) $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|0 $~lib/metashrew-as/assembly/utils/box/Box.concat~anonymous|1 $~lib/metashrew-as/assembly/utils/utils/concat~anonymous|0 $assembly/index/SatRanges.fromTransaction~anonymous|0 $assembly/index/SatRanges.fromSats~anonymous|0 $assembly/index/SatRanges#pull~anonymous|0 $assembly/index/Index.sortOutPoints~anonymous|0 $~lib/metashrew-as/assembly/indexer/index/_flush~anonymous|0 $assembly/index/outpointToSatRanges~anonymous|0)
  (export "trap" (func $assembly/index/trap))
  (export "_start" (func $assembly/index/_start))
  (export "satranges" (func $assembly/index/satranges))
@@ -9744,7 +9745,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $9)
+    call_indirect (type $8)
     i32.const 0
     i32.le_s
     if
@@ -9776,7 +9777,7 @@
        global.set $~argumentsLength
        local.get $comparator
        i32.load
-       call_indirect (type $9)
+       call_indirect (type $8)
        i32.const 0
        i32.gt_s
        if
@@ -9824,7 +9825,7 @@
        global.set $~argumentsLength
        local.get $comparator
        i32.load
-       call_indirect (type $9)
+       call_indirect (type $8)
        i32.const 0
        i32.gt_s
        if
@@ -9893,7 +9894,7 @@
   global.set $~argumentsLength
   local.get $comparator
   i32.load
-  call_indirect (type $9)
+  call_indirect (type $8)
   i32.const 0
   i32.gt_s
   if
@@ -9918,7 +9919,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $9)
+     call_indirect (type $8)
      i32.const 31
      i32.shr_u
     else
@@ -9998,7 +9999,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $9)
+     call_indirect (type $8)
      i32.const 0
      i32.ge_s
     else
@@ -10169,7 +10170,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $9)
+    call_indirect (type $8)
     i32.const 0
     i32.lt_s
     if
@@ -10315,7 +10316,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $9)
+     call_indirect (type $8)
      i32.const 0
      i32.gt_s
      local.set $c
@@ -10339,7 +10340,7 @@
      global.set $~argumentsLength
      local.get $comparator
      i32.load
-     call_indirect (type $9)
+     call_indirect (type $8)
      i32.const 0
      i32.gt_s
      local.set $c
@@ -10368,7 +10369,7 @@
     global.set $~argumentsLength
     local.get $comparator
     i32.load
-    call_indirect (type $9)
+    call_indirect (type $8)
     i32.const 0
     i32.gt_s
     local.set $c|9
@@ -13733,6 +13734,84 @@
    end
   end
  )
+ (func $assembly/index/Index.sortOutPoints~anonymous|0 (param $a i64) (param $b i64) (result i32)
+  local.get $a
+  local.get $b
+  i64.lt_u
+  if
+   i32.const -1
+   return
+  end
+  local.get $a
+  local.get $b
+  i64.gt_u
+  if
+   i32.const 1
+   return
+  end
+  i32.const 0
+  return
+ )
+ (func $assembly/index/Index.sortOutPoints (param $tx i32)
+  (local $txid i32)
+  (local $i i32)
+  (local $outpoint i32)
+  (local $sats i32)
+  (local $j i32)
+  local.get $tx
+  call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#txid
+  local.set $txid
+  i32.const 0
+  local.set $i
+  loop $for-loop|0
+   local.get $i
+   local.get $tx
+   call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#get:outs
+   call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Output>#get:length
+   i32.lt_s
+   if
+    local.get $txid
+    local.get $i
+    call $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint.from
+    call $~lib/metashrew-as/assembly/blockdata/transaction/OutPoint#toArrayBuffer
+    local.set $outpoint
+    global.get $assembly/tables/OUTPOINT_TO_SAT
+    local.get $outpoint
+    call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#select
+    call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#getListValues<u64>
+    i32.const 6352
+    call $~lib/array/Array<u64>#sort
+    local.set $sats
+    i32.const 0
+    local.set $j
+    loop $for-loop|1
+     local.get $j
+     local.get $sats
+     call $~lib/array/Array<u64>#get:length
+     i32.lt_s
+     if
+      global.get $assembly/tables/OUTPOINT_TO_SAT
+      local.get $j
+      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#selectIndex
+      local.get $sats
+      local.get $j
+      call $~lib/array/Array<u64>#__get
+      call $~lib/metashrew-as/assembly/indexer/tables/IndexPointer#setValue<u64>
+      local.get $j
+      i32.const 1
+      i32.add
+      local.set $j
+      br $for-loop|1
+     end
+    end
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
+ )
  (func $assembly/index/Index.indexBlock (param $height i32) (param $block i32)
   (local $coinbase i32)
   (local $startingSat i64)
@@ -13832,6 +13911,8 @@
   end
   local.get $coinbaseSource
   call $assembly/index/excessSats
+  local.get $coinbase
+  call $assembly/index/Index.sortOutPoints
  )
  (func $~lib/array/Array<~lib/string/String>#set:buffer (param $this i32) (param $buffer i32)
   local.get $this
@@ -14788,7 +14869,7 @@
   call $~lib/array/Array<~lib/array/Array<u8>>#constructor
   local.set $protobufInput
   local.get $hashKeys
-  i32.const 6352
+  i32.const 6384
   local.get $protobufInput
   call $~lib/array/Array<~lib/string/String>#reduce<~lib/array/Array<~lib/array/Array<u8>>>
   drop
@@ -14876,7 +14957,7 @@
   i32.or
   if
    i32.const 1584
-   i32.const 6384
+   i32.const 6416
    i32.const 25
    i32.const 7
    call $~lib/builtins/abort
@@ -15114,7 +15195,7 @@
   i32.ge_u
   if
    i32.const 2320
-   i32.const 6384
+   i32.const 6416
    i32.const 72
    i32.const 50
    call $~lib/builtins/abort
@@ -16071,14 +16152,14 @@
    i32.const 10
    call $~lib/number/I32#toString
    local.set $54
-   i32.const 6576
+   i32.const 6608
    i32.const 1
    local.get $54
    call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
-   i32.const 6576
+   i32.const 6608
    i32.const 6096
    call $~lib/staticarray/StaticArray<~lib/string/String>#join
-   i32.const 6608
+   i32.const 6640
    i32.const 278
    i32.const 7
    call $~lib/builtins/abort
@@ -17582,7 +17663,7 @@
   call $assembly/protobuf/ordinals.SatRanges#constructor
   local.set $result
   local.get $sats
-  i32.const 6672
+  i32.const 6704
   call $~lib/array/Array<u64>#map<u64>
   local.set $distances
   i32.const 0

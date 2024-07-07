@@ -330,6 +330,20 @@ class Index {
       Index.indexOutputValuesForTransaction(block.transactions[i]);
     }
   }
+  static sortOutPoints(tx: Transaction): void {
+    const txid = tx.txid();
+    for (let i = 0; i < tx.outs.length; i++) {
+      const outpoint = OutPoint.from(txid, i).toArrayBuffer();
+      const sats = OUTPOINT_TO_SAT.select(outpoint).getListValues<u64>().sort((a: u64, b: u64) => {
+	if (a < b) return -1;
+	if (a > b) return 1;
+	return 0;
+      });
+      for (let j = 0; j < sats.length; j++) {
+        OUTPOINT_TO_SAT.selectIndex(j).setValue<u64>(sats[j]);
+      }
+    }
+  }
   static indexBlock(height: u32, block: Block): void {
     HEIGHT_TO_BLOCKHASH.selectValue<u32>(height).set(block.blockhash());
     BLOCKHASH_TO_HEIGHT.select(block.blockhash()).setValue<u32>(height);
@@ -352,8 +366,8 @@ class Index {
       if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
       Index.indexTransactionInscriptions(tx, txid, height);
     }
-    
     excessSats(coinbaseSource);
+    Index.sortOutPoints(coinbase);
   }
 }
 
