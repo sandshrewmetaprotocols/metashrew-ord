@@ -9939,11 +9939,11 @@
     call $assembly/index/SatSink#constructor
     local.set $13
     i32.const 0
-    local.set $6
+    local.set $1
     i32.const 0
     local.set $3
     i32.const 0
-    local.set $1
+    local.set $6
     i32.const 0
     local.set $5
     local.get $9
@@ -10001,7 +10001,7 @@
     call $~lib/array/Array<u64>#constructor
     local.set $14
     loop $for-loop|003
-     local.get $1
+     local.get $6
      local.get $15
      i32.load offset=12
      i32.lt_s
@@ -10011,14 +10011,14 @@
       loop $for-loop|1
        local.get $3
        local.get $15
-       local.get $1
+       local.get $6
        call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
        i32.load offset=12
        i32.lt_s
        if
         local.get $14
         local.get $15
-        local.get $1
+        local.get $6
         call $~lib/array/Array<~lib/metashrew-as/assembly/blockdata/transaction/Input>#__get
         local.get $3
         call $~lib/array/Array<u64>#__get
@@ -10030,10 +10030,10 @@
         br $for-loop|1
        end
       end
-      local.get $1
+      local.get $6
       i32.const 1
       i32.add
-      local.set $1
+      local.set $6
       br $for-loop|003
      end
     end
@@ -10045,23 +10045,23 @@
     call $~lib/util/sort/SORT<u64>
     local.get $14
     i32.load offset=12
-    local.tee $1
+    local.tee $3
     i32.const 0
     i32.le_s
     if (result i32)
      i32.const 1
     else
-     local.get $1
+     local.get $3
     end
     call $~lib/array/Array<u64>#constructor
-    local.set $1
+    local.set $3
     loop $for-loop|024
      local.get $5
      local.get $14
      i32.load offset=12
      i32.lt_s
      if
-      local.get $1
+      local.get $3
       local.get $5
       global.get $assembly/tables/SAT_TO_OUTPOINT
       local.get $14
@@ -10078,18 +10078,18 @@
      end
     end
     local.get $14
-    local.get $1
+    local.get $3
     call $assembly/index/SatRanges#constructor
     call $assembly/index/SatSource#constructor
-    local.tee $1
-    i32.load
     local.tee $5
+    i32.load
+    local.tee $6
     i32.load
     local.tee $3
     i32.load offset=12
     local.set $14
     loop $for-loop|0035
-     local.get $6
+     local.get $1
      local.get $14
      local.get $3
      i32.load offset=12
@@ -10102,7 +10102,7 @@
      if
       local.get $3
       i32.load offset=4
-      local.get $6
+      local.get $1
       i32.const 3
       i32.shl
       i32.add
@@ -10111,15 +10111,15 @@
       i32.const 3
       global.set $~argumentsLength
       local.get $4
-      local.get $6
+      local.get $1
       local.get $3
       i32.const 7216
       i32.load
       call_indirect (type $14)
-      local.get $6
+      local.get $1
       i32.const 1
       i32.add
-      local.set $6
+      local.set $1
       br $for-loop|0035
      end
     end
@@ -10127,13 +10127,13 @@
     local.set $3
     i32.const 0
     call $~lib/array/Array<u64>#constructor
-    local.set $6
+    local.set $1
     i32.const 0
     call $~lib/array/Array<u64>#constructor
     local.set $14
     loop $for-loop|026
      local.get $3
-     local.get $5
+     local.get $6
      i32.load
      local.tee $15
      i32.load offset=12
@@ -10143,13 +10143,13 @@
       local.get $3
       call $~lib/array/Array<u64>#__get
       local.set $11
-      local.get $5
+      local.get $6
       i32.load offset=4
       local.get $3
       call $~lib/array/Array<u64>#__get
       local.set $4
       loop $while-continue|1
-       local.get $5
+       local.get $6
        i32.load
        local.tee $15
        i32.load offset=12
@@ -10176,7 +10176,7 @@
          i32.const 0
         end
         if
-         local.get $5
+         local.get $6
          i32.load offset=4
          local.get $3
          call $~lib/array/Array<u64>#__get
@@ -10191,7 +10191,7 @@
         end
        end
       end
-      local.get $6
+      local.get $1
       local.get $11
       call $~lib/array/Array<u64>#push
       local.get $14
@@ -10204,28 +10204,23 @@
       br $for-loop|026
      end
     end
-    local.get $5
     local.get $6
+    local.get $1
     i32.store
-    local.get $5
+    local.get $6
     local.get $14
     i32.store offset=4
     local.get $13
-    local.get $1
+    local.get $5
     call $assembly/index/SatSink#consume
     local.get $9
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#txid
-    local.set $3
-    local.get $1
-    call $assembly/index/SatSource#consumed
-    i32.eqz
-    if
-     local.get $12
-     local.get $1
-     call $assembly/index/SatSink#consume
-    end
+    local.set $1
+    local.get $12
+    local.get $5
+    call $assembly/index/SatSink#consume
     local.get $9
-    local.get $3
+    local.get $1
     local.get $0
     call $assembly/index/Index.indexTransactionInscriptions
     local.get $7

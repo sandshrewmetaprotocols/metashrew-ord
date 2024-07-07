@@ -352,4 +352,46 @@ describe("metashrew-ord", () => {
     });
    */
   });
+  it("should capture fees", async () => {
+    const program = buildProgram();
+    program.setBlockHeight(0);
+    const block = buildDefaultBlock();
+    const coinbase = buildCoinbaseToTestAddress();
+    const coinbaseBlock = buildDefaultBlock();
+    coinbaseBlock.transactions.push(coinbase);
+    program.setBlockHeight(0);
+    program.setBlock(coinbaseBlock.toHex());
+    await program.run("_start");
+    block.transactions.push(buildCoinbaseToRandomAddress());
+    const transaction = buildTransaction(
+      [
+        {
+          hash: coinbase.getHash(),
+          index: 0,
+        },
+      ],
+      [
+        {
+          script: bitcoinjs.payments.p2pkh({
+            address: TEST_BTC_ADDRESS1,
+            network: bitcoinjs.networks.bitcoin,
+          }).output,
+          value: 1,
+        },
+        {
+          script: bitcoinjs.payments.p2pkh({
+            network: bitcoinjs.networks.bitcoin,
+            address: TEST_BTC_ADDRESS1,
+          }).output,
+          value: 50e8 - 51,
+        },
+      ],
+    );
+    block.transactions[0].outs[0].value += 50;
+    block.transactions.push(transaction);
+    program.setBlockHeight(1)!;
+    program.setBlock(block.toHex());
+    await program.run("_start");
+    expect(Object.values(await satRangesForTransaction(program, block.transactions[0]))[0][1].distance).to.eql(50n);
+  });
 });

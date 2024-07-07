@@ -363,7 +363,7 @@ class Index {
       const transactionSource = SatSource.fromTransaction(tx, startingSat).pull();
       transactionSink.consume(transactionSource);
       const txid = tx.txid();
-      if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
+      coinbaseSink.consume(transactionSource);
       Index.indexTransactionInscriptions(tx, txid, height);
     }
     excessSats(coinbaseSource);

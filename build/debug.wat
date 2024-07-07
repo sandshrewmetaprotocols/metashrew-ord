@@ -13890,14 +13890,9 @@
     local.get $tx
     call $~lib/metashrew-as/assembly/blockdata/transaction/Transaction#txid
     local.set $txid
+    local.get $coinbaseSink
     local.get $transactionSource
-    call $assembly/index/SatSource#consumed
-    i32.eqz
-    if
-     local.get $coinbaseSink
-     local.get $transactionSource
-     call $assembly/index/SatSink#consume
-    end
+    call $assembly/index/SatSink#consume
     local.get $tx
     local.get $txid
     local.get $height
