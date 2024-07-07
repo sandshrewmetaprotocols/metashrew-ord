@@ -105,11 +105,13 @@ class SatRanges {
     return this;
   }
   static fromSats(sats: Array<u64>, rangeEnd: u64): SatRanges {
+	  /*
     sats.sort((a: u64, b: u64) => {
       if (a < b) return -1;
       if (a > b) return 1;
       return 0;
     });
+   */
     const distances = new Array<u64>(max(sats.length, 1));
     for (let i = 0; i < sats.length; i++) {
       distances[i] = rangeLength<u64>(SAT_TO_OUTPOINT, sats[i], rangeEnd);
@@ -358,16 +360,15 @@ class Index {
 
     for (let i: i32 = 1; i < block.transactions.length; i++) {
       const tx = block.transactions[i];
-      //console.log('tx: ' + Box.from(tx.txid()).toHexString());
       const transactionSink = SatSink.fromTransaction(tx);
       const transactionSource = SatSource.fromTransaction(tx, startingSat).pull();
       transactionSink.consume(transactionSource);
       const txid = tx.txid();
-      coinbaseSink.consume(transactionSource);
+      if (!transactionSource.consumed()) coinbaseSink.consume(transactionSource);
+      if (!transactionSource.consumed() && coinbaseSink.filled()) excessSats(transactionSource);
       Index.indexTransactionInscriptions(tx, txid, height);
     }
     excessSats(coinbaseSource);
-    Index.sortOutPoints(coinbase);
   }
 }
 

@@ -328,29 +328,6 @@ describe("metashrew-ord", () => {
     program.setBlockHeight(2);
     program.setBlock(block2.toHex());
     await program.run("_start");
-    /*
-    expect(await sat(program, 5)).to.eql({
-      pointer: 5n,
-      satrange: { start: 0n, distance: 4999999950n },
-      satrangesOnOutpoint: [{ start: 0n, distance: 4999999950n }],
-      outpoint: {
-        txid: "61a15730ff805422dca92f92e38dace5446bb22f0050a7bd985d79f0df716905",
-        vout: 0,
-      },
-    });
-    */
-    expect(
-      await satranges(program, `${transaction2.getId().toString("hex")}:0`),
-    ).to.eql([{ start: 0n, distance: 4999999950n }]);
-    /*
-    expect(
-      await satRangesForTransaction(program, block2.transactions[1]),
-    ).to.eql({
-      "61a15730ff805422dca92f92e38dace5446bb22f0050a7bd985d79f0df716905:0": [
-        { start: 0n, distance: 4999999950n },
-      ],
-    });
-   */
   });
   it("should capture fees", async () => {
     const program = buildProgram();
@@ -389,9 +366,30 @@ describe("metashrew-ord", () => {
     );
     block.transactions[0].outs[0].value += 50;
     block.transactions.push(transaction);
-    program.setBlockHeight(1)!;
+    program.setBlockHeight(1);
     program.setBlock(block.toHex());
     await program.run("_start");
-    expect(Object.values(await satRangesForTransaction(program, block.transactions[0]))[0][1].distance).to.eql(50n);
+    const block3 = buildDefaultBlock();
+    const coinbase3 = buildCoinbaseToRandomAddress();
+    block3.transactions.push(coinbase3);
+    const transaction3 = buildTransaction([{
+      hash: transaction.getHash(),
+      index: 1
+    }, {
+      hash: block.transactions[0].getHash(),
+      index: 0
+    }], [{
+      script: bitcoinjs.payments.p2pkh({
+        network: bitcoinjs.networks.bitcoin,
+        address: TEST_BTC_ADDRESS1,
+      }).output,
+      value: 50e8 + 50 + 50e8 - 51 - 30
+    }]);
+    block3.transactions.push(transaction3);
+    block3.transactions[0].outs[0].value += 30;
+    program.setBlock(block3.toHex());
+    program.setBlockHeight(2);
+    await program.run('_start');
+    expect(Object.values(await satRangesForTransaction(program, block3.transactions[1]))[0][2].distance).to.eql(20n);
   });
 });
