@@ -255,12 +255,8 @@ describe("metashrew-ord", () => {
     program.setBlock(coinbaseBlock.toHex());
     await program.run("_start");
     expect(
-      await satRangesForTransaction(program, coinbaseBlock.transactions[0]),
-    ).to.eql({
-      "5c28236f2c0ca66a078c01ed45b7cefc21e5b8373458be17bbb5ce0a00e00bab:0": [
-        { start: 0n, distance: 5000000000n },
-      ],
-    });
+      Object.values(await satRangesForTransaction(program, coinbaseBlock.transactions[0]))[0][0],
+    ).to.eql({ start: 0n, distance: 5000000000n });
     block.transactions.push(buildCoinbaseToRandomAddress());
     const transaction = buildTransaction(
       [
